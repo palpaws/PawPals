@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Đăng nhập | PawPals</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+
+
+    <!-- LOGIN CSS -->
+    <link rel="stylesheet" th:href="@{/login.css}">
+
+    <!-- HEADER CSS -->
+    <link rel="stylesheet" th:href="@{/header.css}">
+
+</head>
+
+<body>
+
+<div class="login-page">
+
+    <!-- HEADER -->
+    <div th:replace="fragments/header :: header"></div>
+
+    <!-- LOGIN -->
+    <section class="login-section">
+
+        <div class="login-card">
+
+            <h2>Đăng nhập</h2>
+
+            <form class="login-form"
+                  th:action="@{/login}"
+                  method="post">
+
+                <div class="input-group">
+
+                    <input type="email"
+                           name="email"
+                           placeholder="Email">
+
+                </div>
+
+                <div class="input-group">
+
+                    <input type="password"
+                           name="password"
+                           placeholder="Mật khẩu">
+
+                </div>
+
+                <div class="login-options">
+
+                    <label class="remember-box">
+
+                        <input type="checkbox">
+
+                        <span>Ghi nhớ đăng nhập</span>
+
+                    </label>
+
+                    <a href="#">
+                        Quên mật khẩu?
+                    </a>
+
+                </div>
+
+                <button type="submit"
+                        class="login-btn-form">
+
+                    Đăng nhập
+
+                </button>
+
+            </form>
+
+            <p class="register-text">
+
+                Bạn chưa có tài khoản?
+
+                <a th:href="@{/register}">
+                    Đăng ký ngay
+                </a>
+
+            </p>
+
+        </div>
+
+    </section>
+
+</div>
+
+</body>
+</html>

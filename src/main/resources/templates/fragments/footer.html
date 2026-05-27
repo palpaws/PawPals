@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<footer class="footer" th:fragment="footer">
+
+    <!-- TOP -->
+    <div class="footer-top">
+
+        <!-- LEFT -->
+        <div class="footer-brand">
+
+            <h2>PawPals</h2>
+
+            <p>
+                Nền tảng hỗ trợ chăm sóc thú cưng toàn diện,
+                kết nối cộng đồng yêu thú cưng và các dịch vụ
+                chất lượng xung quanh bạn.
+            </p>
+
+            <div class="footer-socials">
+
+                <a href="#">Facebook</a>
+                <a href="#">Instagram</a>
+                <a href="#">TikTok</a>
+
+            </div>
+
+        </div>
+
+        <!-- MENU -->
+        <div class="footer-links">
+
+            <h3>Khám phá</h3>
+
+            <a th:href="@{/}">Trang chủ</a>
+            <a th:href="@{/services}">Dịch vụ</a>
+            <a th:href="@{/map}">Map</a>
+            <a th:href="@{/pricing}">Pricing</a>
+
+        </div>
+
+        <!-- SUPPORT -->
+        <div class="footer-links">
+
+            <h3>Hỗ trợ</h3>
+
+            <a href="#">Trung tâm trợ giúp</a>
+            <a href="#">Điều khoản</a>
+            <a href="#">Bảo mật</a>
+            <a href="#">Liên hệ</a>
+
+        </div>
+
+        <!-- NEWSLETTER -->
+        <div class="footer-newsletter">
+
+            <h3>Nhận tips chăm sóc thú cưng</h3>
+
+            <p>
+                Đăng ký email để nhận các mẹo chăm sóc,
+                khuyến mãi và cập nhật mới nhất.
+            </p>
+
+            <div class="newsletter-box">
+
+                <input type="email" placeholder="Nhập email của bạn">
+
+                <button>
+                    Gửi
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- DIVIDER -->
+    <div class="footer-divider"></div>
+
+    <!-- BOTTOM -->
+    <div class="footer-bottom">
+
+        <p>
+            © 2026 PawPals. All rights reserved.
+        </p>
+
+        <span>
+            Made with ❤️ for pet lovers
+        </span>
+
+    </div>
+
+</footer>
+
+</body>
+</html>

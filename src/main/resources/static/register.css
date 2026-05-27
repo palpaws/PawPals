@@ -1,0 +1,544 @@
+/* ================= RESET ================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:'Fredoka', sans-serif;
+
+    background:#d8aebb;
+
+    min-height:100vh;
+
+    overflow-x:hidden;
+
+    position:relative;
+}
+
+/* ================= BACKGROUND EFFECT ================= */
+
+body::before{
+    content:"";
+
+    position:fixed;
+
+    width:420px;
+    height:420px;
+
+    top:-120px;
+    left:-120px;
+
+    border-radius:50%;
+
+    background:
+            radial-gradient(
+                    circle,
+                    rgba(255,255,255,0.25),
+                    transparent 70%
+            );
+
+    filter:blur(22px);
+
+    z-index:-1;
+
+    animation:floatBlob1 8s ease-in-out infinite;
+}
+
+body::after{
+    content:"";
+
+    position:fixed;
+
+    width:380px;
+    height:380px;
+
+    bottom:-100px;
+    right:-100px;
+
+    border-radius:50%;
+
+    background:
+            radial-gradient(
+                    circle,
+                    rgba(141,158,228,0.22),
+                    transparent 70%
+            );
+
+    filter:blur(26px);
+
+    z-index:-1;
+
+    animation:floatBlob2 10s ease-in-out infinite;
+}
+
+@keyframes floatBlob1{
+
+    0%{
+        transform:translateY(0px);
+    }
+
+    50%{
+        transform:translateY(25px);
+    }
+
+    100%{
+        transform:translateY(0px);
+    }
+}
+
+@keyframes floatBlob2{
+
+    0%{
+        transform:translateY(0px);
+    }
+
+    50%{
+        transform:translateY(-25px);
+    }
+
+    100%{
+        transform:translateY(0px);
+    }
+}
+
+/* ================= HEADER ================= */
+
+.header{
+    width:100%;
+    height:82px;
+
+    background:#ea79a0;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 42px;
+
+    border-bottom-left-radius:30px;
+    border-bottom-right-radius:30px;
+
+    box-shadow:
+            0 10px 24px rgba(234,121,160,0.22);
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.header::before{
+    content:"";
+
+    position:absolute;
+
+    width:220px;
+    height:220px;
+
+    background:
+            radial-gradient(
+                    circle,
+                    rgba(255,255,255,0.22),
+                    transparent 70%
+            );
+
+    top:-120px;
+    right:-40px;
+}
+
+/* ================= LOGO ================= */
+
+.logo{
+    display:flex;
+    align-items:center;
+
+    gap:14px;
+
+    position:relative;
+    z-index:2;
+}
+
+.logo i{
+    font-size:40px;
+
+    color:#ffd0df;
+
+    filter:
+            drop-shadow(0 4px 10px rgba(255,255,255,0.25));
+}
+
+.logo span{
+    font-size:31px;
+    font-weight:700;
+
+    color:#173d37;
+
+    letter-spacing:1px;
+}
+
+/* ================= LOGIN BUTTON ================= */
+
+.login-btn{
+    width:130px;
+    height:46px;
+
+    border:none;
+    border-radius:16px;
+
+    background:
+            rgba(255,255,255,0.45);
+
+    backdrop-filter:blur(10px);
+
+    color:#173d37;
+
+    font-size:17px;
+    font-family:'Fredoka', sans-serif;
+    font-weight:600;
+
+    cursor:pointer;
+
+    box-shadow:
+            0 6px 18px rgba(0,0,0,0.08);
+
+    transition:0.35s ease;
+
+    position:relative;
+    z-index:2;
+}
+
+.login-btn:hover{
+    transform:
+            translateY(-3px)
+            scale(1.02);
+
+    background:
+            rgba(255,255,255,0.65);
+}
+
+/* ================= SECTION ================= */
+
+.register-section{
+    width:100%;
+
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+
+    padding:
+            42px 20px 50px;
+}
+
+/* ================= CARD ================= */
+
+.register-card{
+    width:480px;
+
+    background:
+            rgba(248,248,248,0.92);
+
+    backdrop-filter:blur(12px);
+
+    border-radius:36px;
+
+    padding:55px 52px 42px;
+
+    position:relative;
+
+    overflow:hidden;
+
+    border:
+            1px solid rgba(255,255,255,0.35);
+
+    box-shadow:
+            0 18px 40px rgba(0,0,0,0.08),
+            inset 0 4px 10px rgba(255,255,255,0.22);
+
+    animation:cardShow 0.8s ease;
+}
+
+/* LIGHT EFFECT */
+
+.register-card::before{
+    content:"";
+
+    position:absolute;
+
+    width:200px;
+    height:200px;
+
+    background:
+            radial-gradient(
+                    circle,
+                    rgba(255,255,255,0.45),
+                    transparent 70%
+            );
+
+    top:-90px;
+    right:-70px;
+
+    border-radius:50%;
+
+    pointer-events:none;
+}
+
+/* ================= TITLE ================= */
+
+.register-card h1{
+    text-align:center;
+
+    font-size:56px;
+    font-weight:700;
+
+    color:#24453f;
+
+    margin-bottom:36px;
+
+    letter-spacing:-1px;
+}
+
+/* ================= FORM ================= */
+
+form{
+    width:100%;
+}
+
+/* ================= INPUT ================= */
+
+.input-box{
+    width:100%;
+
+    margin-bottom:18px;
+
+    position:relative;
+}
+
+.input-box input{
+    width:100%;
+    height:54px;
+
+    border:1.8px solid #c7ceef;
+
+    border-radius:999px;
+
+    padding:0 22px;
+
+    font-size:15px;
+    font-family:'Fredoka', sans-serif;
+    font-weight:500;
+
+    outline:none;
+
+    color:#24453f;
+
+    background:
+            rgba(255,255,255,0.72);
+
+    box-shadow:
+            0 4px 10px rgba(0,0,0,0.03);
+
+    transition:0.35s ease;
+}
+
+.input-box input::placeholder{
+    color:#989898;
+}
+
+.input-box input:hover{
+    transform:translateY(-1px);
+}
+
+.input-box input:focus{
+    border-color:#8795df;
+
+    background:white;
+
+    transform:translateY(-2px);
+
+    box-shadow:
+            0 0 0 5px rgba(135,149,223,0.14),
+            0 10px 20px rgba(135,149,223,0.10);
+}
+
+/* ================= BUTTON ================= */
+
+.register-button{
+    width:100%;
+    height:56px;
+
+    border:none;
+    border-radius:999px;
+
+    margin-top:12px;
+
+    background:
+            linear-gradient(
+                    135deg,
+                    #9fa8cf,
+                    #7387e6
+            );
+
+    color:white;
+
+    font-size:20px;
+    font-family:'Fredoka', sans-serif;
+    font-weight:700;
+
+    letter-spacing:0.4px;
+
+    cursor:pointer;
+
+    position:relative;
+
+    overflow:hidden;
+
+    box-shadow:
+            0 12px 26px rgba(115,135,230,0.25);
+
+    transition:0.35s ease;
+}
+
+/* BUTTON SHINE */
+
+.register-button::before{
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:-120%;
+
+    width:100%;
+    height:100%;
+
+    background:
+            linear-gradient(
+                    120deg,
+                    transparent,
+                    rgba(255,255,255,0.4),
+                    transparent
+            );
+
+    transition:0.8s;
+}
+
+.register-button:hover::before{
+    left:120%;
+}
+
+.register-button:hover{
+    transform:
+            translateY(-4px)
+            scale(1.015);
+
+    box-shadow:
+            0 18px 34px rgba(115,135,230,0.34);
+}
+
+.register-button:active{
+    transform:scale(0.98);
+}
+
+/* ================= TEXT ================= */
+
+.bottom-text{
+    text-align:center;
+
+    margin-top:24px;
+
+    color:#6f6f6f;
+
+    font-size:15px;
+
+    font-weight:500;
+}
+
+.bottom-text a{
+    color:#6f83d7;
+
+    text-decoration:none;
+
+    font-weight:700;
+
+    transition:0.3s ease;
+}
+
+.bottom-text a:hover{
+    color:#ea79a0;
+}
+
+/* ================= CARD ANIMATION ================= */
+
+@keyframes cardShow{
+
+    from{
+        opacity:0;
+
+        transform:
+                translateY(35px)
+                scale(0.96);
+    }
+
+    to{
+        opacity:1;
+
+        transform:
+                translateY(0)
+                scale(1);
+    }
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:768px){
+
+    .header{
+        padding:0 20px;
+    }
+
+    .logo span{
+        font-size:24px;
+    }
+
+    .logo i{
+        font-size:32px;
+    }
+
+    .login-btn{
+        width:110px;
+        height:42px;
+
+        font-size:15px;
+    }
+
+    .register-section{
+        padding:
+                30px 16px 40px;
+    }
+
+    .register-card{
+        width:100%;
+
+        padding:42px 24px 36px;
+
+        border-radius:30px;
+    }
+
+    .register-card h1{
+        font-size:44px;
+    }
+
+    .input-box input{
+        height:52px;
+    }
+
+    .register-button{
+        height:54px;
+    }
+}

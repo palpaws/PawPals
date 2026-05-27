@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Ký - PawPals</title>
+
+    <!-- FONT -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Font giống mẫu -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- ICON -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+    <link rel="stylesheet" href="register.css">
+    <!-- HEADER CSS -->
+    <link rel="stylesheet" th:href="@{/header.css}">
+</head>
+<body>
+
+<!-- HEADER -->
+<!-- HEADER -->
+<div th:replace="fragments/header :: header"></div>
+
+<!-- REGISTER -->
+<section class="register-section">
+
+    <div class="register-card">
+
+        <h1>Đăng ký</h1>
+
+        <form>
+
+            <div class="input-box">
+                <input type="text" placeholder="Họ và tên">
+            </div>
+
+            <div class="input-box">
+                <input type="email" placeholder="Email">
+            </div>
+
+            <div class="input-box">
+                <input type="password" placeholder="Mật khẩu">
+            </div>
+
+            <div class="input-box">
+                <input type="password" placeholder="Xác nhận mật khẩu">
+            </div>
+
+            <button type="submit" class="register-button">
+                Đăng ký
+            </button>
+
+        </form>
+
+        <p class="bottom-text">
+            Đã có tài khoản?
+            <a th:href="@{/login}">
+                Đăng nhập ngay
+            </a>
+        </p>
+
+    </div>
+
+</section>
+
+</body>
+</html>

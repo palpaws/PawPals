@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PawPals</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+
+    <link rel="stylesheet" th:href="@{/home.css}">
+</head>
+<body>
+
+<div class="page">
+
+    <!-- HEADER -->
+    <div th:replace="fragments/header :: header"></div>
+
+
+    <section class="hero">
+
+        <!-- floating icons -->
+        <div class="circle icon1">🧺</div>
+        <div class="circle icon2">🥕</div>
+        <div class="circle icon3">🦴</div>
+        <div class="circle icon4">🐾</div>
+
+        <!-- title -->
+        <div class="hero-title">
+            <h1>PAWPALS</h1>
+            <p>Tổng hợp dịch vụ chăm sóc thú cưng</p>
+        </div>
+
+        <!-- content -->
+        <div class="hero-content">
+
+            <!-- left card -->
+            <div class="card small-card">
+
+                <h3>Theo dõi vị trí thú cưng của bạn</h3>
+
+                <img th:src="@{/images/img1.jpg}" alt="">
+
+            </div>
+
+            <!-- big image -->
+            <div class="big-image">
+
+                <img th:src="@{/images/img2.jpg}" alt="">
+
+            </div>
+
+            <!-- center -->
+            <div class="center-box">
+                <a th:href="@{/login}" class="login-btn">
+                    Đăng Nhập
+                </a>
+                <a th:href="@{/register}" class="register-btn">
+                    Đăng Ký
+                </a>
+
+                <div class="stats-card">
+
+                    <h2>30000+</h2>
+                    <p>Happy Pets</p>
+
+                </div>
+
+            </div>
+
+            <!-- right card -->
+            <div class="card small-card">
+
+                <img th:src="@{/images/img3.jpg}" alt="">
+
+                <h3>Nhắc nhở lịch trình thú cưng của bạn</h3>
+
+            </div>
+
+            <!-- right big image -->
+            <div class="right-image">
+
+                <img th:src="@{/images/img4.jpg}" alt="">
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- SERVICES SECTION -->
+    <section class="services-section">
+
+        <!-- TOP LINE -->
+        <div class="service-top">
+
+            <div class="service-logo">
+                Pawpals
+            </div>
+
+            <div class="service-line"></div>
+
+            <div class="service-text-small">
+                One stop community for pet lovers
+            </div>
+
+        </div>
+
+
+        <!-- MAIN CONTENT -->
+        <div class="services-box">
+
+            <!-- IMAGE -->
+            <div class="service-image-wrapper">
+
+                <div class="image-border">
+
+                    <img th:src="@{/images/service.jpg}" alt="">
+
+                </div>
+
+            </div>
+
+
+            <!-- TEXT -->
+            <div class="service-heading">
+
+    <span class="service-tag">
+        PawPals Services
+    </span>
+
+                <h2>
+                    Chúng tôi chăm sóc
+                    <span>toàn diện</span>
+                    cho thú cưng của bạn
+                </h2>
+
+                <p>
+                    Từ theo dõi sức khỏe, nhắc lịch, mua sắm
+                    đến chăm sóc hằng ngày — tất cả đều có tại PawPals.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="profile-section">
+
+        <!-- TOP -->
+        <div class="profile-top">
+
+            <div class="profile-title">
+                Trang cá nhân
+            </div>
+
+            <div class="profile-line"></div>
+
+            <div class="profile-small-text">
+                Tùy chỉnh, ghi chép. trang trí hồ sơ thú cưng của bạn
+            </div>
+
+        </div>
+
+        <!-- CONTENT -->
+        <div class="profile-content">
+
+            <!-- LEFT -->
+            <div class="profile-left">
+
+                <span class="profile-number">01</span>
+
+                <h2>
+                    Tùy chỉnh hồ sơ thú cưng của bạn
+                </h2>
+
+                <ul>
+                    <li>
+                        Quản lý sức khỏe: Tự động nhắc lịch tiêm chủng,
+                        khám định kỳ và lưu trữ hồ sơ y tế điện tử.
+                    </li>
+
+                    <li>
+                        Cá nhân hóa lịch trình: Thiết lập biểu đồ chăm sóc,
+                        ăn uống và vận động riêng biệt cho từng bé.
+                    </li>
+
+                    <li>
+                        Kết nối cộng đồng: Tính năng ghép đôi giúp thú cưng
+                        tìm kiếm bạn đời phù hợp và gắn kết các chủ nuôi.
+                    </li>
+
+                    <li>
+                        Theo dõi sự phát triển: Kiểm soát cân nặng và các
+                        chỉ số sức khỏe trực quan theo thời gian thực.
+                    </li>
+                </ul>
+
+                <!-- BUTTONS -->
+                <div class="profile-buttons">
+
+                    <button>
+                        ←
+                    </button>
+
+                    <button>
+                        →
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- RIGHT -->
+            <div class="profile-right">
+
+                <div class="profile-card card-back">
+                    <img th:src="@{/images/cat1.jpg}" alt="">
+                </div>
+
+                <div class="profile-card card-middle">
+                    <img th:src="@{/images/cat2.jpg}" alt="">
+                </div>
+
+                <div class="profile-card card-front">
+                    <img th:src="@{/images/cat3.jpg}" alt="">
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="map-section">
+
+        <!-- TOP -->
+        <div class="map-top">
+
+            <div class="map-title">
+                Map
+            </div>
+
+            <div class="map-line"></div>
+
+            <div class="map-small-text">
+                Tìm kiếm dịch vụ thú cưng xung quanh bạn
+            </div>
+
+        </div>
+
+        <!-- CONTENT -->
+        <div class="map-content">
+
+            <!-- LEFT -->
+            <div class="map-left">
+
+                <!-- ITEM -->
+                <div class="map-card white-card">
+
+                    <div class="map-card-text">
+
+                        <h3>Cưng Hotel</h3>
+
+                        <button>
+                            Xem thêm →
+                        </button>
+
+                    </div>
+
+                    <img th:src="@{/images/map1.jpg}" alt="">
+
+                </div>
+
+                <!-- ITEM -->
+                <div class="map-card gray-card">
+
+                    <img th:src="@{/images/map2.jpg}" alt="">
+
+                    <div class="map-card-text">
+
+                        <h3>LanaPets Spa</h3>
+
+                        <button>
+                            Xem thêm →
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <!-- ITEM -->
+                <div class="map-card pink-card">
+
+                    <div class="map-card-text">
+
+                        <h3>Catty Pet Shop</h3>
+
+                        <button>
+                            Xem thêm →
+                        </button>
+
+                    </div>
+
+                    <img th:src="@{/images/map3.jpg}" alt="">
+
+                </div>
+
+            </div>
+
+            <!-- RIGHT -->
+            <div class="map-right">
+
+                <div class="map-right-top">
+
+                    <h2>
+                        Tìm kiếm xung
+                        <br>
+                        quanh bạn
+                    </h2>
+
+                    <button>
+                        →
+                    </button>
+
+                </div>
+
+                <div class="map-big-image">
+
+                    <img th:src="@{/images/map4.jpg}" alt="">
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="review-section">
+
+        <!-- TOP -->
+        <div class="review-top">
+
+            <div class="review-title">
+                Review
+            </div>
+
+            <div class="review-line"></div>
+
+            <div class="review-small-text">
+                Xem ý kiến của những người khác về các dịch vụ thú cưng trước khi bạn quyết định đăng ký
+            </div>
+
+        </div>
+
+        <!-- REVIEW LIST -->
+        <div class="review-list">
+
+            <!-- CARD -->
+            <div class="review-card review-down">
+
+                <p>
+                    Mình cho bé tắm ở shop gần 2 năm nay rồi,
+                    thấy các bạn nhân viên cũng thân thiện,
+                    chu đáo, làm cũng rất nhìn cưng.
+                    Có mấy lần mình cần đón bé luôn ngồi đó
+                    chờ còn được.
+                </p>
+
+                <span>❞</span>
+
+                <div class="review-user">
+
+                    <img th:src="@{/images/review1.jpg}" alt="">
+
+                    <h4>Thanh</h4>
+
+                </div>
+
+            </div>
+
+            <!-- CARD -->
+            <div class="review-card review-up">
+
+                <p>
+                    Dịch vụ spa cực kỳ tệ. Mình đã đặt lịch từ trước rồi
+                    đồng ý nhận lịch và cũng có báo trước là sẽ bị muộn
+                    nhưng 9h30 mình qua gửi bé đến chiều giờ vẫn chưa xong.
+                    Đến 20h mình lại gọi thì lúc đó mới báo là bạn vừa mới tắm xong.
+                </p>
+
+                <span>❞</span>
+
+                <div class="review-user">
+
+                    <img th:src="@{/images/review2.jpg}" alt="">
+
+                    <h4>Phương Nguyễn</h4>
+
+                </div>
+
+            </div>
+
+            <!-- CARD -->
+            <div class="review-card review-mid">
+
+                <p>
+                    Shop có đủ mọi loại đồ dùng và thức ăn cho thú cưng.
+                    Ngoài ra dịch vụ spa cũng rất chuyên nghiệp.
+                    Một địa chỉ đáng để trải nghiệm!
+                </p>
+
+                <span>❞</span>
+
+                <div class="review-user">
+
+                    <img th:src="@{/images/review3.jpg}" alt="">
+
+                    <h4>Hoàng Lê</h4>
+
+                </div>
+
+            </div>
+
+            <!-- CARD -->
+            <div class="review-card review-down">
+
+                <p>
+                    Dịch vụ tốt, nhân viên tư vấn nhiệt tình.
+                    Cửa hàng to và đẹp có cả chỗ để cho các em mèo chơi.
+                    Rất ưng spa này.
+                </p>
+
+                <span>❞</span>
+
+                <div class="review-user">
+
+                    <img th:src="@{/images/review4.jpg}" alt="">
+
+                    <h4>Đặng Minh</h4>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ================= PRICING SECTION ================= -->
+
+    <section class="pricing-section">
+
+        <!-- TOP -->
+        <div class="pricing-top">
+
+            <div class="pricing-title">
+                Pricing
+            </div>
+
+            <div class="pricing-line"></div>
+
+            <div class="pricing-small-text">
+                Chọn gói dịch vụ phù hợp dành cho thú cưng của bạn
+            </div>
+
+        </div>
+
+        <!-- CONTENT -->
+        <div class="pricing-wrapper">
+
+            <!-- LEFT IMAGE -->
+            <div class="pricing-image left-image">
+
+                <img th:src="@{/images/pricing1.jpg}" alt="">
+
+            </div>
+
+            <!-- CARD AREA -->
+            <div class="pricing-cards">
+
+                <!-- FREE -->
+                <div class="pricing-card free-card">
+
+                    <h3>Miễn Phí</h3>
+
+                    <div class="price">
+                        0đ
+                    </div>
+
+                    <span>per month</span>
+
+                    <ul>
+
+                        <li>Quản lý hồ sơ thú cưng</li>
+
+                        <li>Nhắc lịch tiêm chủng</li>
+
+                        <li>Theo dõi hoạt động hằng ngày</li>
+
+                        <li>Kết nối cộng đồng PawPals</li>
+
+                    </ul>
+
+                    <div class="pricing-divider"></div>
+
+                    <p>
+                        <strong>Phù hợp:</strong>
+                        Người dùng mới muốn trải nghiệm các tính năng cơ bản.
+                    </p>
+
+                    <button>
+                        Bắt đầu miễn phí
+                    </button>
+
+                </div>
+
+                <!-- PREMIUM -->
+                <div class="pricing-card premium-card">
+
+                    <h3>Premium</h3>
+
+                    <div class="price">
+                        29.000đ
+                    </div>
+
+                    <span>per month</span>
+
+                    <ul>
+
+                        <li>Tất cả tính năng miễn phí</li>
+
+                        <li>AI phân tích sức khỏe thú cưng</li>
+
+                        <li>Ưu tiên đặt lịch spa / hotel</li>
+
+                        <li>Thống kê & báo cáo nâng cao</li>
+
+                    </ul>
+
+                    <div class="pricing-divider"></div>
+
+                    <p>
+                        <strong>Phù hợp:</strong>
+                        Chủ nuôi muốn chăm sóc thú cưng chuyên sâu hơn.
+                    </p>
+
+                    <button>
+                        Nâng cấp ngay
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- RIGHT IMAGE -->
+            <div class="pricing-image right-image2">
+
+                <img th:src="@{/images/pricing2.jpg}" alt="">
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= TIPS SECTION ================= -->
+
+    <section class="tips-section">
+
+        <!-- TOP -->
+        <div class="tips-top">
+
+            <div class="tips-title">
+                Tips
+            </div>
+
+            <div class="tips-small-text">
+                Các tips chăm sóc thú cưng từ các
+                bác sĩ thú y hoặc người nuôi khác
+            </div>
+
+        </div>
+
+        <!-- CARDS -->
+        <div class="tips-wrapper">
+
+            <!-- CARD -->
+            <div class="tips-card">
+
+                <img th:src="@{/images/tips1.jpg}" alt="">
+
+                <h3>
+                    Đừng nhìn chằm chằm
+                    vào thú cưng mới!
+                </h3>
+
+                <button>
+                    Xem thêm →
+                </button>
+
+            </div>
+
+            <!-- CARD -->
+            <div class="tips-card">
+
+                <img th:src="@{/images/tips2.jpg}" alt="">
+
+                <h3>
+                    Mẹo dùng cỏ mèo cho chó
+                </h3>
+
+                <button>
+                    Xem thêm →
+                </button>
+
+            </div>
+
+            <!-- CARD -->
+            <div class="tips-card">
+
+                <img th:src="@{/images/tips3.jpg}" alt="">
+
+                <h3>
+                    Đừng ngay việc đặt bát
+                    nước cạnh bát thức ăn!
+                </h3>
+
+                <button>
+                    Xem thêm →
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- FOOTER -->
+    <div th:replace="fragments/footer :: footer"></div>
+
+
+    <!-- FLOAT ICONS -->
+    <div class="icon basket">🧺</div>
+    <div class="icon needle">💉</div>
+    <div class="icon pet">⌘</div>
+    <div class="icon bowl">🦴</div>
+
+</div>
+<!-- ================= CHAT BOT ================= -->
+
+<div class="chatbot-toggle" id="chatbotToggle">
+
+    <div class="chat-glow"></div>
+
+    <div class="chat-ripple"></div>
+
+    <!-- NEW ICON -->
+    <div class="chat-icon">
+
+        <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="30"
+                height="30"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="white"
+                stroke-width="2.4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+        >
+            <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/>
+            <path d="M8 10h8"/>
+            <path d="M8 14h5"/>
+        </svg>
+
+    </div>
+
+</div>
+
+<div class="chatbot-container light-mode" id="chatbotContainer">
+
+    <!-- HEADER -->
+    <div class="chatbot-header">
+
+        <div class="chatbot-header-left">
+
+            <div class="bot-avatar">
+                🐶
+            </div>
+
+            <div>
+
+                <h2>PawPals AI</h2>
+
+                <span class="online-status">
+                       Online
+                </span>
+
+            </div>
+
+        </div>
+
+        <div class="chatbot-actions">
+
+            <!-- DARK MODE -->
+            <button id="themeToggle" class="theme-btn">
+                🌙
+            </button>
+
+            <!-- CLOSE -->
+            <button id="closeChat" class="close-btn">
+                ✕
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- BODY -->
+    <div class="chatbot-body" id="chatDisplay">
+
+        <div class="bot-message">
+            Xin chào 👋 <br>
+            Tôi là trợ lý AI của PawPals.
+            Tôi có thể giúp bạn tìm dịch vụ spa,
+            hotel, chăm sóc thú cưng và nhiều hơn nữa 🐾
+        </div>
+
+    </div>
+
+    <!-- INPUT -->
+    <div class="chatbot-input">
+
+        <input
+                type="text"
+                id="chatInput"
+                placeholder="Nhập tin nhắn..."
+        >
+
+        <button id="sendButton">
+            ➤
+        </button>
+
+    </div>
+
+</div>
+<script th:src="@{/home.js}"></script>
+</body>
+</html>
