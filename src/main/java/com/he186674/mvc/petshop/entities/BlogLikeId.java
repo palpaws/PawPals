@@ -9,7 +9,9 @@ import java.util.Objects;
 @Embeddable
 public class BlogLikeId implements Serializable {
 
+    @Column(name = "post_id")
     private Integer postId;
+    @Column(name = "user_id")
     private Integer userId;
 
     public BlogLikeId() {}

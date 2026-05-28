@@ -5,22 +5,25 @@ package com.he186674.mvc.petshop.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "OrderDetails")
+@Table(name = "order_details")
 public class OrderDetail {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "order_detail_id")
     private Integer orderDetailId;
 
     @ManyToOne
-    @JoinColumn(name = "OrderId")
+    @JoinColumn(name = "order_id")
     private Order order;
 
     @ManyToOne
-    @JoinColumn(name = "ProductId")
+    @JoinColumn(name = "product_id")
     private Product product;
 
+    @Column(name = "quantity")
     private Integer quantity;
+    @Column(name = "unit_price")
     private Double unitPrice;
 
     // ===== Getter & Setter =====

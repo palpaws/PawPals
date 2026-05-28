@@ -7,23 +7,27 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "PetMoodHistory")
+@Table(name = "pet_mood_history")
 public class PetMoodHistory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "mood_id")
     private Integer moodId;
 
     @ManyToOne
-    @JoinColumn(name = "PetId")
+    @JoinColumn(name = "pet_id")
     private Pet pet;
 
-    @Column(nullable = false)
+    @Column(name = "mood", nullable = false)
     private String mood;
 
+    @Column(name = "description")
     private String description;
 
+    @Column(name = "mood_date")
     private LocalDate moodDate;
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     // ===== Getter & Setter =====

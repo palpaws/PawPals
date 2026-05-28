@@ -7,29 +7,36 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "Products")
+@Table(name = "products")
 public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "product_id")
     private Integer productId;
 
     @ManyToOne
-    @JoinColumn(name = "CategoryId")
+    @JoinColumn(name = "category_id")
     private ProductCategory category;
 
+    @Column(name = "product_name")
     private String productName;
 
-    @Column(length = 2000)
+    @Column(name = "description", length = 2000)
     private String description;
 
+    @Column(name = "price")
     private Double price;
+    @Column(name = "stock")
     private Integer stock;
 
+    @Column(name = "image_url")
     private String imageUrl;
 
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @Column(name = "is_active")
     private Boolean isActive = true;
 
     @OneToMany(mappedBy = "product")

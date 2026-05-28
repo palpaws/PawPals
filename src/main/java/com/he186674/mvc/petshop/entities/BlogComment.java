@@ -6,24 +6,26 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "BlogComments")
+@Table(name = "blog_comments")
 public class BlogComment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "comment_id")
     private Integer commentId;
 
     @ManyToOne
-    @JoinColumn(name = "PostId")
+    @JoinColumn(name = "post_id")
     private BlogPost post;
 
     @ManyToOne
-    @JoinColumn(name = "UserId")
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(nullable = false)
+    @Column(name = "content", nullable = false)
     private String content;
 
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     // ===== Getter & Setter =====

@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "BlogLikes")
+@Table(name = "blog_likes")
 public class BlogLike {
 
     @EmbeddedId
@@ -13,14 +13,15 @@ public class BlogLike {
 
     @ManyToOne
     @MapsId("postId")
-    @JoinColumn(name = "PostId")
+    @JoinColumn(name = "post_id")
     private BlogPost post;
 
     @ManyToOne
     @MapsId("userId")
-    @JoinColumn(name = "UserId")
+    @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(name = "liked_at")
     private LocalDateTime likedAt;
 
     // ===== Getter & Setter =====

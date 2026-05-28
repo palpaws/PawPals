@@ -1,303 +1,297 @@
-﻿CREATE TABLE Users (
-    UserId INT IDENTITY(1,1) PRIMARY KEY,
-    FullName NVARCHAR(150) NOT NULL,
-    Email NVARCHAR(150) NOT NULL UNIQUE,
-    PasswordHash NVARCHAR(255) NOT NULL,
-    Phone NVARCHAR(20) UNIQUE,
-    Address NVARCHAR(255),
-
-    Role NVARCHAR(20) DEFAULT 'USER'
-        CHECK (Role IN ('USER','ADMIN')),
-
-    -- 🔥 Streak System
-    CurrentStreak INT DEFAULT 0,
-    LongestStreak INT DEFAULT 0,
-    LastLoginDate DATE NULL,
-
-    CreatedAt DATETIME2 DEFAULT SYSDATETIME(),
-    IsActive BIT DEFAULT 1
+CREATE TABLE users (
+    user_id INT IDENTITY(1,1) PRIMARY KEY,
+    full_name NVARCHAR(150) NOT NULL,
+    email NVARCHAR(150) NOT NULL UNIQUE,
+    password_hash NVARCHAR(255) NOT NULL,
+    phone NVARCHAR(20),
+    address NVARCHAR(255),
+    role NVARCHAR(20) DEFAULT 'USER'
+        CHECK (role IN ('USER','ADMIN')),
+    premium_expired_at DATETIME2 NULL,
+    current_streak INT DEFAULT 0,
+    longest_streak INT DEFAULT 0,
+    last_login_date DATE NULL,
+    created_at DATETIME2 DEFAULT SYSDATETIME(),
+    is_active BIT DEFAULT 1
 );
+CREATE INDEX ix_users_email ON users(email);
 
-CREATE INDEX IX_Users_Email ON Users(Email);
+CREATE TABLE pets (
+    pet_id INT IDENTITY(1,1) PRIMARY KEY,
+    user_id INT NOT NULL,
 
+    pet_name NVARCHAR(100) NOT NULL,
+    species NVARCHAR(50) NOT NULL,
+    breed NVARCHAR(100),
+    gender NVARCHAR(10)
+        CHECK (gender IN ('Male','Female')),
+    date_of_birth DATE,
+    birthday DATE NULL,
+    weight DECIMAL(5,2) CHECK (weight >= 0),
+    height DECIMAL(5,2) NULL,
+    color NVARCHAR(50),
 
-CREATE TABLE Pets (
-    PetId INT IDENTITY(1,1) PRIMARY KEY,
-    UserId INT NOT NULL,
-
-    PetName NVARCHAR(100) NOT NULL,
-    Species NVARCHAR(50) NOT NULL,
-    Breed NVARCHAR(100),
-    Gender NVARCHAR(10)
-        CHECK (Gender IN ('Male','Female')),
-    DateOfBirth DATE,
-    Birthday DATE NULL,
-    Weight DECIMAL(5,2) CHECK (Weight >= 0),
-    Height DECIMAL(5,2) NULL,
-    Color NVARCHAR(50),
-
-    MicrochipCode NVARCHAR(100) UNIQUE,
+    microchip_code NVARCHAR(100) UNIQUE,
 
     -- Sức khỏe
-    BloodType NVARCHAR(10),
-    Allergies NVARCHAR(500),
-    ChronicDiseases NVARCHAR(500),
-    LastVetVisit DATE,
-    Vaccinated BIT DEFAULT 0,
-    Sterilized BIT DEFAULT 0,
-    HealthStatus NVARCHAR(255),
+    blood_type NVARCHAR(10),
+    allergies NVARCHAR(500),
+    chronic_diseases NVARCHAR(500),
+    last_vet_visit DATE,
+    vaccinated BIT DEFAULT 0,
+    sterilized BIT DEFAULT 0,
+    health_status NVARCHAR(255),
 
     -- Hành vi
-    Temperament NVARCHAR(255),
-    ActivityLevel NVARCHAR(50),
+    temperament NVARCHAR(255),
+    activity_level NVARCHAR(50),
 
     -- Ghép đôi
-    IsAvailableForMatching BIT DEFAULT 0,
-    MatchingDescription NVARCHAR(500),
+    is_available_for_matching BIT DEFAULT 0,
+    matching_description NVARCHAR(500),
 
     -- Hệ thống
-    ProfileViewCount INT DEFAULT 0,
-    IsPublic BIT DEFAULT 1,
-    Status NVARCHAR(20) DEFAULT 'ACTIVE'
-        CHECK (Status IN ('ACTIVE','INACTIVE','DECEASED')),
+    profile_view_count INT DEFAULT 0,
+    is_public BIT DEFAULT 1,
+    status NVARCHAR(20) DEFAULT 'ACTIVE'
+        CHECK (status IN ('ACTIVE','INACTIVE','DECEASED')),
 
-    CreatedAt DATETIME2 DEFAULT SYSDATETIME(),
-    UpdatedAt DATETIME2 NULL,
+    created_at DATETIME2 DEFAULT SYSDATETIME(),
+    updated_at DATETIME2 NULL,
 
-    CONSTRAINT FK_Pets_User FOREIGN KEY (UserId)
-        REFERENCES Users(UserId)
+    CONSTRAINT fk_pets_user FOREIGN KEY (user_id)
+        REFERENCES users(user_id)
         ON DELETE CASCADE
 );
 
-CREATE INDEX IX_Pets_UserId ON Pets(UserId);
+CREATE INDEX ix_pets_user_id ON pets(user_id);
 
 
-CREATE TABLE PetImages (
-    ImageId INT IDENTITY(1,1) PRIMARY KEY,
-    PetId INT NOT NULL,
-    ImageUrl NVARCHAR(255) NOT NULL,
-    IsPrimary BIT DEFAULT 0,
+CREATE TABLE pet_images (
+    image_id INT IDENTITY(1,1) PRIMARY KEY,
+    pet_id INT NOT NULL,
+    image_url NVARCHAR(255) NOT NULL,
+    is_primary BIT DEFAULT 0,
 
-    CONSTRAINT FK_PetImages_Pet FOREIGN KEY (PetId)
-        REFERENCES Pets(PetId)
-        ON DELETE CASCADE
-);
-
-
-CREATE TABLE PetMoodHistory (
-    MoodId INT IDENTITY(1,1) PRIMARY KEY,
-    PetId INT NOT NULL,
-    Mood NVARCHAR(50) NOT NULL,
-    Description NVARCHAR(500),
-    MoodDate DATE DEFAULT CAST(GETDATE() AS DATE),
-    CreatedAt DATETIME2 DEFAULT SYSDATETIME(),
-
-    CONSTRAINT FK_Mood_Pet FOREIGN KEY (PetId)
-        REFERENCES Pets(PetId)
+    CONSTRAINT fk_pet_images_pet FOREIGN KEY (pet_id)
+        REFERENCES pets(pet_id)
         ON DELETE CASCADE
 );
 
 
-CREATE TABLE Vaccines (
-    VaccineId INT IDENTITY(1,1) PRIMARY KEY,
-    VaccineName NVARCHAR(150) NOT NULL,
-    Description NVARCHAR(1000),
-    RecommendedMonths INT
-);
+CREATE TABLE pet_mood_history (
+    mood_id INT IDENTITY(1,1) PRIMARY KEY,
+    pet_id INT NOT NULL,
+    mood NVARCHAR(50) NOT NULL,
+    description NVARCHAR(500),
+    mood_date DATE DEFAULT CAST(GETDATE() AS DATE),
+    created_at DATETIME2 DEFAULT SYSDATETIME(),
 
-
-
-CREATE TABLE PetVaccinations (
-    PetVaccinationId INT IDENTITY(1,1) PRIMARY KEY,
-    PetId INT NOT NULL,
-    VaccineId INT NOT NULL,
-    InjectionDate DATE,
-    NextDueDate DATE,
-    Status NVARCHAR(20) DEFAULT 'PENDING'
-        CHECK (Status IN ('PENDING','COMPLETED','OVERDUE')),
-
-    CONSTRAINT FK_PV_Pet FOREIGN KEY (PetId)
-        REFERENCES Pets(PetId)
-        ON DELETE CASCADE,
-
-    CONSTRAINT FK_PV_Vaccine FOREIGN KEY (VaccineId)
-        REFERENCES Vaccines(VaccineId)
-);
-
-
-CREATE TABLE Notifications (
-    NotificationId INT IDENTITY(1,1) PRIMARY KEY,
-    UserId INT NOT NULL,
-    Title NVARCHAR(200),
-    Content NVARCHAR(1000),
-    IsRead BIT DEFAULT 0,
-    CreatedAt DATETIME2 DEFAULT SYSDATETIME(),
-
-    CONSTRAINT FK_Notification_User FOREIGN KEY (UserId)
-        REFERENCES Users(UserId)
+    CONSTRAINT fk_mood_pet FOREIGN KEY (pet_id)
+        REFERENCES pets(pet_id)
         ON DELETE CASCADE
 );
 
 
-CREATE TABLE PetMatchingPosts (
-    PostId INT IDENTITY(1,1) PRIMARY KEY,
-    PetId INT NOT NULL,
-    Title NVARCHAR(150),
-    Description NVARCHAR(1000),
-    Location NVARCHAR(150),
-    CreatedAt DATETIME2 DEFAULT SYSDATETIME(),
-    Status NVARCHAR(20) DEFAULT 'OPEN'
-        CHECK (Status IN ('OPEN','CLOSED')),
+CREATE TABLE vaccines (
+    vaccine_id INT IDENTITY(1,1) PRIMARY KEY,
+    vaccine_name NVARCHAR(150) NOT NULL,
+    description NVARCHAR(1000),
+    recommended_months INT
+);
 
-    CONSTRAINT FK_Matching_Pet FOREIGN KEY (PetId)
-        REFERENCES Pets(PetId)
+
+
+CREATE TABLE pet_vaccinations (
+    pet_vaccination_id INT IDENTITY(1,1) PRIMARY KEY,
+    pet_id INT NOT NULL,
+    vaccine_id INT NOT NULL,
+    injection_date DATE,
+    next_due_date DATE,
+    status NVARCHAR(20) DEFAULT 'PENDING'
+        CHECK (status IN ('PENDING','COMPLETED','OVERDUE')),
+
+    CONSTRAINT fk_pv_pet FOREIGN KEY (pet_id)
+        REFERENCES pets(pet_id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_pv_vaccine FOREIGN KEY (vaccine_id)
+        REFERENCES vaccines(vaccine_id)
+);
+
+
+CREATE TABLE notifications (
+    notification_id INT IDENTITY(1,1) PRIMARY KEY,
+    user_id INT NOT NULL,
+    title NVARCHAR(200),
+    content NVARCHAR(1000),
+    is_read BIT DEFAULT 0,
+    created_at DATETIME2 DEFAULT SYSDATETIME(),
+
+    CONSTRAINT fk_notification_user FOREIGN KEY (user_id)
+        REFERENCES users(user_id)
         ON DELETE CASCADE
 );
 
 
-CREATE TABLE BlogCategories (
-    CategoryId INT IDENTITY(1,1) PRIMARY KEY,
-    CategoryName NVARCHAR(100) NOT NULL UNIQUE,
-    Description NVARCHAR(255)
+CREATE TABLE pet_matching_posts (
+    post_id INT IDENTITY(1,1) PRIMARY KEY,
+    pet_id INT NOT NULL,
+    title NVARCHAR(150),
+    description NVARCHAR(1000),
+    location NVARCHAR(150),
+    created_at DATETIME2 DEFAULT SYSDATETIME(),
+    status NVARCHAR(20) DEFAULT 'OPEN'
+        CHECK (status IN ('OPEN','CLOSED')),
+
+    CONSTRAINT fk_matching_pet FOREIGN KEY (pet_id)
+        REFERENCES pets(pet_id)
+        ON DELETE CASCADE
 );
 
 
-CREATE TABLE BlogPosts (
-    PostId INT IDENTITY(1,1) PRIMARY KEY,
-    AuthorId INT NOT NULL,
-    CategoryId INT NOT NULL,
-    Title NVARCHAR(200) NOT NULL,
-    Slug NVARCHAR(250) UNIQUE,
-    ThumbnailUrl NVARCHAR(255),
-    Content NVARCHAR(MAX) NOT NULL,
-    ViewCount INT DEFAULT 0,
-    CreatedAt DATETIME2 DEFAULT SYSDATETIME(),
-    Status NVARCHAR(20) DEFAULT 'PUBLISHED'
-        CHECK (Status IN ('DRAFT','PUBLISHED','HIDDEN')),
+CREATE TABLE blog_categories (
+    category_id INT IDENTITY(1,1) PRIMARY KEY,
+    category_name NVARCHAR(100) NOT NULL UNIQUE,
+    description NVARCHAR(255)
+);
 
-    CONSTRAINT FK_Blog_Author FOREIGN KEY (AuthorId)
-        REFERENCES Users(UserId),
 
-    CONSTRAINT FK_Blog_Category FOREIGN KEY (CategoryId)
-        REFERENCES BlogCategories(CategoryId)
+CREATE TABLE blog_posts (
+    post_id INT IDENTITY(1,1) PRIMARY KEY,
+    author_id INT NOT NULL,
+    category_id INT NOT NULL,
+    title NVARCHAR(200) NOT NULL,
+    slug NVARCHAR(250) UNIQUE,
+    thumbnail_url NVARCHAR(255),
+    content NVARCHAR(MAX) NOT NULL,
+    view_count INT DEFAULT 0,
+    created_at DATETIME2 DEFAULT SYSDATETIME(),
+    status NVARCHAR(20) DEFAULT 'PUBLISHED'
+        CHECK (status IN ('DRAFT','PUBLISHED','HIDDEN')),
+
+    CONSTRAINT fk_blog_author FOREIGN KEY (author_id)
+        REFERENCES users(user_id),
+
+    CONSTRAINT fk_blog_category FOREIGN KEY (category_id)
+        REFERENCES blog_categories(category_id)
 );
 
 
 
-CREATE TABLE BlogComments (
-    CommentId INT IDENTITY(1,1) PRIMARY KEY,
-    PostId INT NOT NULL,
-    UserId INT NOT NULL,
-    Content NVARCHAR(1000) NOT NULL,
-    CreatedAt DATETIME2 DEFAULT SYSDATETIME(),
+CREATE TABLE blog_comments (
+    comment_id INT IDENTITY(1,1) PRIMARY KEY,
+    post_id INT NOT NULL,
+    user_id INT NOT NULL,
+    content NVARCHAR(1000) NOT NULL,
+    created_at DATETIME2 DEFAULT SYSDATETIME(),
 
-    CONSTRAINT FK_Comment_Post FOREIGN KEY (PostId)
-        REFERENCES BlogPosts(PostId)
+    CONSTRAINT fk_comment_post FOREIGN KEY (post_id)
+        REFERENCES blog_posts(post_id)
         ON DELETE CASCADE,
 
-    CONSTRAINT FK_Comment_User FOREIGN KEY (UserId)
-        REFERENCES Users(UserId)
+    CONSTRAINT fk_comment_user FOREIGN KEY (user_id)
+        REFERENCES users(user_id)
 );
 
 
-CREATE TABLE BlogLikes (
-    PostId INT NOT NULL,
-    UserId INT NOT NULL,
-    LikedAt DATETIME2 DEFAULT SYSDATETIME(),
+CREATE TABLE blog_likes (
+    post_id INT NOT NULL,
+    user_id INT NOT NULL,
+    liked_at DATETIME2 DEFAULT SYSDATETIME(),
 
-    PRIMARY KEY (PostId, UserId),
+    PRIMARY KEY (post_id, user_id),
 
-    CONSTRAINT FK_Like_Post FOREIGN KEY (PostId)
-        REFERENCES BlogPosts(PostId)
+    CONSTRAINT fk_like_post FOREIGN KEY (post_id)
+        REFERENCES blog_posts(post_id)
         ON DELETE CASCADE,
 
-    CONSTRAINT FK_Like_User FOREIGN KEY (UserId)
-        REFERENCES Users(UserId)
+    CONSTRAINT fk_like_user FOREIGN KEY (user_id)
+        REFERENCES users(user_id)
 );
 
 
-CREATE TABLE ProductCategories (
-    CategoryId INT IDENTITY(1,1) PRIMARY KEY,
-    CategoryName NVARCHAR(100) NOT NULL UNIQUE
+CREATE TABLE product_categories (
+    category_id INT IDENTITY(1,1) PRIMARY KEY,
+    category_name NVARCHAR(100) NOT NULL UNIQUE
 );
 
 
-CREATE TABLE Products (
-    ProductId INT IDENTITY(1,1) PRIMARY KEY,
-    CategoryId INT NOT NULL,
-    ProductName NVARCHAR(150) NOT NULL,
-    Description NVARCHAR(2000),
-    Price DECIMAL(18,2) CHECK (Price >= 0),
-    Stock INT DEFAULT 0 CHECK (Stock >= 0),
-    ImageUrl NVARCHAR(255),
-    CreatedAt DATETIME2 DEFAULT SYSDATETIME(),
-    IsActive BIT DEFAULT 1,
+CREATE TABLE products (
+    product_id INT IDENTITY(1,1) PRIMARY KEY,
+    category_id INT NOT NULL,
+    product_name NVARCHAR(150) NOT NULL,
+    description NVARCHAR(2000),
+    price DECIMAL(18,2) CHECK (price >= 0),
+    stock INT DEFAULT 0 CHECK (stock >= 0),
+    image_url NVARCHAR(255),
+    created_at DATETIME2 DEFAULT SYSDATETIME(),
+    is_active BIT DEFAULT 1,
 
-    CONSTRAINT FK_Product_Category FOREIGN KEY (CategoryId)
-        REFERENCES ProductCategories(CategoryId)
+    CONSTRAINT fk_product_category FOREIGN KEY (category_id)
+        REFERENCES product_categories(category_id)
 );
 
-CREATE TABLE Orders (
-    OrderId INT IDENTITY(1,1) PRIMARY KEY,
-    UserId INT NOT NULL,
-    OrderDate DATETIME2 DEFAULT SYSDATETIME(),
-    TotalAmount DECIMAL(18,2),
-    Status NVARCHAR(30) DEFAULT 'PENDING'
-        CHECK (Status IN ('PENDING','CONFIRMED','SHIPPING','COMPLETED','CANCELLED')),
+CREATE TABLE orders (
+    order_id INT IDENTITY(1,1) PRIMARY KEY,
+    user_id INT NOT NULL,
+    order_date DATETIME2 DEFAULT SYSDATETIME(),
+    total_amount DECIMAL(18,2),
+    status NVARCHAR(30) DEFAULT 'PENDING'
+        CHECK (status IN ('PENDING','CONFIRMED','SHIPPING','COMPLETED','CANCELLED')),
 
-    ShippingAddress NVARCHAR(255),
-    Phone NVARCHAR(20),
+    shipping_address NVARCHAR(255),
+    phone NVARCHAR(20),
 
-    CONSTRAINT FK_Order_User FOREIGN KEY (UserId)
-        REFERENCES Users(UserId)
+    CONSTRAINT fk_order_user FOREIGN KEY (user_id)
+        REFERENCES users(user_id)
 );
 
 
 
-CREATE TABLE OrderDetails (
-    OrderDetailId INT IDENTITY(1,1) PRIMARY KEY,
-    OrderId INT NOT NULL,
-    ProductId INT NOT NULL,
-    Quantity INT CHECK (Quantity > 0),
-    UnitPrice DECIMAL(18,2),
+CREATE TABLE order_details (
+    order_detail_id INT IDENTITY(1,1) PRIMARY KEY,
+    order_id INT NOT NULL,
+    product_id INT NOT NULL,
+    quantity INT CHECK (quantity > 0),
+    unit_price DECIMAL(18,2),
 
-    CONSTRAINT FK_OD_Order FOREIGN KEY (OrderId)
-        REFERENCES Orders(OrderId)
+    CONSTRAINT fk_od_order FOREIGN KEY (order_id)
+        REFERENCES orders(order_id)
         ON DELETE CASCADE,
 
-    CONSTRAINT FK_OD_Product FOREIGN KEY (ProductId)
-        REFERENCES Products(ProductId)
+    CONSTRAINT fk_od_product FOREIGN KEY (product_id)
+        REFERENCES products(product_id)
 );
 
 
-CREATE TABLE StreakRewards (
-    RewardId INT IDENTITY(1,1) PRIMARY KEY,
-    RequiredDays INT NOT NULL UNIQUE,  -- số ngày cần đạt
-    RewardName NVARCHAR(100) NOT NULL,
-    Description NVARCHAR(255),
-    BadgeIconUrl NVARCHAR(255),        -- icon huy hiệu (nếu có)
-    CreatedAt DATETIME2 DEFAULT SYSDATETIME()
+CREATE TABLE streak_rewards (
+    reward_id INT IDENTITY(1,1) PRIMARY KEY,
+    required_days INT NOT NULL UNIQUE,  -- số ngày cần đạt
+    reward_name NVARCHAR(100) NOT NULL,
+    description NVARCHAR(255),
+    badge_icon_url NVARCHAR(255),        -- icon huy hiệu (nếu có)
+    created_at DATETIME2 DEFAULT SYSDATETIME()
 );
-INSERT INTO StreakRewards (RequiredDays, RewardName, Description)
-VALUES 
-(7, 'Bronze Badge', 'Giữ lửa 7 ngày liên tiếp'),
-(30, 'Silver Badge', 'Giữ lửa 30 ngày liên tiếp'),
-(100, 'Golden Flame', 'Giữ lửa 100 ngày liên tiếp');
+INSERT INTO streak_rewards (required_days, reward_name, description)
+VALUES
+    (7, N'Bronze Badge', N'Giữ lửa 7 ngày liên tiếp'),
+    (30, N'Silver Badge', N'Giữ lửa 30 ngày liên tiếp'),
+    (100, N'Golden Flame', N'Giữ lửa 100 ngày liên tiếp');
 
+CREATE TABLE user_rewards (
+    user_reward_id INT IDENTITY(1,1) PRIMARY KEY,
+    user_id INT NOT NULL,
+    reward_id INT NOT NULL,
+    awarded_at DATETIME2 DEFAULT SYSDATETIME(),
 
-CREATE TABLE UserRewards (
-    UserRewardId INT IDENTITY(1,1) PRIMARY KEY,
-    UserId INT NOT NULL,
-    RewardId INT NOT NULL,
-    AwardedAt DATETIME2 DEFAULT SYSDATETIME(),
+    CONSTRAINT uq_user_reward UNIQUE (user_id, reward_id),
 
-    CONSTRAINT UQ_User_Reward UNIQUE (UserId, RewardId),
-
-    CONSTRAINT FK_UserReward_User FOREIGN KEY (UserId)
-        REFERENCES Users(UserId)
+    CONSTRAINT fk_userreward_user FOREIGN KEY (user_id)
+        REFERENCES users(user_id)
         ON DELETE CASCADE,
 
-    CONSTRAINT FK_UserReward_Reward FOREIGN KEY (RewardId)
-        REFERENCES StreakRewards(RewardId)
+    CONSTRAINT fk_userreward_reward FOREIGN KEY (reward_id)
+        REFERENCES streak_rewards(reward_id)
         ON DELETE CASCADE
 );

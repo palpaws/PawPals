@@ -7,23 +7,27 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "StreakRewards")
+@Table(name = "streak_rewards")
 public class StreakReward {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "reward_id")
     private Integer rewardId;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "required_days", nullable = false, unique = true)
     private Integer requiredDays;
 
-    @Column(nullable = false)
+    @Column(name = "reward_name", nullable = false)
     private String rewardName;
 
+    @Column(name = "description")
     private String description;
 
+    @Column(name = "badge_icon_url")
     private String badgeIconUrl;
 
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "reward")

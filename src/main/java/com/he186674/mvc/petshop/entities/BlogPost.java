@@ -7,36 +7,42 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "BlogPosts")
+@Table(name = "blog_posts")
 public class BlogPost {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "post_id")
     private Integer postId;
 
     @ManyToOne
-    @JoinColumn(name = "AuthorId")
+    @JoinColumn(name = "author_id")
     private User author;
 
     @ManyToOne
-    @JoinColumn(name = "CategoryId")
+    @JoinColumn(name = "category_id")
     private BlogCategory category;
 
-    @Column(nullable = false)
+    @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(unique = true)
+    @Column(name = "slug", unique = true)
     private String slug;
 
+    @Column(name = "thumbnail_url")
     private String thumbnailUrl;
 
+    @Column(name = "content")
     @Lob
     private String content;
 
+    @Column(name = "view_count")
     private Integer viewCount = 0;
 
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @Column(name = "status")
     private String status;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)

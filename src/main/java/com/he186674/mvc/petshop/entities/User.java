@@ -10,34 +10,48 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "Users")
+@Table(name = "users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Integer userId;
 
+    @Column(name = "full_name", nullable = false)
     private String fullName;
 
-    @Column(unique = true)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
+    @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
-    @Column(unique = true)
+    @Column(name = "phone", unique = true)
     private String phone;
 
+    @Column(name = "address")
     private String address;
 
+    @Column(name = "role")
     private String role = "USER";
 
+    @Column(name = "premium_expired_at")
+    private LocalDateTime premiumExpiredAt;
+
+    @Column(name = "current_streak")
     private Integer currentStreak = 0;
+
+    @Column(name = "longest_streak")
     private Integer longestStreak = 0;
 
+    @Column(name = "last_login_date")
     private LocalDate lastLoginDate;
 
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @Column(name = "is_active")
     private Boolean isActive = true;
 
     // ===== RELATIONSHIPS =====
@@ -74,6 +88,9 @@ public class User {
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
 
+    public LocalDateTime getPremiumExpiredAt() { return premiumExpiredAt; }
+    public void setPremiumExpiredAt(LocalDateTime premiumExpiredAt) { this.premiumExpiredAt = premiumExpiredAt; }
+
     public Integer getCurrentStreak() { return currentStreak; }
     public void setCurrentStreak(Integer currentStreak) { this.currentStreak = currentStreak; }
 
@@ -97,4 +114,5 @@ public class User {
 
     public List<UserReward> getRewards() { return rewards; }
     public void setRewards(List<UserReward> rewards) { this.rewards = rewards; }
+
 }

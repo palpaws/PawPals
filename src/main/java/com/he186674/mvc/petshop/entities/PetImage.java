@@ -5,20 +5,22 @@ package com.he186674.mvc.petshop.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "PetImages")
+@Table(name = "pet_images")
 public class PetImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "image_id")
     private Integer imageId;
 
     @ManyToOne
-    @JoinColumn(name = "PetId")
+    @JoinColumn(name = "pet_id")
     private Pet pet;
 
-    @Column(nullable = false)
+    @Column(name = "image_url", nullable = false)
     private String imageUrl;
 
+    @Column(name = "is_primary")
     private Boolean isPrimary = false;
 
     // ===== Getter & Setter =====

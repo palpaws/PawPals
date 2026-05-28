@@ -6,24 +6,28 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Notifications")
+@Table(name = "notifications")
 public class Notification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "notification_id")
     private Integer notificationId;
 
     @ManyToOne
-    @JoinColumn(name = "UserId")
+    @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(name = "title")
     private String title;
 
-    @Column(length = 1000)
+    @Column(name = "content", length = 1000)
     private String content;
 
+    @Column(name = "is_read")
     private Boolean isRead = false;
 
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     // ===== Getter & Setter =====

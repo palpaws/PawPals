@@ -6,16 +6,18 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "BlogCategories")
+@Table(name = "blog_categories")
 public class BlogCategory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "category_id")
     private Integer categoryId;
 
-    @Column(unique = true, nullable = false)
+    @Column(name = "category_name", unique = true, nullable = false)
     private String categoryName;
 
+    @Column(name = "description")
     private String description;
 
     @OneToMany(mappedBy = "category")
