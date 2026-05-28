@@ -6,24 +6,28 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "PetVaccinations")
+@Table(name = "pet_vaccinations")
 public class PetVaccination {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "pet_vaccination_id")
     private Integer petVaccinationId;
 
     @ManyToOne
-    @JoinColumn(name = "PetId")
+    @JoinColumn(name = "pet_id")
     private Pet pet;
 
     @ManyToOne
-    @JoinColumn(name = "VaccineId")
+    @JoinColumn(name = "vaccine_id")
     private Vaccine vaccine;
 
+    @Column(name = "injection_date")
     private LocalDate injectionDate;
+    @Column(name = "next_due_date")
     private LocalDate nextDueDate;
 
+    @Column(name = "status")
     private String status;
 
     // ===== Getter & Setter =====

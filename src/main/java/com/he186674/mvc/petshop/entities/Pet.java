@@ -8,52 +8,79 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "Pets")
+@Table(name = "pets")
 public class Pet {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "pet_id")
     private Integer petId;
 
     @ManyToOne
-    @JoinColumn(name = "UserId")
+    @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(name = "pet_name")
     private String petName;
+    @Column(name = "species")
     private String species;
+    @Column(name = "breed")
     private String breed;
+    @Column(name = "gender")
     private String gender;
 
+    @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
+    @Column(name = "birthday")
     private LocalDate birthday;
 
+    @Column(name = "weight")
     private Double weight;
+    @Column(name = "height")
     private Double height;
 
+    @Column(name = "color")
     private String color;
+    @Column(name = "microchip_code")
     private String microchipCode;
 
+    @Column(name = "blood_type")
     private String bloodType;
+    @Column(name = "allergies")
     private String allergies;
+    @Column(name = "chronic_diseases")
     private String chronicDiseases;
+    @Column(name = "last_vet_visit")
     private LocalDate lastVetVisit;
 
+    @Column(name = "vaccinated")
     private Boolean vaccinated;
+    @Column(name = "sterilized")
     private Boolean sterilized;
 
+    @Column(name = "health_status")
     private String healthStatus;
+    @Column(name = "temperament")
     private String temperament;
+    @Column(name = "activity_level")
     private String activityLevel;
 
+    @Column(name = "is_available_for_matching")
     private Boolean isAvailableForMatching;
+    @Column(name = "matching_description")
     private String matchingDescription;
 
+    @Column(name = "profile_view_count")
     private Integer profileViewCount;
+    @Column(name = "is_public")
     private Boolean isPublic;
 
+    @Column(name = "status")
     private String status;
 
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     // RELATIONSHIPS

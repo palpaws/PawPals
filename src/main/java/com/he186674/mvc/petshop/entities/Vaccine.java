@@ -6,19 +6,21 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "Vaccines")
+@Table(name = "vaccines")
 public class Vaccine {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "vaccine_id")
     private Integer vaccineId;
 
-    @Column(nullable = false)
+    @Column(name = "vaccine_name", nullable = false)
     private String vaccineName;
 
-    @Column(length = 1000)
+    @Column(name = "description", length = 1000)
     private String description;
 
+    @Column(name = "recommended_months")
     private Integer recommendedMonths;
 
     @OneToMany(mappedBy = "vaccine")

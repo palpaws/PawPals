@@ -5,22 +5,24 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "UserRewards",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"UserId", "RewardId"}))
+@Table(name = "user_rewards",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "reward_id"}))
 public class UserReward {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_reward_id")
     private Integer userRewardId;
 
     @ManyToOne
-    @JoinColumn(name = "UserId")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "RewardId")
+    @JoinColumn(name = "reward_id")
     private StreakReward reward;
 
+    @Column(name = "awarded_at")
     private LocalDateTime awardedAt;
 
     // ===== Getter & Setter =====

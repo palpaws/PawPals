@@ -6,26 +6,31 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "PetMatchingPosts")
+@Table(name = "pet_matching_posts")
 public class PetMatchingPost {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "post_id")
     private Integer postId;
 
     @ManyToOne
-    @JoinColumn(name = "PetId")
+    @JoinColumn(name = "pet_id")
     private Pet pet;
 
+    @Column(name = "title")
     private String title;
 
-    @Column(length = 1000)
+    @Column(name = "description", length = 1000)
     private String description;
 
+    @Column(name = "location")
     private String location;
 
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @Column(name = "status")
     private String status;
 
     // ===== Getter & Setter =====

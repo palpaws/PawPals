@@ -5,14 +5,15 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "ProductCategories")
+@Table(name = "product_categories")
 public class ProductCategory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "category_id")
     private Integer categoryId;
 
-    @Column(unique = true)
+    @Column(name = "category_name", unique = true)
     private String categoryName;
 
     @OneToMany(mappedBy = "category")

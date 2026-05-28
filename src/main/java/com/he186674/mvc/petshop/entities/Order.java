@@ -7,24 +7,30 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "Orders")
+@Table(name = "orders")
 public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "order_id")
     private Integer orderId;
 
     @ManyToOne
-    @JoinColumn(name = "UserId")
+    @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(name = "order_date")
     private LocalDateTime orderDate;
 
+    @Column(name = "total_amount")
     private Double totalAmount;
 
+    @Column(name = "status")
     private String status;
 
+    @Column(name = "shipping_address")
     private String shippingAddress;
+    @Column(name = "phone")
     private String phone;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
