@@ -7,8 +7,8 @@
     <title>Đăng nhập | PawPals</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
-
-
+    <!-- ICON -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
 
     <!-- LOGIN CSS -->
     <link rel="stylesheet" th:href="@{/login.css}">
@@ -32,6 +32,18 @@
 
             <h2>Đăng nhập</h2>
 
+            <!-- Error message -->
+            <div th:if="${error}" style="background-color: #ffeef0; color: #d73a49; border: 1px solid rgba(215, 58, 73, 0.4); padding: 12px; border-radius: 12px; margin-bottom: 20px; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 8px; justify-content: center; font-family: sans-serif;">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <span th:text="${error}"></span>
+            </div>
+
+            <!-- Success message -->
+            <div th:if="${success}" style="background-color: #e6f6ec; color: #28a745; border: 1px solid rgba(40, 167, 69, 0.4); padding: 12px; border-radius: 12px; margin-bottom: 20px; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 8px; justify-content: center; font-family: sans-serif;">
+                <i class="fa-solid fa-circle-check"></i>
+                <span th:text="${success}"></span>
+            </div>
+
             <form class="login-form"
                   th:action="@{/login}"
                   method="post">
@@ -39,16 +51,21 @@
                 <div class="input-group">
 
                     <input type="email"
+                           id="emailInput"
                            name="email"
-                           placeholder="Email">
+                           th:value="${emailVal}"
+                           placeholder="Email"
+                           required>
 
                 </div>
 
                 <div class="input-group">
 
                     <input type="password"
+                           id="passwordInput"
                            name="password"
-                           placeholder="Mật khẩu">
+                           placeholder="Mật khẩu"
+                           required>
 
                 </div>
 
@@ -56,7 +73,7 @@
 
                     <label class="remember-box">
 
-                        <input type="checkbox">
+                        <input type="checkbox" id="rememberCheckbox" name="rememberMe">
 
                         <span>Ghi nhớ đăng nhập</span>
 
@@ -92,6 +109,36 @@
     </section>
 
 </div>
+
+<script>
+    const emailInput = document.getElementById('emailInput');
+    const rememberCheckbox = document.getElementById('rememberCheckbox');
+
+    // Load remembered email on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        const savedEmail = localStorage.getItem('rememberedEmail');
+        if (savedEmail) {
+            emailInput.value = savedEmail;
+            rememberCheckbox.checked = true;
+        }
+    });
+
+    // Save email when checkbox is checked/unchecked
+    rememberCheckbox.addEventListener('change', () => {
+        if (rememberCheckbox.checked && emailInput.value) {
+            localStorage.setItem('rememberedEmail', emailInput.value);
+        } else {
+            localStorage.removeItem('rememberedEmail');
+        }
+    });
+
+    // Update saved email when email input changes
+    emailInput.addEventListener('change', () => {
+        if (rememberCheckbox.checked && emailInput.value) {
+            localStorage.setItem('rememberedEmail', emailInput.value);
+        }
+    });
+</script>
 
 </body>
 </html>

@@ -15,9 +15,26 @@
         <a th:href="@{/profile}">Bạn</a>
     </nav>
 
-    <button class="top-btn">
-        Đăng Ký
-    </button>
+    <!-- Auth Action Buttons -->
+    <div th:if="${session != null and session.currentUser != null}" style="display: flex; align-items: center; gap: 15px;">
+        <span style="font-size: 16px; font-weight: 600; color: #143f38;" th:text="${'Xin chào, ' + session.currentUser.fullName}"></span>
+        <a th:href="@{/logout}">
+            <button class="top-btn" style="background: linear-gradient(135deg,#ff7e5f,#feb47b); box-shadow: 0 8px 18px rgba(255,126,95,0.35);">
+                Đăng xuất
+            </button>
+        </a>
+    </div>
+    
+    <div th:if="${session == null or session.currentUser == null}" style="display: flex; align-items: center; gap: 20px;">
+        <a th:href="@{/login}" style="text-decoration: none; font-size: 16px; font-weight: 600; color: #143f38; transition: 0.3s;" onmouseover="this.style.color='#eb6f99'" onmouseout="this.style.color='#143f38'">
+            Đăng nhập
+        </a>
+        <a th:href="@{/register}">
+            <button class="top-btn">
+                Đăng Ký
+            </button>
+        </a>
+    </div>
 
 </header>
 
