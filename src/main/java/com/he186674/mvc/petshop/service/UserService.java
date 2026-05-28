@@ -1,0 +1,8 @@
+package com.he186674.mvc.petshop.service;
+
+import com.he186674.mvc.petshop.entities.User;
+
+public interface UserService {
+    User register(String fullName, String email, String password, String confirmPassword);
+    User login(String email, String password);
+}
