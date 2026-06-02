@@ -57,7 +57,7 @@
                 <div class="transport-btn active" data-profile="driving" onclick="selectTransport('driving', this)">
                     <i class="fas fa-car"></i> Ô tô
                 </div>
-                <div class="transport-btn" data-profile="driving" onclick="selectTransport('driving', this)">
+                <div class="transport-btn" data-profile="motorcycle" onclick="selectTransport('motorcycle', this)">
                     <i class="fas fa-motorcycle"></i> Xe máy
                 </div>
                 <div class="transport-btn" data-profile="walking" onclick="selectTransport('walking', this)">
@@ -272,6 +272,26 @@
                 div.onclick = () => {
                     flyToPlace(lat, lng, name, 'search-' + idx);
                     addToPlaceList([{ lat, lng, name, address: item.display_name, category: 'search' }]);
+                    // Hiển thị marker + popup tại vị trí chính xác
+                    clearClickMarkers();
+                    const icon = L.divIcon({
+                        className: 'custom-marker end',
+                        html: '<i class="fas fa-map-pin"></i>',
+                        iconSize: [36, 36],
+                        iconAnchor: [18, 36]
+                    });
+                    const marker = L.marker([lat, lng], { icon })
+                        .addTo(map)
+                        .bindPopup(
+                            '<strong>📍 ' + name + '</strong><br>' +
+                            item.display_name.substring(0, 80) + '...<br><br>' +
+                            '<button onclick="showDirectionByLatLng(' + lat + ', ' + lng + ', \'' +
+                                name.replace(/'/g, "\\'") + '\')" ' +
+                                'style="padding:6px 14px;border:none;border-radius:8px;background:#a89ce4;color:white;cursor:pointer;font-family:Fredoka,sans-serif;">' +
+                                '<i class="fas fa-route"></i> Chỉ đường đến đây</button>'
+                        )
+                        .openPopup();
+                    clickMarkers.push(marker);
                 };
                 resultsDiv.appendChild(div);
             });
@@ -402,7 +422,11 @@
                         '<i class="fas fa-eye"></i> Xem</button>' +
                 '</div>';
 
-            card.onclick = () => flyToPlace(place.lat, place.lng, place.name, idx);
+            card.onclick = () => {
+                flyToPlace(place.lat, place.lng, place.name, idx);
+                // Optionally, directly show direction to this place upon card click
+                // showDirectionByLatLng(place.lat, place.lng, place.name);
+            };
             list.appendChild(card);
 
             addPlaceMarker(place.lat, place.lng, place.name, idx, place.category);
@@ -539,10 +563,12 @@
             '<div class="loading-spinner active"><i class="fas fa-spinner"></i> Đang tìm đường...</div>';
 
         try {
-            // Map transport to OSRM profile
-            let profile = 'driving';
-            if (currentTransport === 'walking') profile = 'foot';
-            else if (currentTransport === 'cycling') profile = 'bicycle';
+            // Map transport to OSRM profile + điều chỉnh tốc độ
+            let profile = currentTransport;
+            let speedFactor = 1.0; // Ô tô: 1.0 (chuẩn)
+            if (currentTransport === 'walking') { profile = 'foot'; speedFactor = 1.0; }
+            else if (currentTransport === 'cycling') { profile = 'bicycle'; speedFactor = 1.0; }
+            else if (currentTransport === 'motorcycle') { profile = 'driving'; speedFactor = 1.3; } // Xe máy chậm hơn ô tô ~30%
 
             const url = 'https://router.project-osrm.org/route/v1/' + profile + '/' +
                 userLocation.lng + ',' + userLocation.lat + ';' +
@@ -562,7 +588,11 @@
 
             const route = data.routes[0];
             const distanceKm = (route.distance / 1000).toFixed(1);
-            const durationMin = Math.round(route.duration / 60);
+            // Áp dụng speedFactor: xe máy *1.3, ô tô *1.0, đi bộ/xe đạp *1.0 (OSRM đã tính đúng)
+            let durationMin = Math.round(route.duration / 60);
+            if (currentTransport === 'motorcycle') {
+                durationMin = Math.round(durationMin * 1.3); // Xe máy chậm hơn ô tô 30%
+            }
 
             let durationText = '';
             if (durationMin < 60) {
