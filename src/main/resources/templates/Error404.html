@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 | PawPals</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+    <link rel="stylesheet" th:href="@{/error404.css}">
+    <link rel="stylesheet" th:href="@{/header.css}">
+</head>
+<body>
+<div class="error-page">
+    <div th:replace="fragments/header :: header"></div>
+
+    <section class="error-section">
+        <div class="error-container">
+            <div class="error-illustration">
+                <div class="cat-face">
+                    <div class="cat-head">
+                        <div class="cat-ears">
+                            <span class="ear left-ear"></span>
+                            <span class="ear right-ear"></span>
+                        </div>
+                        <div class="cat-eyes">
+                            <span class="eye left-eye">
+                                <span class="pupil">✕</span>
+                            </span>
+                            <span class="eye right-eye">
+                                <span class="pupil">✕</span>
+                            </span>
+                        </div>
+                        <div class="cat-nose"></div>
+                        <div class="cat-mouth"></div>
+                        <div class="cat-whiskers">
+                            <span class="whisker left-whisker-1"></span>
+                            <span class="whisker left-whisker-2"></span>
+                            <span class="whisker right-whisker-1"></span>
+                            <span class="whisker right-whisker-2"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="error-code">
+                    <span class="code-left">4</span>
+                    <span class="code-center">0</span>
+                    <span class="code-right">4</span>
+                </div>
+            </div>
+
+            <h1 class="error-title">Không tìm thấy trang</h1>
+            <p class="error-description">
+                Có vẻ có vấn đề với trang web này<br>
+                dừng lại bạn có thể quay lại ...
+            </p>
+
+            <a href="/" class="error-btn">Trang chủ</a>
+        </div>
+    </section>
+</div>
+</body>
+</html>
