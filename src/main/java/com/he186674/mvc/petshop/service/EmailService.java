@@ -18,7 +18,7 @@ public class EmailService {
     public void sendOtpEmail(String toEmail, String otp) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom("khung123450@gmail.com");
+            message.setFrom("PawPals <khung123450@gmail.com>");
             message.setTo(toEmail);
             message.setSubject("Mã OTP PawPals - Đặt lại mật khẩu");
             message.setText("Mã OTP của bạn là: " + otp + "\n\n"

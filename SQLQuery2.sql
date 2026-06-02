@@ -11,6 +11,10 @@ CREATE TABLE users (
     current_streak INT DEFAULT 0,
     longest_streak INT DEFAULT 0,
     last_login_date DATE NULL,
+    reset_token NVARCHAR(255) NULL,
+    reset_token_expiry DATETIME2 NULL,
+    otp NVARCHAR(10) NULL,
+    otp_expiry DATETIME2 NULL,
     created_at DATETIME2 DEFAULT SYSDATETIME(),
     is_active BIT DEFAULT 1
 );
@@ -294,4 +298,32 @@ CREATE TABLE user_rewards (
     CONSTRAINT fk_userreward_reward FOREIGN KEY (reward_id)
         REFERENCES streak_rewards(reward_id)
         ON DELETE CASCADE
+);
+
+
+-- =============================================
+-- BẢNG PET_REMINDERS (Nhắc nhở lịch khám, spa, phối giống cho thú cưng)
+-- =============================================
+
+CREATE TABLE pet_reminders (
+    reminder_id INT IDENTITY(1,1) PRIMARY KEY,
+    pet_id INT NOT NULL,
+    user_id INT NOT NULL,
+    title NVARCHAR(150) NOT NULL,
+    description NVARCHAR(500),
+    event_type NVARCHAR(50) NOT NULL,
+    event_date DATE NOT NULL,
+    event_time NVARCHAR(20),
+    location NVARCHAR(255),
+    is_completed BIT DEFAULT 0,
+    is_recurring BIT DEFAULT 0,
+    recurring_interval_days INT,
+    created_at DATETIME2 DEFAULT SYSDATETIME(),
+
+    CONSTRAINT fk_reminder_pet FOREIGN KEY (pet_id)
+        REFERENCES pets(pet_id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_reminder_user FOREIGN KEY (user_id)
+        REFERENCES users(user_id)
 );

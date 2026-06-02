@@ -55,10 +55,10 @@
 
             <!-- center -->
             <div class="center-box">
-                <a th:href="@{/login}" class="login-btn">
+                <a th:if="${session == null or session.currentUser == null}" th:href="@{/login}" class="login-btn">
                     Đăng Nhập
                 </a>
-                <a th:href="@{/register}" class="register-btn">
+                <a th:if="${session == null or session.currentUser == null}" th:href="@{/register}" class="register-btn">
                     Đăng Ký
                 </a>
 

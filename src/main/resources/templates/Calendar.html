@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lịch - PawPals</title>
+
+    <!-- FONT -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- ICON -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+    <!-- HEADER CSS -->
+    <link rel="stylesheet" th:href="@{/header.css}">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            font-family: 'Fredoka', sans-serif;
+            padding-top: 60px;
+        }
+
+        .calendar-container {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .sidebar-left {
+            width: 200px;
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-left h2 {
+            font-size: 28px;
+            color: #666;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .pet-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .pet-item {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            border: 3px solid transparent;
+            position: relative;
+        }
+
+        .pet-item:hover {
+            transform: scale(1.05);
+        }
+
+        .pet-item.active {
+            border-color: #a89ce4;
+        }
+
+        .pet-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .pet-item .pet-name-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            font-size: 12px;
+            text-align: center;
+            padding: 4px;
+        }
+
+        .pet-item-all {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: 3px solid transparent;
+            cursor: pointer;
+            text-align: center;
+            background: #f0f0f8;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .pet-item-all:hover {
+            transform: scale(1.05);
+        }
+
+        .pet-item-all.active {
+            border-color: #a89ce4;
+            background: #e8e4f3;
+            color: #5a4e9e;
+        }
+
+        .calendar-wrapper {
+            flex: 1;
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .calendar-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 20px;
+        }
+
+        .calendar-header button {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #a89ce4;
+            padding: 5px 10px;
+        }
+
+        .calendar-header h3 {
+            font-size: 24px;
+            color: #a89ce4;
+            min-width: 100px;
+            text-align: center;
+        }
+
+        .calendar-grid {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .calendar-grid th {
+            text-align: center;
+            padding: 12px;
+            background: #f8f8f8;
+            border: 1px solid #e0e0e0;
+            font-weight: 600;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .calendar-grid td {
+            border: 1px solid #e0e0e0;
+            padding: 8px;
+            height: 100px;
+            vertical-align: top;
+            background: white;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .calendar-grid td:hover {
+            background: #f8f6ff;
+        }
+
+        .calendar-grid td.other-month {
+            background: #f8f8f8;
+            color: #ccc;
+        }
+
+        .calendar-grid td.other-month:hover {
+            background: #f0f0f0;
+        }
+
+        .calendar-grid td.today {
+            background: #f0ecff;
+        }
+
+        .day-number {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .other-month .day-number {
+            color: #ccc;
+        }
+
+        .today .day-number {
+            color: #a89ce4;
+            font-weight: 700;
+        }
+
+        .event {
+            font-size: 11px;
+            padding: 3px 6px;
+            border-radius: 6px;
+            margin: 2px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            cursor: pointer;
+            display: block;
+        }
+
+        .event:hover {
+            opacity: 0.8;
+        }
+
+        .event.KHAM {
+            background: #c8d9f1;
+            color: #3c5a99;
+        }
+
+        .event.SPA {
+            background: #e8d4c4;
+            color: #b8860b;
+        }
+
+        .event.PHOI_GIONG {
+            background: #f5d0e0;
+            color: #c44569;
+        }
+
+        .event.VACCINE {
+            background: #d4e8d4;
+            color: #4a7c4e;
+        }
+
+        .event.OTHER {
+            background: #e0e0e0;
+            color: #555;
+        }
+
+        .event.completed {
+            opacity: 0.5;
+            text-decoration: line-through;
+        }
+
+        .sidebar-right {
+            width: 250px;
+            background: #e8e4f3;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-right h3 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .schedule-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .schedule-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            font-size: 13px;
+            transition: transform 0.2s;
+        }
+
+        .schedule-item:hover {
+            transform: translateX(3px);
+        }
+
+        .schedule-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #a89ce4;
+        }
+
+        .schedule-item .event-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .schedule-item .event-name {
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .schedule-item .event-pet {
+            font-size: 11px;
+            color: #999;
+        }
+
+        .schedule-item .event-date {
+            color: #999;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .schedule-item.completed .event-name {
+            text-decoration: line-through;
+            opacity: 0.5;
+        }
+
+        .schedule-item .delete-btn {
+            background: none;
+            border: none;
+            color: #ccc;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 2px 5px;
+        }
+
+        .schedule-item .delete-btn:hover {
+            color: #e74c3c;
+        }
+
+        .add-schedule-btn {
+            width: 100%;
+            height: 50px;
+            border-radius: 8px;
+            background: #a89ce4;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 15px;
+            transition: background 0.3s ease;
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        .add-schedule-btn:hover {
+            background: #9a8fd6;
+        }
+
+        .no-pets-msg {
+            text-align: center;
+            color: #999;
+            font-size: 13px;
+            padding: 20px 0;
+        }
+
+        .no-events-msg {
+            text-align: center;
+            color: #999;
+            font-size: 13px;
+            padding: 20px 0;
+        }
+
+        /* ===== MODAL ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            width: 450px;
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .modal h3 {
+            font-size: 20px;
+            color: #5a4e9e;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Fredoka', sans-serif;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #a89ce4;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .form-check {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-check input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #a89ce4;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-actions button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Fredoka', sans-serif;
+            transition: opacity 0.3s;
+        }
+
+        .modal-actions button:hover {
+            opacity: 0.85;
+        }
+
+        .btn-save {
+            background: #a89ce4;
+            color: white;
+        }
+
+        .btn-cancel {
+            background: #e0e0e0;
+            color: #555;
+        }
+
+        .event-type-icon {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 4px;
+        }
+
+        .event-type-icon.KHAM { background: #3c5a99; }
+        .event-type-icon.SPA { background: #b8860b; }
+        .event-type-icon.PHOI_GIONG { background: #c44569; }
+        .event-type-icon.VACCINE { background: #4a7c4e; }
+        .event-type-icon.OTHER { background: #555; }
+
+        /* Event detail popup */
+        .event-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            width: 380px;
+            max-width: 90vw;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            z-index: 1001;
+        }
+
+        .event-popup.active {
+            display: block;
+        }
+
+        .event-popup h4 {
+            font-size: 18px;
+            color: #5a4e9e;
+            margin-bottom: 15px;
+        }
+
+        .event-popup .detail-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .event-popup .detail-row i {
+            width: 20px;
+            color: #a89ce4;
+        }
+
+        .event-popup .popup-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .event-popup .popup-actions button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        .btn-toggle {
+            background: #d4e8d4;
+            color: #4a7c4e;
+        }
+
+        .btn-delete {
+            background: #f5d0d0;
+            color: #c0392b;
+        }
+
+        .btn-close-popup {
+            background: #e0e0e0;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div th:replace="fragments/header :: header"></div>
+
+<div class="calendar-container">
+    <!-- LEFT SIDEBAR -->
+    <div class="sidebar-left">
+        <h2>Lịch</h2>
+        <div class="pet-list">
+            <!-- Nút xem tất cả -->
+            <div class="pet-item-all active" id="petAll" onclick="selectAllPets()">
+                <i class="fas fa-paw"></i> Tất cả
+            </div>
+
+            <!-- Danh sách pets từ backend -->
+            <div th:if="${pets != null and !pets.isEmpty()}">
+                <div th:each="pet : ${pets}"
+                     class="pet-item"
+                     th:attr="data-pet-id=${pet.petId}, onclick='selectPet(' + ${pet.petId} + ')'"
+                     style="background: #f0f0f8; display: flex; align-items: center; justify-content: center;">
+                    <div style="text-align: center; padding: 8px;">
+                        <i class="fas fa-dog" style="font-size: 28px; color: #a89ce4;"
+                           th:if="${pet.species != null and pet.species.toLowerCase().contains('chó')}"></i>
+                        <i class="fas fa-cat" style="font-size: 28px; color: #a89ce4;"
+                           th:if="${pet.species == null or !pet.species.toLowerCase().contains('chó')}"></i>
+                        <div class="pet-name-label" th:text="${pet.petName}">Tên thú cưng</div>
+                    </div>
+                </div>
+            </div>
+
+            <div th:if="${pets == null or pets.isEmpty()}" class="no-pets-msg">
+                <i class="fas fa-info-circle"></i> Chưa có thú cưng nào.<br>
+                <a href="/" style="color: #a89ce4;">Thêm thú cưng</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- CALENDAR -->
+    <div class="calendar-wrapper">
+        <div class="calendar-header">
+            <button id="prevBtn" onclick="previousMonth()">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <h3 id="monthYear"></h3>
+            <button id="nextBtn" onclick="nextMonth()">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <table class="calendar-grid" id="calendar">
+            <thead>
+                <tr>
+                    <th>Thứ 2</th>
+                    <th>Thứ 3</th>
+                    <th>Thứ 4</th>
+                    <th>Thứ 5</th>
+                    <th>Thứ 6</th>
+                    <th>Thứ 7</th>
+                    <th>CN</th>
+                </tr>
+            </thead>
+            <tbody id="calendarBody">
+            </tbody>
+        </table>
+    </div>
+
+    <!-- RIGHT SIDEBAR -->
+    <div class="sidebar-right">
+        <h3><i class="fas fa-bell"></i> Lịch trình sắp tới</h3>
+        <div class="schedule-list" id="scheduleList">
+            <div class="no-events-msg" id="noEventsMsg">
+                <i class="fas fa-calendar-check"></i><br>
+                Chưa có lịch trình nào
+            </div>
+        </div>
+        <button class="add-schedule-btn" onclick="openCreateModal()">
+            <i class="fas fa-plus"></i> Thêm lịch trình
+        </button>
+    </div>
+</div>
+
+<!-- MODAL: Tạo nhắc nhở mới -->
+<div class="modal-overlay" id="createModal">
+    <div class="modal">
+        <h3><i class="fas fa-calendar-plus"></i> Tạo nhắc nhở mới</h3>
+        <form id="reminderForm" onsubmit="submitReminder(event)">
+            <div class="form-group">
+                <label>Thú cưng *</label>
+                <select id="formPetId" required>
+                    <option value="">-- Chọn thú cưng --</option>
+                    <option th:each="pet : ${pets}"
+                            th:value="${pet.petId}"
+                            th:text="${pet.petName}">
+                    </option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Tiêu đề *</label>
+                <input type="text" id="formTitle" placeholder="VD: Khám sức khỏe Cốm" required>
+            </div>
+            <div class="form-group">
+                <label>Loại sự kiện *</label>
+                <select id="formEventType" required>
+                    <option value="KHAM">🏥 Khám bệnh</option>
+                    <option value="SPA">💆 Spa / Tắm rửa</option>
+                    <option value="PHOI_GIONG">🐾 Phối giống</option>
+                    <option value="VACCINE">💉 Tiêm chủng</option>
+                    <option value="OTHER">📋 Khác</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Ngày *</label>
+                    <input type="date" id="formEventDate" required>
+                </div>
+                <div class="form-group">
+                    <label>Giờ</label>
+                    <input type="time" id="formEventTime">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Địa điểm</label>
+                <input type="text" id="formLocation" placeholder="VD: Phòng khám Thú y ABC">
+            </div>
+            <div class="form-group">
+                <label>Ghi chú</label>
+                <textarea id="formDescription" placeholder="Ghi chú thêm..."></textarea>
+            </div>
+            <div class="form-group">
+                <div class="form-check">
+                    <input type="checkbox" id="formIsRecurring" onchange="toggleRecurring()">
+                    <label for="formIsRecurring" style="margin-bottom:0">Lặp lại định kỳ</label>
+                </div>
+            </div>
+            <div class="form-group" id="recurringGroup" style="display:none">
+                <label>Chu kỳ (ngày)</label>
+                <input type="number" id="formRecurringDays" min="1" value="30" placeholder="VD: 30">
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="closeCreateModal()">Hủy</button>
+                <button type="submit" class="btn-save">Lưu nhắc nhở</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL: Chi tiết nhắc nhở -->
+<div class="modal-overlay" id="detailModal">
+    <div class="modal" style="width: 400px;">
+        <h3 id="detailTitle"></h3>
+        <div id="detailContent"></div>
+        <div class="modal-actions" style="margin-top: 20px;">
+            <button class="btn-cancel" onclick="closeDetailModal()">Đóng</button>
+            <button class="btn-toggle" id="detailToggleBtn" onclick="toggleFromDetail()">
+                <i class="fas fa-check"></i> Hoàn thành
+            </button>
+            <button class="btn-delete" id="detailDeleteBtn" onclick="deleteFromDetail()">
+                <i class="fas fa-trash"></i> Xóa
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ===== STATE =====
+    let currentDate = new Date();
+    let selectedPetId = null; // null = tất cả pets
+    let reminders = []; // reminders của tháng hiện tại
+    let currentDetailReminderId = null;
+
+    // ===== PET SELECTION =====
+    function selectAllPets() {
+        selectedPetId = null;
+        document.querySelectorAll('.pet-item').forEach(p => p.classList.remove('active'));
+        document.getElementById('petAll').classList.add('active');
+        loadReminders();
+        loadUpcomingReminders();
+    }
+
+    function selectPet(petId) {
+        selectedPetId = petId;
+        document.getElementById('petAll').classList.remove('active');
+        document.querySelectorAll('.pet-item').forEach(p => {
+            p.classList.toggle('active', parseInt(p.getAttribute('data-pet-id')) === petId);
+        });
+        loadReminders();
+        loadUpcomingReminders();
+    }
+
+    // ===== CALENDAR RENDERING =====
+    function generateCalendar() {
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth();
+
+        const firstDay = new Date(year, month, 1);
+        const lastDay = new Date(year, month + 1, 0);
+
+        let calendarBody = document.getElementById('calendarBody');
+        calendarBody.innerHTML = '';
+
+        const startingDayOfWeek = (firstDay.getDay() + 6) % 7; // Monday = 0
+
+        const today = new Date();
+        const todayStr = today.getFullYear() + '-' +
+            String(today.getMonth() + 1).padStart(2, '0') + '-' +
+            String(today.getDate()).padStart(2, '0');
+
+        // Build events map: key = "YYYY-MM-DD", value = array of reminders
+        const eventsMap = {};
+        reminders.forEach(r => {
+            if (!eventsMap[r.eventDate]) {
+                eventsMap[r.eventDate] = [];
+            }
+            eventsMap[r.eventDate].push(r);
+        });
+
+        let row = document.createElement('tr');
+
+        // Fill previous month days
+        const prevMonthLastDay = new Date(year, month, 0).getDate();
+        for (let i = startingDayOfWeek - 1; i >= 0; i--) {
+            const cell = document.createElement('td');
+            cell.className = 'other-month';
+            cell.innerHTML = '<div class="day-number">' + (prevMonthLastDay - i) + '</div>';
+            row.appendChild(cell);
+        }
+
+        // Fill current month days
+        for (let day = 1; day <= lastDay.getDate(); day++) {
+            if (row.children.length === 7) {
+                calendarBody.appendChild(row);
+                row = document.createElement('tr');
+            }
+
+            const cell = document.createElement('td');
+            const dateStr = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+
+            let cellClass = '';
+            if (dateStr === todayStr) cellClass = 'today';
+            cell.className = cellClass;
+
+            let cellHTML = '<div class="day-number">' + day + '</div>';
+
+            if (eventsMap[dateStr]) {
+                eventsMap[dateStr].forEach(r => {
+                    const completedClass = r.isCompleted ? ' completed' : '';
+                    cellHTML += '<span class="event ' + r.eventType + completedClass + '" ' +
+                        'onclick="showReminderDetail(' + r.reminderId + ')" ' +
+                        'title="' + r.title + ' (' + r.petName + ')">' +
+                        r.title + '</span>';
+                });
+            }
+
+            // Click on empty area to create reminder
+            cell.innerHTML = cellHTML;
+            cell.addEventListener('dblclick', function(e) {
+                if (e.target === cell || e.target.classList.contains('day-number')) {
+                    openCreateModalWithDate(dateStr);
+                }
+            });
+
+            row.appendChild(cell);
+        }
+
+        // Fill next month days
+        let nextDay = 1;
+        while (row.children.length < 7) {
+            const cell = document.createElement('td');
+            cell.className = 'other-month';
+            cell.innerHTML = '<div class="day-number">' + nextDay + '</div>';
+            row.appendChild(cell);
+            nextDay++;
+        }
+        if (row.children.length > 0) {
+            calendarBody.appendChild(row);
+        }
+
+        // Update month/year display
+        document.getElementById('monthYear').textContent = (month + 1) + '/' + year;
+    }
+
+    function previousMonth() {
+        currentDate.setMonth(currentDate.getMonth() - 1);
+        loadReminders();
+    }
+
+    function nextMonth() {
+        currentDate.setMonth(currentDate.getMonth() + 1);
+        loadReminders();
+    }
+
+    // ===== API CALLS =====
+    function loadReminders() {
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth() + 1;
+
+        let url = '/api/calendar/reminders?year=' + year + '&month=' + month;
+        if (selectedPetId) {
+            url += '&petId=' + selectedPetId;
+        }
+
+        fetch(url)
+            .then(res => res.json())
+            .then(data => {
+                reminders = data;
+                generateCalendar();
+            })
+            .catch(err => {
+                console.error('Lỗi tải reminders:', err);
+                reminders = [];
+                generateCalendar();
+            });
+    }
+
+    function loadUpcomingReminders() {
+        let url = '/api/calendar/upcoming';
+        if (selectedPetId) {
+            url += '?petId=' + selectedPetId;
+        }
+
+        fetch(url)
+            .then(res => res.json())
+            .then(data => {
+                renderUpcomingList(data);
+            })
+            .catch(err => {
+                console.error('Lỗi tải upcoming:', err);
+            });
+    }
+
+    function renderUpcomingList(items) {
+        const list = document.getElementById('scheduleList');
+        const noMsg = document.getElementById('noEventsMsg');
+
+        if (!items || items.length === 0) {
+            list.innerHTML = '';
+            list.appendChild(noMsg);
+            noMsg.style.display = 'block';
+            return;
+        }
+
+        noMsg.style.display = 'none';
+        list.innerHTML = '';
+
+        items.forEach(r => {
+            const typeLabels = {
+                'KHAM': '🏥',
+                'SPA': '💆',
+                'PHOI_GIONG': '🐾',
+                'VACCINE': '💉',
+                'OTHER': '📋'
+            };
+
+            const dateParts = r.eventDate.split('-');
+            const dateDisplay = parseInt(dateParts[2]) + '/' + parseInt(dateParts[1]);
+
+            const div = document.createElement('div');
+            div.className = 'schedule-item';
+            div.innerHTML =
+                '<span class="event-type-icon ' + r.eventType + '"></span>' +
+                '<div class="event-info">' +
+                    '<div class="event-name">' + (typeLabels[r.eventType] || '') + ' ' + r.title + '</div>' +
+                    '<div class="event-pet">' + r.petName + '</div>' +
+                '</div>' +
+                '<span class="event-date">' + dateDisplay + '</span>' +
+                '<button class="delete-btn" onclick="deleteReminder(' + r.reminderId + ')" title="Xóa">' +
+                    '<i class="fas fa-times"></i>' +
+                '</button>';
+
+            div.querySelector('.event-name').addEventListener('click', function() {
+                showReminderDetail(r.reminderId);
+            });
+
+            list.appendChild(div);
+        });
+    }
+
+    // ===== CREATE REMINDER =====
+    function openCreateModal() {
+        document.getElementById('createModal').classList.add('active');
+        document.getElementById('reminderForm').reset();
+
+        // Nếu đang chọn pet cụ thể, pre-select
+        if (selectedPetId) {
+            document.getElementById('formPetId').value = selectedPetId;
+        }
+
+        // Set default date to today
+        const today = new Date();
+        document.getElementById('formEventDate').value =
+            today.getFullYear() + '-' +
+            String(today.getMonth() + 1).padStart(2, '0') + '-' +
+            String(today.getDate()).padStart(2, '0');
+    }
+
+    function openCreateModalWithDate(dateStr) {
+        openCreateModal();
+        document.getElementById('formEventDate').value = dateStr;
+    }
+
+    function closeCreateModal() {
+        document.getElementById('createModal').classList.remove('active');
+    }
+
+    function toggleRecurring() {
+        const checked = document.getElementById('formIsRecurring').checked;
+        document.getElementById('recurringGroup').style.display = checked ? 'block' : 'none';
+    }
+
+    function submitReminder(e) {
+        e.preventDefault();
+
+        const data = {
+            petId: document.getElementById('formPetId').value,
+            title: document.getElementById('formTitle').value,
+            eventType: document.getElementById('formEventType').value,
+            eventDate: document.getElementById('formEventDate').value,
+            eventTime: document.getElementById('formEventTime').value || null,
+            location: document.getElementById('formLocation').value || null,
+            description: document.getElementById('formDescription').value || null,
+            isRecurring: document.getElementById('formIsRecurring').checked ? 'true' : 'false',
+            recurringIntervalDays: document.getElementById('formRecurringDays').value || null
+        };
+
+        if (!data.petId) {
+            alert('Vui lòng chọn thú cưng');
+            return;
+        }
+
+        fetch('/api/calendar/reminders', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+        .then(res => {
+            if (!res.ok) throw new Error('Lỗi tạo nhắc nhở');
+            return res.json();
+        })
+        .then(saved => {
+            closeCreateModal();
+            loadReminders();
+            loadUpcomingReminders();
+        })
+        .catch(err => {
+            alert(err.message);
+        });
+    }
+
+    // ===== DETAIL / TOGGLE / DELETE =====
+    function showReminderDetail(reminderId) {
+        const r = reminders.find(x => x.reminderId === reminderId);
+        if (!r) return;
+
+        currentDetailReminderId = reminderId;
+
+        const typeLabels = {
+            'KHAM': '🏥 Khám bệnh',
+            'SPA': '💆 Spa / Tắm rửa',
+            'PHOI_GIONG': '🐾 Phối giống',
+            'VACCINE': '💉 Tiêm chủng',
+            'OTHER': '📋 Khác'
+        };
+
+        document.getElementById('detailTitle').textContent = r.title;
+
+        let html = '';
+        html += '<div class="detail-row"><i class="fas fa-paw"></i> <strong>' + r.petName + '</strong></div>';
+        html += '<div class="detail-row"><i class="fas fa-tag"></i> ' + (typeLabels[r.eventType] || r.eventType) + '</div>';
+        html += '<div class="detail-row"><i class="fas fa-calendar"></i> ' + formatDate(r.eventDate) + '</div>';
+        if (r.eventTime) {
+            html += '<div class="detail-row"><i class="fas fa-clock"></i> ' + r.eventTime + '</div>';
+        }
+        if (r.location) {
+            html += '<div class="detail-row"><i class="fas fa-map-marker-alt"></i> ' + r.location + '</div>';
+        }
+        if (r.description) {
+            html += '<div class="detail-row"><i class="fas fa-sticky-note"></i> ' + r.description + '</div>';
+        }
+        html += '<div class="detail-row"><i class="fas fa-check-circle"></i> Trạng thái: ' +
+            (r.isCompleted ? '<span style="color:#4a7c4e">Hoàn thành</span>' : '<span style="color:#e67e22">Chưa hoàn thành</span>') +
+            '</div>';
+
+        document.getElementById('detailContent').innerHTML = html;
+
+        const toggleBtn = document.getElementById('detailToggleBtn');
+        toggleBtn.innerHTML = r.isCompleted
+            ? '<i class="fas fa-undo"></i> Chưa hoàn thành'
+            : '<i class="fas fa-check"></i> Hoàn thành';
+
+        document.getElementById('detailModal').classList.add('active');
+    }
+
+    function closeDetailModal() {
+        document.getElementById('detailModal').classList.remove('active');
+        currentDetailReminderId = null;
+    }
+
+    function toggleFromDetail() {
+        if (!currentDetailReminderId) return;
+
+        fetch('/api/calendar/reminders/' + currentDetailReminderId + '/toggle', {
+            method: 'PUT'
+        })
+        .then(res => {
+            if (!res.ok) throw new Error('Lỗi');
+            closeDetailModal();
+            loadReminders();
+            loadUpcomingReminders();
+        })
+        .catch(err => alert(err.message));
+    }
+
+    function deleteFromDetail() {
+        if (!currentDetailReminderId) return;
+        if (!confirm('Bạn có chắc muốn xóa nhắc nhở này?')) return;
+
+        fetch('/api/calendar/reminders/' + currentDetailReminderId, {
+            method: 'DELETE'
+        })
+        .then(res => {
+            if (!res.ok) throw new Error('Lỗi');
+            closeDetailModal();
+            loadReminders();
+            loadUpcomingReminders();
+        })
+        .catch(err => alert(err.message));
+    }
+
+    function deleteReminder(reminderId) {
+        if (!confirm('Bạn có chắc muốn xóa nhắc nhở này?')) return;
+
+        fetch('/api/calendar/reminders/' + reminderId, {
+            method: 'DELETE'
+        })
+        .then(res => {
+            if (!res.ok) throw new Error('Lỗi');
+            loadReminders();
+            loadUpcomingReminders();
+        })
+        .catch(err => alert(err.message));
+    }
+
+    // ===== HELPERS =====
+    function formatDate(dateStr) {
+        const parts = dateStr.split('-');
+        return parseInt(parts[2]) + '/' + parseInt(parts[1]) + '/' + parts[0];
+    }
+
+    // ===== INIT =====
+    document.addEventListener('DOMContentLoaded', function() {
+        loadReminders();
+        loadUpcomingReminders();
+    });
+
+    // Close modals on overlay click
+    document.getElementById('createModal').addEventListener('click', function(e) {
+        if (e.target === this) closeCreateModal();
+    });
+    document.getElementById('detailModal').addEventListener('click', function(e) {
+        if (e.target === this) closeDetailModal();
+    });
+</script>
+
+</body>
+</html>
