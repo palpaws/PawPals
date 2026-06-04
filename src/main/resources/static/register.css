@@ -13,99 +13,17 @@ html{
 body{
     font-family:'Fredoka', sans-serif;
 
-    background:#d8aebb;
+    background-image: url("images/register.jpg");
+    background-size: cover;
+    background-position: 20% center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 
     min-height:100vh;
 
     overflow-x:hidden;
 
     position:relative;
-}
-
-/* ================= BACKGROUND EFFECT ================= */
-
-body::before{
-    content:"";
-
-    position:fixed;
-
-    width:420px;
-    height:420px;
-
-    top:-120px;
-    left:-120px;
-
-    border-radius:50%;
-
-    background:
-            radial-gradient(
-                    circle,
-                    rgba(255,255,255,0.25),
-                    transparent 70%
-            );
-
-    filter:blur(22px);
-
-    z-index:-1;
-
-    animation:floatBlob1 8s ease-in-out infinite;
-}
-
-body::after{
-    content:"";
-
-    position:fixed;
-
-    width:380px;
-    height:380px;
-
-    bottom:-100px;
-    right:-100px;
-
-    border-radius:50%;
-
-    background:
-            radial-gradient(
-                    circle,
-                    rgba(141,158,228,0.22),
-                    transparent 70%
-            );
-
-    filter:blur(26px);
-
-    z-index:-1;
-
-    animation:floatBlob2 10s ease-in-out infinite;
-}
-
-@keyframes floatBlob1{
-
-    0%{
-        transform:translateY(0px);
-    }
-
-    50%{
-        transform:translateY(25px);
-    }
-
-    100%{
-        transform:translateY(0px);
-    }
-}
-
-@keyframes floatBlob2{
-
-    0%{
-        transform:translateY(0px);
-    }
-
-    50%{
-        transform:translateY(-25px);
-    }
-
-    100%{
-        transform:translateY(0px);
-    }
 }
 
 /* ================= HEADER ================= */
@@ -228,11 +146,10 @@ body::after{
     width:100%;
 
     display:flex;
-    justify-content:center;
+    justify-content:flex-end;
     align-items:flex-start;
 
-    padding:
-            42px 20px 50px;
+    padding:42px 120px 50px 20px;
 }
 
 /* ================= CARD ================= */
@@ -243,7 +160,7 @@ body::after{
     background:
             rgba(248,248,248,0.92);
 
-    backdrop-filter:blur(12px);
+    backdrop-filter:none;
 
     border-radius:36px;
 
