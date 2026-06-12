@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hồ Sơ Thú Cưng</title>
+
+    <link rel="stylesheet" th:href="@{/baseprofile.css}">
+    <link rel="stylesheet" th:href="@{/header.css}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+
+</head>
+<body>
+
+<div th:replace="fragments/header :: header"></div>
+
+<div class="base-profile-container">
+
+    <div class="page-header">
+        <h1>
+            <i class="fa-solid fa-paw"></i>
+            Thú Cưng Của Tôi
+        </h1>
+    </div>
+
+    <div class="profile-wrapper">
+
+        <a th:href="@{/profile}" class="profile-link">
+            <div class="profile-card">
+
+                <div class="card-title">
+                    <i class="fa-regular fa-user"></i>
+                    Chủ Nuôi
+                </div>
+
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600"
+                     alt="user">
+
+                <h3>Bạn</h3>
+
+            </div>
+        </a>
+
+        <div class="profile-card pet-card">
+
+            <div class="card-title">
+                <i class="fa-solid fa-paw"></i>
+                Thú Cưng
+            </div>
+
+            <img src="https://images.unsplash.com/photo-1519052537078-e6302a4968d4?w=600"
+                 alt="pet"
+                 class="pet-image"
+                 onclick="window.location.href='/pets'">
+
+            <h3>Bé Cốm</h3>
+
+            <button
+                    class="add-pet-btn"
+                    id="openPetModal">
+                <i class="fa-solid fa-plus"></i>
+                Thêm thú cưng
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="schedule-section">
+
+        <div class="schedule-menu">
+
+            <h2>Lịch Chăm Sóc</h2>
+
+            <button class="schedule-btn">
+                <i class="fa-regular fa-bell"></i>
+                Tạo nhắc nhở
+            </button>
+
+            <button class="schedule-btn">
+                <i class="fa-solid fa-heart"></i>
+                Lịch phối giống
+            </button>
+
+            <button class="schedule-btn">
+                <i class="fa-solid fa-stethoscope"></i>
+                Lịch khám
+            </button>
+
+        </div>
+
+        <div class="upcoming-box">
+
+            <h2>Lịch Sắp Tới</h2>
+
+            <div class="schedule-item">
+                <span>13/08/2025</span>
+                <p>Lịch khám của Cốm</p>
+            </div>
+
+            <div class="schedule-item">
+                <span>18/08/2025</span>
+                <p>Lịch tiêm của Miu</p>
+            </div>
+
+            <div class="schedule-item">
+                <span>23/08/2025</span>
+                <p>Lịch khám của Ún</p>
+            </div>
+
+            <div class="schedule-item">
+                <span>03/09/2025</span>
+                <p>Lịch tiêm của Cốm</p>
+            </div>
+
+            <a href="#" class="view-more">
+                Xem tất cả →
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div id="petModal" class="modal">
+
+    <div class="modal-content">
+
+        <span class="close-modal">&times;</span>
+
+        <div class="modal-header">
+
+            <div class="pet-icon">
+                <i class="fa-solid fa-paw"></i>
+            </div>
+
+            <h2>Thêm Thú Cưng</h2>
+
+            <p>Tạo hồ sơ cho người bạn nhỏ của bạn</p>
+
+        </div>
+
+        <form
+                th:action="@{/pets/create}"
+                method="post"
+                enctype="multipart/form-data">
+
+            <div class="image-upload-box">
+
+                <img
+                        id="imagePreview"
+                        src="https://cdn-icons-png.flaticon.com/512/616/616408.png"
+                        alt="preview">
+
+                <label class="upload-btn">
+
+                    <i class="fa-solid fa-camera"></i>
+                    Chọn ảnh
+
+                    <input
+                            type="file"
+                            name="imageFile"
+                            id="imageFile"
+                            accept="image/*"
+                            hidden>
+
+                </label>
+
+            </div>
+
+            <div class="form-group">
+                <label>Tên thú cưng</label>
+
+                <input
+                        type="text"
+                        name="petName"
+                        placeholder="Ví dụ: Bé Cốm"
+                        required>
+            </div>
+
+            <div class="form-group">
+
+                <label>Loài</label>
+
+                <select name="species">
+
+                    <option value="Dog">🐶 Chó</option>
+                    <option value="Cat">🐱 Mèo</option>
+
+                </select>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Giới tính</label>
+
+                <select name="gender">
+
+                    <option value="Male">♂ Đực</option>
+                    <option value="Female">♀ Cái</option>
+
+                </select>
+
+            </div>
+
+            <button type="submit" class="save-btn">
+
+                <i class="fa-solid fa-heart"></i>
+                Thêm thú cưng
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+
+    const modal =
+        document.getElementById(
+            "petModal"
+        );
+
+    document
+        .getElementById(
+            "openPetModal"
+        )
+        .onclick = function(){
+
+        modal.style.display = "block";
+
+    };
+
+    document
+        .querySelector(
+            ".close-modal"
+        )
+        .onclick = function(){
+
+        modal.style.display = "none";
+
+    };
+
+    window.onclick = function(event){
+
+        if(event.target == modal){
+
+            modal.style.display = "none";
+
+        }
+
+    };
+    // Preview ảnh khi chọn file
+
+    const imageInput =
+        document.getElementById("imageFile");
+
+    const imagePreview =
+        document.getElementById("imagePreview");
+
+    imageInput.addEventListener(
+        "change",
+        function () {
+
+            const file =
+                this.files[0];
+
+            if (!file) return;
+
+            const reader =
+                new FileReader();
+
+            reader.onload =
+                function (e) {
+
+                    imagePreview.src =
+                        e.target.result;
+
+                };
+
+            reader.readAsDataURL(file);
+        }
+    );
+
+</script>
+
+</body>
+</html>

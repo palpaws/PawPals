@@ -93,4 +93,26 @@ public class UserServiceImpl implements UserService {
 
         return userRepository.save(user);
     }
+    @Override
+    public User updateProfile(Integer userId,
+                              String fullName,
+                              String phone,
+                              String address) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Không tìm thấy người dùng."));
+
+        user.setFullName(fullName.trim());
+
+        user.setPhone(
+                phone == null ? null : phone.trim()
+        );
+
+        user.setAddress(
+                address == null ? null : address.trim()
+        );
+
+        return userRepository.save(user);
+    }
 }

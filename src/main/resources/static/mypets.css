@@ -1,0 +1,260 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Inter',sans-serif;
+}
+
+body{
+
+    background:
+            linear-gradient(
+                    180deg,
+                    #ddb4bf 0%,
+                    #e8c6cf 100%
+            );
+
+    min-height:100vh;
+}
+
+.pets-container{
+
+    max-width:1400px;
+
+    margin:110px auto 40px;
+
+    padding:20px;
+}
+
+/* ===========================
+   HEADER
+=========================== */
+
+.page-header{
+
+    text-align:center;
+
+    margin-bottom:40px;
+}
+
+.page-header h1{
+
+    color:#7387d8;
+
+    font-size:42px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    gap:12px;
+
+    margin-bottom:10px;
+}
+
+.page-header p{
+
+    color:#555;
+
+    font-size:16px;
+}
+
+/* ===========================
+   GRID
+=========================== */
+
+.pets-grid{
+
+    display:grid;
+
+    grid-template-columns:
+            repeat(
+                    auto-fill,
+                    minmax(320px,1fr)
+            );
+
+    gap:25px;
+}
+
+/* ===========================
+   CARD
+=========================== */
+
+.pet-card{
+
+    background:
+            rgba(
+                    255,
+                    255,
+                    255,
+                    .78
+            );
+
+    backdrop-filter:blur(14px);
+
+    border-radius:24px;
+
+    overflow:hidden;
+
+    box-shadow:
+            0 10px 25px rgba(0,0,0,.08);
+
+    transition:.25s;
+}
+
+.pet-card:hover{
+
+    transform:
+            translateY(-6px);
+
+    box-shadow:
+            0 18px 35px rgba(0,0,0,.12);
+}
+
+.pet-card img{
+
+    width:100%;
+
+    height:260px;
+
+    object-fit:cover;
+}
+
+.pet-info{
+
+    padding:22px;
+}
+
+.pet-info h2{
+
+    color:#333;
+
+    margin-bottom:15px;
+}
+
+/* ===========================
+   TAG
+=========================== */
+
+.pet-tags{
+
+    display:flex;
+
+    gap:10px;
+
+    margin-bottom:20px;
+
+    flex-wrap:wrap;
+}
+
+.tag{
+
+    background:#f7d7e3;
+
+    color:#ea7da3;
+
+    padding:8px 14px;
+
+    border-radius:999px;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:6px;
+}
+
+/* ===========================
+   BUTTON
+=========================== */
+
+.detail-btn{
+
+    display:inline-block;
+
+    text-decoration:none;
+
+    background:#7387d8;
+
+    color:white;
+
+    padding:12px 18px;
+
+    border-radius:12px;
+
+    font-weight:600;
+
+    transition:.25s;
+}
+
+.detail-btn:hover{
+
+    background:#6178d3;
+}
+
+/* ===========================
+   EMPTY
+=========================== */
+
+.empty-state{
+
+    background:
+            rgba(
+                    255,
+                    255,
+                    255,
+                    .75
+            );
+
+    padding:60px;
+
+    border-radius:24px;
+
+    text-align:center;
+
+    backdrop-filter:blur(12px);
+}
+
+.empty-state i{
+
+    font-size:70px;
+
+    color:#ea7da3;
+
+    margin-bottom:20px;
+}
+
+.empty-state h2{
+
+    color:#333;
+
+    margin-bottom:10px;
+}
+
+.empty-state p{
+
+    color:#666;
+}
+
+/* ===========================
+   MOBILE
+=========================== */
+
+@media(max-width:768px){
+
+    .page-header h1{
+
+        font-size:30px;
+    }
+
+    .pet-card img{
+
+        height:220px;
+    }
+}

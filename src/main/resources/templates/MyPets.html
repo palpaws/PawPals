@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="vi"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Thú Cưng Của Tôi</title>
+
+    <link rel="stylesheet"
+          th:href="@{/header.css}">
+
+    <link rel="stylesheet"
+          th:href="@{/mypets.css}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+
+<body>
+
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="pets-container">
+
+    <div class="page-header">
+
+        <h1>
+            <i class="fa-solid fa-paw"></i>
+            Thú Cưng Của Tôi
+        </h1>
+
+        <p>
+            Quản lý và theo dõi những người bạn nhỏ của bạn
+        </p>
+
+    </div>
+
+    <!-- KHÔNG CÓ THÚ CƯNG -->
+
+    <div class="empty-state"
+         th:if="${#lists.isEmpty(pets)}">
+
+        <i class="fa-solid fa-dog"></i>
+
+        <h2>Chưa có thú cưng nào</h2>
+
+        <p>
+            Hãy thêm thú cưng đầu tiên của bạn để bắt đầu quản lý hồ sơ.
+        </p>
+
+    </div>
+
+    <!-- DANH SÁCH PET -->
+
+    <div class="pets-grid"
+         th:unless="${#lists.isEmpty(pets)}">
+
+        <div class="pet-card"
+             th:each="pet : ${pets}">
+
+            <img
+                    th:src="${pet.images != null && !pet.images.isEmpty() ? pet.images[0].imageUrl : '/images/default-pet.jpg'}"
+                    alt="pet">
+
+            <div class="pet-info">
+
+                <h2 th:text="${pet.petName}">
+                    Bé Cốm
+                </h2>
+
+                <div class="pet-tags">
+
+                    <span class="tag">
+                        <i class="fa-solid fa-paw"></i>
+
+                        <span th:text="${pet.species}">
+                            Chó
+                        </span>
+                    </span>
+
+                    <span class="tag">
+
+                        <i class="fa-solid fa-venus-mars"></i>
+
+                        <span th:text="${pet.gender}">
+                            Đực
+                        </span>
+
+                    </span>
+
+                </div>
+
+                <a class="detail-btn"
+                   th:href="@{/pets/{id}(id=${pet.petId})}">
+
+                    Xem chi tiết
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
