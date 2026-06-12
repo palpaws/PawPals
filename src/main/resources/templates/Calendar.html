@@ -41,10 +41,14 @@
                      th:attr="data-pet-id=${pet.petId}, onclick='selectPet(' + ${pet.petId} + ')'"
                      style="background: #f0f0f8; display: flex; align-items: center; justify-content: center;">
                     <div style="text-align: center; padding: 8px;">
-                        <i class="fas fa-dog" style="font-size: 28px; color: #a89ce4;"
-                           th:if="${pet.species != null and pet.species.toLowerCase().contains('chó')}"></i>
-                        <i class="fas fa-cat" style="font-size: 28px; color: #a89ce4;"
-                           th:if="${pet.species == null or !pet.species.toLowerCase().contains('chó')}"></i>
+                        <!-- Ảnh thú cưng hoặc fallback icon -->
+                        <img th:if="${petImageMap[pet.petId] != null}"
+                             th:src="${petImageMap[pet.petId]}"
+                             alt="pet avatar"
+                             style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover; display: block; margin: 0 auto 4px auto;">
+                        <i th:if="${petImageMap[pet.petId] == null}"
+                           th:classappend="${pet.species != null and pet.species.toLowerCase().contains('chó')} ? 'fas fa-dog' : 'fas fa-cat'"
+                           style="font-size: 28px; color: #a89ce4; display: block; margin-bottom: 4px;"></i>
                         <div class="pet-name-label" th:text="${pet.petName}">Tên thú cưng</div>
                     </div>
                 </div>
@@ -378,7 +382,12 @@
 
             const div = document.createElement('div');
             div.className = 'schedule-item';
+            // Avatar pet
+            const petAvatar = r.petImageUrl
+                ? '<img src="' + r.petImageUrl + '" alt="pet" class="schedule-pet-avatar">'
+                : '<div class="schedule-pet-avatar-placeholder"><i class="fas fa-paw"></i></div>';
             div.innerHTML =
+                petAvatar +
                 '<span class="event-type-icon ' + r.eventType + '"></span>' +
                 '<div class="event-info">' +
                     '<div class="event-name">' + (typeLabels[r.eventType] || '') + ' ' + r.title + '</div>' +
@@ -486,7 +495,10 @@
         document.getElementById('detailTitle').textContent = r.title;
 
         let html = '';
-        html += '<div class="detail-row"><i class="fas fa-paw"></i> <strong>' + r.petName + '</strong></div>';
+        const avatarHtml = r.petImageUrl
+            ? '<img src="' + r.petImageUrl + '" style="width:32px;height:32px;border-radius:50%;object-fit:cover;vertical-align:middle;margin-right:8px;">'
+            : '';
+        html += '<div class="detail-row"><i class="fas fa-paw"></i> ' + avatarHtml + '<strong>' + r.petName + '</strong></div>';
         html += '<div class="detail-row"><i class="fas fa-tag"></i> ' + (typeLabels[r.eventType] || r.eventType) + '</div>';
         html += '<div class="detail-row"><i class="fas fa-calendar"></i> ' + formatDate(r.eventDate) + '</div>';
         if (r.eventTime) {

@@ -1,6 +1,7 @@
 package com.he186674.mvc.petshop.controller;
 
 import com.he186674.mvc.petshop.entities.Pet;
+import com.he186674.mvc.petshop.entities.PetImage;
 import com.he186674.mvc.petshop.entities.PetReminder;
 import com.he186674.mvc.petshop.entities.User;
 import com.he186674.mvc.petshop.repository.PetRepository;
@@ -28,6 +29,19 @@ public class CalendarController {
         this.petRepository = petRepository;
     }
 
+    // Helper: lấy URL ảnh chính của pet
+    private String getPrimaryImageUrl(Pet pet) {
+        if (pet.getImages() != null && !pet.getImages().isEmpty()) {
+            // Ưu tiên ảnh isPrimary == true
+            return pet.getImages().stream()
+                    .filter(img -> Boolean.TRUE.equals(img.getIsPrimary()))
+                    .findFirst()
+                    .map(PetImage::getImageUrl)
+                    .orElse(pet.getImages().get(0).getImageUrl());
+        }
+        return null;
+    }
+
     @GetMapping("/calendar")
     public String calendarPage(HttpSession session, Model model) {
         User currentUser = (User) session.getAttribute("currentUser");
@@ -35,9 +49,16 @@ public class CalendarController {
             return "redirect:/login";
         }
 
-        // Lấy danh sách pets của user
+        // Lấy danh sách pets của user + ảnh chính
         List<Pet> pets = petRepository.findByUser_UserId(currentUser.getUserId());
         model.addAttribute("pets", pets);
+
+        // Build pet image map cho Thymeleaf
+        Map<Integer, String> petImageMap = new HashMap<>();
+        for (Pet pet : pets) {
+            petImageMap.put(pet.getPetId(), getPrimaryImageUrl(pet));
+        }
+        model.addAttribute("petImageMap", petImageMap);
 
         // Lấy reminders sắp tới (tất cả pets)
         List<PetReminder> upcomingReminders = petReminderService.getUpcomingReminders(currentUser.getUserId(), null);
@@ -78,6 +99,7 @@ public class CalendarController {
             dto.put("isRecurring", r.getIsRecurring());
             dto.put("petId", r.getPet().getPetId());
             dto.put("petName", r.getPet().getPetName());
+            dto.put("petImageUrl", getPrimaryImageUrl(r.getPet()));
             return dto;
         }).collect(Collectors.toList());
 
@@ -194,6 +216,7 @@ public class CalendarController {
             dto.put("eventDate", r.getEventDate().toString());
             dto.put("petName", r.getPet().getPetName());
             dto.put("petId", r.getPet().getPetId());
+            dto.put("petImageUrl", getPrimaryImageUrl(r.getPet()));
             return dto;
         }).collect(Collectors.toList());
 

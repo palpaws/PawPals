@@ -271,6 +271,27 @@ body {
     transition: transform 0.2s;
 }
 
+.schedule-pet-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.schedule-pet-avatar-placeholder {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #e8e4f3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #a89ce4;
+    font-size: 14px;
+}
+
 .schedule-item:hover {
     transform: translateX(3px);
 }

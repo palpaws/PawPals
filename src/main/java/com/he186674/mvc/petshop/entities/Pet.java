@@ -125,6 +125,9 @@ public class Pet {
     public Double getHeight() { return height; }
     public void setHeight(Double height) { this.height = height; }
 
+    public List<PetImage> getImages() { return images; }
+    public void setImages(List<PetImage> images) { this.images = images; }
+
     public String getColor() { return color; }
     public void setColor(String color) { this.color = color; }
 

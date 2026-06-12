@@ -1,5 +1,3 @@
-/* ================= RESET ================= */
-
 *{
     margin:0;
     padding:0;
@@ -26,16 +24,12 @@ body{
     position:relative;
 }
 
-/* ================= PAGE ================= */
-
 .login-page{
     width:100%;
     min-height:100vh;
 
     padding:20px 45px;
 }
-
-/* ================= LOGIN SECTION ================= */
 
 .login-section{
     width:100%;
@@ -48,8 +42,6 @@ body{
 
     padding-top:10px;
 }
-
-/* ================= LOGIN CARD ================= */
 
 .login-card{
     width:400px;
@@ -77,8 +69,6 @@ body{
     animation:cardShow 0.8s ease;
 }
 
-/* LIGHT EFFECT */
-
 .login-card::before{
     content:"";
 
@@ -102,8 +92,6 @@ body{
     pointer-events:none;
 }
 
-/* ================= TITLE ================= */
-
 .login-card h2{
     text-align:center;
 
@@ -119,8 +107,6 @@ body{
 
     position:relative;
 }
-
-/* ================= INPUT ================= */
 
 .input-group{
     margin-bottom:18px;
@@ -174,8 +160,6 @@ body{
             0 0 0 5px rgba(141,158,228,0.13),
             0 10px 20px rgba(141,158,228,0.10);
 }
-
-/* ================= OPTIONS ================= */
 
 .login-options{
     display:flex;
@@ -243,8 +227,6 @@ body{
     width:100%;
 }
 
-/* ================= BUTTON ================= */
-
 .login-btn-form{
     width:100%;
     height:54px;
@@ -278,8 +260,6 @@ body{
 
     transition:0.35s ease;
 }
-
-/* BUTTON SHINE */
 
 .login-btn-form::before{
     content:"";
@@ -320,8 +300,6 @@ body{
     transform:scale(0.98);
 }
 
-/* ================= REGISTER ================= */
-
 .register-text{
     margin-top:22px;
 
@@ -348,8 +326,6 @@ body{
     color:#7186dc;
 }
 
-/* ================= CARD ANIMATION ================= */
-
 @keyframes cardShow{
 
     from{
@@ -368,8 +344,6 @@ body{
                 scale(1);
     }
 }
-
-/* ================= RESPONSIVE ================= */
 
 @media(max-width:768px){
 
