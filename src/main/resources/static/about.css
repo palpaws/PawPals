@@ -483,6 +483,57 @@ body{
     box-shadow:0 25px 40px rgba(0,0,0,0.14);
 }
 
+/* ================= LINK BUTTONS ================= */
+
+.about-links{
+    display:flex;
+    justify-content:center;
+    gap:30px;
+    padding:60px 20px;
+    flex-wrap:wrap;
+}
+
+.about-link-btn{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:18px 36px;
+    border-radius:60px;
+    text-decoration:none;
+    font-family:'Baloo 2', cursive;
+    font-size:20px;
+    font-weight:700;
+    cursor:pointer;
+    transition:all 0.35s ease;
+    border:none;
+}
+
+.about-link-btn i{
+    font-size:26px;
+}
+
+.about-link-btn:first-child{
+    background:white;
+    color:#5d6fd6;
+    box-shadow:0 8px 25px rgba(93,111,214,0.25);
+}
+
+.about-link-btn:first-child:hover{
+    transform:translateY(-6px) scale(1.04);
+    box-shadow:0 18px 35px rgba(93,111,214,0.35);
+}
+
+.about-link-btn:last-child{
+    background:linear-gradient(135deg,#ea7da3,#f08bab);
+    color:white;
+    box-shadow:0 8px 25px rgba(234,125,163,0.3);
+}
+
+.about-link-btn:last-child:hover{
+    transform:translateY(-6px) scale(1.04);
+    box-shadow:0 18px 35px rgba(234,125,163,0.45);
+}
+
 /* ================= ANIMATIONS ================= */
 
 @keyframes float{

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Câu hỏi thường gặp - PawPals</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+    <link rel="stylesheet" th:href="@{/header.css}">
+    <link rel="stylesheet" th:href="@{/faq.css}">
+    <link rel="stylesheet" th:href="@{/footer.css}">
+</head>
+<body>
+
+<div class="page">
+
+<!-- HEADER -->
+<div th:replace="fragments/header :: header"></div>
+
+<!-- ================= HERO ================= -->
+<section class="faq-hero">
+    <div class="faq-hero-content">
+        <h1>Câu hỏi thường gặp</h1>
+        <p>Tìm câu trả lời cho những thắc mắc phổ biến về PawPals.</p>
+    </div>
+</section>
+
+<!-- ================= FAQ ACCORDION ================= -->
+<section class="faq-section">
+
+    <!-- A. Tài khoản & Đăng ký -->
+    <div class="faq-group">
+        <h2 class="faq-group-title">A. Tài khoản & Đăng ký</h2>
+
+        <div class="accordion">
+            <div class="accordion-item">
+                <button class="accordion-header" aria-expanded="false">
+                    <span>Làm thế nào để tạo tài khoản?</span>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </button>
+                <div class="accordion-body">
+                    <p>Bạn chỉ cần nhấp vào nút <strong>"Đăng Ký"</strong> ở góc trên bên phải, điền đầy đủ thông tin (họ tên, email, mật khẩu) và xác nhận email. Sau đó bạn có thể bắt đầu sử dụng tất cả các tính năng của PawPals ngay lập tức.</p>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header" aria-expanded="false">
+                    <span>Làm thế nào để đặt lại mật khẩu?</span>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </button>
+                <div class="accordion-body">
+                    <p>Trên trang đăng nhập, nhấp vào <strong>"Quên mật khẩu"</strong>. Nhập email đã đăng ký, chúng tôi sẽ gửi mã OTP để xác thực. Sau khi xác thực, bạn có thể đặt lại mật khẩu mới.</p>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header" aria-expanded="false">
+                    <span>Tôi có thể chỉnh sửa thông tin hồ sơ cá nhân không?</span>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </button>
+                <div class="accordion-body">
+                    <p>Có. Vào trang <strong>"Bạn" (Profile)</strong>, bạn có thể cập nhật ảnh đại diện, họ tên, số điện thoại và các thông tin cá nhân khác bất kỳ lúc nào.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- B. Hồ sơ thú cưng -->
+    <div class="faq-group">
+        <h2 class="faq-group-title">B. Hồ sơ thú cưng</h2>
+
+        <div class="accordion">
+            <div class="accordion-item">
+                <button class="accordion-header" aria-expanded="false">
+                    <span>Làm thế nào để thêm hồ sơ thú cưng?</span>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </button>
+                <div class="accordion-body">
+                    <p>Sau khi đăng nhập, vào mục <strong>"Bạn"</strong> và chọn <strong>"Thêm thú cưng"</strong>. Điền tên, giống, tuổi, cân nặng, sở thích và tải lên ảnh đại diện cho thú cưng của bạn.</p>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header" aria-expanded="false">
+                    <span>Tôi có thể tải lên nhiều ảnh cho thú cưng không?</span>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </button>
+                <div class="accordion-body">
+                    <p>Có. Mỗi hồ sơ thú cưng cho phép tải lên nhiều ảnh. Bạn có thể thêm ảnh mới hoặc xóa ảnh cũ trong phần chỉnh sửa hồ sơ thú cưng.</p>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header" aria-expanded="false">
+                    <span>Làm thế nào để cập nhật thông tin thú cưng?</span>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </button>
+                <div class="accordion-body">
+                    <p>Vào hồ sơ thú cưng của bạn, nhấp vào nút <strong>"Chỉnh sửa"</strong> (biểu tượng bút chì) để cập nhật thông tin như giống, tuổi, cân nặng, màu sắc và các ghi chú khác.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- C. Ghép đôi thú cưng -->
+    <div class="faq-group">
+        <h2 class="faq-group-title">C. Ghép đôi thú cưng</h2>
+
+        <div class="accordion">
+            <div class="accordion-item">
+                <button class="accordion-header" aria-expanded="false">
+                    <span>Hệ thống ghép đôi thú cưng hoạt động như thế nào?</span>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </button>
+                <div class="accordion-body">
+                    <p>Dựa trên thông tin về giống, tính cách, độ tuổi và vị trí địa lý, hệ thống sẽ đề xuất những thú cưng phù hợp để kết bạn hoặc ghép đôi với thú cưng của bạn.</p>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header" aria-expanded="false">
+                    <span>Làm thế nào để tìm bạn đồng hành phù hợp cho thú cưng của tôi?</span>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </button>
+                <div class="accordion-body">
+                    <p>Vào mục <strong>"Ghép đôi"</strong> trên thanh điều hướng. Bạn có thể lọc theo giống, khu vực, độ tuổi và xem hồ sơ chi tiết trước khi kết nối với chủ nuôi khác.</p>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header" aria-expanded="false">
+                    <span>Tôi có thể tắt tính năng ghép đôi cho thú cưng không?</span>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </button>
+                <div class="accordion-body">
+                    <p>Có. Trong phần chỉnh sửa hồ sơ thú cưng, bạn có thể tắt trạng thái <strong>"Có thể ghép đôi"</strong> bất kỳ lúc nào. Thú cưng của bạn sẽ không xuất hiện trong kết quả tìm kiếm ghép đôi.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- D. Sức khỏe & Hồ sơ y tế -->
+    <div class="faq-group">
+        <h2 class="faq-group-title">D. Sức khỏe & Hồ sơ y tế</h2>
+
+        <div class="accordion">
+            <div class="accordion-item">
+                <button class="accordion-header" aria-expanded="false">
+                    <span>Làm thế nào để ghi nhận thông tin tiêm phòng?</span>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </button>
+                <div class="accordion-body">
+                    <p>Trong hồ sơ thú cưng, vào tab <strong>"Sức khỏe"</strong> > <strong>"Lịch tiêm chủng"</strong>. Bạn có thể thêm tên vắc-xin, ngày tiêm, ngày nhắc lại và tải lên hình ảnh sổ tiêm chủng.</p>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header" aria-expanded="false">
+                    <span>Tôi có thể theo dõi lịch sử khám thú y không?</span>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </button>
+                <div class="accordion-body">
+                    <p>Có. PawPals lưu trữ toàn bộ lịch sử khám chữa bệnh, bao gồm ngày khám, chẩn đoán, đơn thuốc và tái khám. Truy cập tab <strong>"Sức khỏe"</strong> > <strong>"Lịch sử khám"</strong> để xem chi tiết.</p>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header" aria-expanded="false">
+                    <span>Làm thế nào để quản lý thông tin sức khỏe của thú cưng?</span>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </button>
+                <div class="accordion-body">
+                    <p>Bạn có thể quản lý cân nặng, chế độ ăn, lịch vận động và các chỉ số sức khỏe khác trong tab <strong>"Sức khỏe"</strong>. Hệ thống cũng gửi nhắc nhở tự động cho các mốc quan trọng.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- E. An toàn & Quyền riêng tư -->
+    <div class="faq-group">
+        <h2 class="faq-group-title">E. An toàn & Quyền riêng tư</h2>
+
+        <div class="accordion">
+            <div class="accordion-item">
+                <button class="accordion-header" aria-expanded="false">
+                    <span>Thông tin cá nhân của tôi có được bảo mật không?</span>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </button>
+                <div class="accordion-body">
+                    <p>Có. PawPals áp dụng các tiêu chuẩn bảo mật nghiêm ngặt. Thông tin cá nhân của bạn được mã hóa và chỉ được sử dụng cho mục đích vận hành nền tảng. Chúng tôi không chia sẻ dữ liệu với bên thứ ba khi chưa có sự đồng ý.</p>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header" aria-expanded="false">
+                    <span>Ai có thể xem hồ sơ thú cưng của tôi?</span>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </button>
+                <div class="accordion-body">
+                    <p>Bạn có thể tùy chỉnh quyền riêng tư cho từng hồ sơ thú cưng: <strong>Công khai</strong> (mọi người đều thấy), <strong>Chỉ bạn bè</strong> (người đã kết nối) hoặc <strong>Riêng tư</strong> (chỉ mình bạn).</p>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header" aria-expanded="false">
+                    <span>Dữ liệu của tôi được bảo vệ như thế nào?</span>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </button>
+                <div class="accordion-body">
+                    <p>Chúng tôi sử dụng mã hóa SSL/TLS cho toàn bộ dữ liệu truyền tải, mã hóa dữ liệu lưu trữ, xác thực hai yếu tố (2FA) và kiểm toán bảo mật định kỳ để đảm bảo an toàn tuyệt đối cho thông tin của bạn.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- F. Hỗ trợ -->
+    <div class="faq-group">
+        <h2 class="faq-group-title">F. Hỗ trợ</h2>
+
+        <div class="accordion">
+            <div class="accordion-item">
+                <button class="accordion-header" aria-expanded="false">
+                    <span>Tôi có thể liên hệ bộ phận hỗ trợ bằng cách nào?</span>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </button>
+                <div class="accordion-body">
+                    <p>Bạn có thể liên hệ qua email <strong>pawpals.pet26@gmail.com</strong>, qua chatbot trực tiếp trên website hoặc gửi tin nhắn qua fanpage Facebook của PawPals. Chúng tôi phản hồi trong vòng 24 giờ.</p>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header" aria-expanded="false">
+                    <span>Làm thế nào để báo cáo nội dung không phù hợp?</span>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </button>
+                <div class="accordion-body">
+                    <p>Nhấp vào biểu tượng <strong>"..."</strong> hoặc <strong>"Báo cáo"</strong> trên nội dung vi phạm. Đội ngũ kiểm duyệt của PawPals sẽ xem xét và xử lý trong vòng 24-48 giờ. Bạn có thể yên tâm thông tin của người báo cáo được bảo mật tuyệt đối.</p>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <button class="accordion-header" aria-expanded="false">
+                    <span>Tôi có thể gửi góp ý hoặc phản hồi ở đâu?</span>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </button>
+                <div class="accordion-body">
+                    <p>Rất hoan nghênh! Bạn có thể gửi phản hồi qua email <strong>pawpals.pet26@gmail.com</strong>, qua form liên hệ trên website hoặc trực tiếp tại mục <strong>"Góp ý"</strong> trong trang cá nhân của bạn.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<!-- FOOTER -->
+<div th:replace="fragments/footer :: footer"></div>
+
+</div>
+
+<script th:src="@{/faq.js}"></script>
+</body>
+</html>
