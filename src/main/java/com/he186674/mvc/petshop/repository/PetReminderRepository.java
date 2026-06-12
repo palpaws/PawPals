@@ -31,4 +31,11 @@ public interface PetReminderRepository extends JpaRepository<PetReminder, Intege
             @Param("startDate") LocalDate startDate,
             @Param("endDate") LocalDate endDate,
             @Param("petId") Integer petId);
+
+    // For calendar notification auto-creation: find reminders due tomorrow
+    List<PetReminder> findByEventDateAndIsCompletedFalse(LocalDate eventDate);
+
+    // For calendar notification auto-creation: all incomplete reminders grouped by user
+    @Query("SELECT pr FROM PetReminder pr WHERE pr.isCompleted = false ORDER BY pr.user.userId")
+    List<PetReminder> findByIsCompletedFalseOrderByUserUserId();
 }

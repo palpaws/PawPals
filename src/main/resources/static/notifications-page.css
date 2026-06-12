@@ -1,0 +1,261 @@
+/* ================= NOTIF HERO ================= */
+
+.notif-hero{
+    width:100%;
+    min-height:40vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+    padding:40px 0;
+    margin-top:20px;
+}
+
+.notif-hero-content{
+    max-width:600px;
+}
+
+.notif-hero-content h1{
+    font-size:72px;
+    color:#163f36;
+    font-weight:800;
+    line-height:1;
+    letter-spacing:2px;
+    text-shadow:0 10px 20px rgba(0,0,0,0.08);
+    animation:fadeDown 1s ease;
+}
+
+.notif-hero-content h1:hover{
+    transform:scale(1.03);
+}
+
+.notif-hero-content p{
+    margin-top:14px;
+    font-size:20px;
+    color:#1f423a;
+    font-weight:500;
+    animation:fadeUp 1.2s ease;
+}
+
+/* ================= NOTIF SECTION ================= */
+
+.notif-section{
+    width:100%;
+    max-width:900px;
+    margin:0 auto 40px;
+    background:white;
+    border-radius:30px;
+    box-shadow:0 -10px 30px rgba(0,0,0,0.04), 0 15px 40px rgba(0,0,0,0.06);
+    padding:30px;
+}
+
+.notif-toolbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:24px;
+    padding-bottom:16px;
+    border-bottom:1px solid rgba(0,0,0,0.06);
+}
+
+.notif-count{
+    font-size:16px;
+    font-weight:600;
+    color:#163f36;
+}
+
+.notif-mark-all{
+    border:none;
+    background:rgba(234,125,163,0.1);
+    color:#ea7da3;
+    font-size:14px;
+    font-weight:600;
+    font-family:'Baloo 2', cursive;
+    padding:8px 18px;
+    border-radius:30px;
+    cursor:pointer;
+    transition:all 0.3s ease;
+}
+
+.notif-mark-all:hover{
+    background:#ea7da3;
+    color:white;
+    transform:translateY(-2px);
+    box-shadow:0 8px 18px rgba(234,125,163,0.25);
+}
+
+/* LIST */
+
+.notif-list{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.notif-loading,
+.notif-empty{
+    text-align:center;
+    padding:60px 20px;
+    color:#96a1c8;
+    font-size:16px;
+}
+
+/* ITEM */
+
+.notif-item{
+    display:flex;
+    align-items:flex-start;
+    gap:16px;
+    padding:18px 20px;
+    border-radius:18px;
+    transition:all 0.3s ease;
+    background:#f8f7f5;
+    position:relative;
+}
+
+.notif-item:hover{
+    background:rgba(93,111,214,0.04);
+    transform:translateX(4px);
+}
+
+.notif-item.unread{
+    background:rgba(93,111,214,0.06);
+    border-left:4px solid #5d6fd6;
+}
+
+.notif-item.read{
+    opacity:0.7;
+}
+
+/* DOT */
+
+.notif-dot{
+    width:10px;
+    height:10px;
+    min-width:10px;
+    border-radius:50%;
+    background:#5d6fd6;
+    margin-top:6px;
+}
+
+.notif-dot.read{
+    background:rgba(0,0,0,0.12);
+}
+
+/* BODY */
+
+.notif-body{
+    flex:1;
+    min-width:0;
+}
+
+.notif-title{
+    font-size:17px;
+    font-weight:700;
+    color:#163f36;
+    margin-bottom:4px;
+}
+
+.notif-content{
+    font-size:14px;
+    color:#6f6f6f;
+    line-height:1.6;
+    margin-bottom:6px;
+}
+
+.notif-time{
+    font-size:13px;
+    color:#96a1c8;
+}
+
+/* MARK BUTTON */
+
+.notif-mark-btn{
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    border:1px solid rgba(0,0,0,0.08);
+    background:white;
+    color:#5d6fd6;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:14px;
+    flex-shrink:0;
+    transition:all 0.3s ease;
+    margin-top:2px;
+}
+
+.notif-mark-btn:hover{
+    background:#5d6fd6;
+    color:white;
+    transform:scale(1.08);
+    box-shadow:0 6px 14px rgba(93,111,214,0.25);
+}
+
+/* ================= ANIMATIONS ================= */
+
+@keyframes fadeDown{
+    from{ opacity:0; transform:translateY(-40px); }
+    to{ opacity:1; transform:translateY(0); }
+}
+
+@keyframes fadeUp{
+    from{ opacity:0; transform:translateY(40px); }
+    to{ opacity:1; transform:translateY(0); }
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:1200px){
+    .notif-hero-content h1{
+        font-size:52px;
+    }
+
+    .notif-hero-content p{
+        font-size:18px;
+    }
+
+    .notif-section{
+        margin-left:20px;
+        margin-right:20px;
+    }
+}
+
+@media(max-width:768px){
+    .page{
+        padding:25px;
+    }
+
+    .notif-hero-content h1{
+        font-size:40px;
+    }
+
+    .notif-hero-content p{
+        font-size:16px;
+    }
+
+    .notif-section{
+        padding:20px 16px;
+        margin-left:0;
+        margin-right:0;
+        border-radius:20px;
+    }
+
+    .notif-toolbar{
+        flex-direction:column;
+        gap:12px;
+        align-items:flex-start;
+    }
+
+    .notif-item{
+        padding:14px 16px;
+    }
+
+    .notif-title{
+        font-size:15px;
+    }
+}

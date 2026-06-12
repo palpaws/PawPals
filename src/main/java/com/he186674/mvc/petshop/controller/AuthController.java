@@ -2,6 +2,7 @@ package com.he186674.mvc.petshop.controller;
 
 import com.he186674.mvc.petshop.entities.User;
 import com.he186674.mvc.petshop.service.UserService;
+import com.he186674.mvc.petshop.service.impl.CalendarNotificationService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,10 +16,12 @@ import java.util.Random;
 public class AuthController {
 
     private final UserService userService;
+    private final CalendarNotificationService calendarNotificationService;
 
     @Autowired
-    public AuthController(UserService userService) {
+    public AuthController(UserService userService, CalendarNotificationService calendarNotificationService) {
         this.userService = userService;
+        this.calendarNotificationService = calendarNotificationService;
     }
 
     @GetMapping("/login")
@@ -35,6 +38,8 @@ public class AuthController {
         try {
             User user = userService.login(email, password);
             session.setAttribute("currentUser", user);
+            // Tự động sinh notification từ reminders khi đăng nhập
+            calendarNotificationService.generateReminderNotifications(user.getUserId());
             return "redirect:/";
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());

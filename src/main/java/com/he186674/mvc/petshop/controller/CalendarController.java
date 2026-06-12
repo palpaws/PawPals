@@ -5,7 +5,9 @@ import com.he186674.mvc.petshop.entities.PetImage;
 import com.he186674.mvc.petshop.entities.PetReminder;
 import com.he186674.mvc.petshop.entities.User;
 import com.he186674.mvc.petshop.repository.PetRepository;
+import com.he186674.mvc.petshop.service.NotificationService;
 import com.he186674.mvc.petshop.service.PetReminderService;
+import com.he186674.mvc.petshop.service.impl.CalendarNotificationService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,11 +24,15 @@ public class CalendarController {
 
     private final PetReminderService petReminderService;
     private final PetRepository petRepository;
+    private final CalendarNotificationService calendarNotificationService;
 
     @Autowired
-    public CalendarController(PetReminderService petReminderService, PetRepository petRepository) {
+    public CalendarController(PetReminderService petReminderService,
+                              PetRepository petRepository,
+                              CalendarNotificationService calendarNotificationService) {
         this.petReminderService = petReminderService;
         this.petRepository = petRepository;
+        this.calendarNotificationService = calendarNotificationService;
     }
 
     // Helper: lấy URL ảnh chính của pet
@@ -173,6 +179,8 @@ public class CalendarController {
 
         try {
             petReminderService.toggleComplete(reminderId, currentUser.getUserId());
+            // Khi reminder được đánh dấu hoàn thành, tự động đánh dấu notification liên quan là đã đọc
+            calendarNotificationService.markNotificationReadForReminder(reminderId);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

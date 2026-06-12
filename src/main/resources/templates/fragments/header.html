@@ -19,6 +19,26 @@
 
     <!-- Auth Action Buttons -->
     <div th:if="${session != null and session.currentUser != null}" style="display: flex; align-items: center; gap: 15px;">
+        <!-- Notification Bell -->
+        <div class="notification-bell-wrapper">
+            <button class="notification-bell" id="notificationBell" aria-label="Thông báo">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
+            </button>
+            <!-- Dropdown -->
+            <div class="notification-dropdown" id="notificationDropdown">
+                <div class="dropdown-header">
+                    <h3>Thông báo</h3>
+                    <button class="mark-all-read" id="markAllRead">Đánh dấu tất cả đã đọc</button>
+                </div>
+                <div class="dropdown-body" id="notificationList">
+                    <div class="dropdown-empty">Không có thông báo</div>
+                </div>
+                <div class="dropdown-footer">
+                    <a th:href="@{/notifications}">Xem tất cả thông báo</a>
+                </div>
+            </div>
+        </div>
         <span style="font-size: 16px; font-weight: 600; color: #143f38;" th:text="${'Xin chào, ' + session.currentUser.fullName}"></span>
         <a th:href="@{/logout}">
             <button class="top-btn" style="background: linear-gradient(135deg,#ff7e5f,#feb47b); box-shadow: 0 8px 18px rgba(255,126,95,0.35);">
@@ -38,7 +58,16 @@
         </a>
     </div>
 
+    <script th:src="@{/notification.js}"></script>
+    <script>
+        // Font Awesome check - load if missing
+        if (!document.querySelector('link[href*="font-awesome"]') && !document.querySelector('link[href*="fontawesome"]')) {
+            var fa = document.createElement('link');
+            fa.rel = 'stylesheet';
+            fa.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css';
+            document.head.appendChild(fa);
+        }
+    </script>
+
 </header>
 
-</body>
-</html>

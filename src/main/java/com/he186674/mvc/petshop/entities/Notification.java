@@ -1,7 +1,5 @@
 package com.he186674.mvc.petshop.entities;
 
-
-
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -15,13 +13,20 @@ public class Notification {
     private Integer notificationId;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "title")
+    @ManyToOne
+    @JoinColumn(name = "reminder_id")
+    private PetReminder reminder;
+
+    @Column(name = "type", nullable = false, length = 50)
+    private String type;
+
+    @Column(name = "title", nullable = false, length = 200)
     private String title;
 
-    @Column(name = "content", length = 1000)
+    @Column(name = "content", nullable = false, length = 1000)
     private String content;
 
     @Column(name = "is_read")
@@ -37,6 +42,12 @@ public class Notification {
 
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }
+
+    public PetReminder getReminder() { return reminder; }
+    public void setReminder(PetReminder reminder) { this.reminder = reminder; }
+
+    public String getType() { return type; }
+    public void setType(String type) { this.type = type; }
 
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }

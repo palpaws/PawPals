@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông báo - PawPals</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+    <link rel="stylesheet" th:href="@{/header.css}">
+    <link rel="stylesheet" th:href="@{/notifications-page.css}">
+    <link rel="stylesheet" th:href="@{/footer.css}">
+</head>
+<body>
+
+<div class="page">
+
+<!-- HEADER -->
+<div th:replace="fragments/header :: header"></div>
+
+<!-- ================= HERO ================= -->
+<section class="notif-hero">
+    <div class="notif-hero-content">
+        <h1>Thông báo</h1>
+        <p>Tất cả thông báo của bạn tại PawPals</p>
+    </div>
+</section>
+
+<!-- ================= NOTIFICATION LIST ================= -->
+<section class="notif-section">
+    <div class="notif-toolbar">
+        <span class="notif-count" id="notifTotalCount">Đang tải...</span>
+        <button class="notif-mark-all" id="notifMarkAllPage">Đánh dấu tất cả đã đọc</button>
+    </div>
+    <div class="notif-list" id="notifFullList">
+        <div class="notif-loading">Đang tải thông báo...</div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<div th:replace="fragments/footer :: footer"></div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const list = document.getElementById('notifFullList');
+    const countSpan = document.getElementById('notifTotalCount');
+    const markAllBtn = document.getElementById('notifMarkAllPage');
+
+    loadAllNotifications();
+
+    markAllBtn.addEventListener('click', function() {
+        fetch('/api/notifications/read-all', { method: 'PUT' })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    document.querySelectorAll('.notif-item.unread').forEach(item => {
+                        item.classList.remove('unread');
+                        item.classList.add('read');
+                    });
+                    countSpan.textContent = '0 thông báo chưa đọc';
+                }
+            });
+    });
+
+    function loadAllNotifications() {
+        fetch('/api/notifications')
+            .then(res => res.json())
+            .then(notifications => {
+                renderAll(notifications);
+                updateCount(notifications);
+            })
+            .catch(() => {
+                list.innerHTML = '<div class="notif-empty">Không thể tải thông báo</div>';
+            });
+    }
+
+    function renderAll(notifications) {
+        if (!notifications || notifications.length === 0) {
+            list.innerHTML = '<div class="notif-empty">Chưa có thông báo nào</div>';
+            return;
+        }
+
+        let html = '';
+        notifications.forEach(n => {
+            const isUnread = !n.isRead;
+            html += `
+                <div class="notif-item ${isUnread ? 'unread' : 'read'}" data-id="${n.notificationId}">
+                    <div class="notif-dot ${isUnread ? '' : 'read'}"></div>
+                    <div class="notif-body">
+                        <div class="notif-title">${escapeHtml(n.title)}</div>
+                        <div class="notif-content">${escapeHtml(n.content)}</div>
+                        <div class="notif-time">${n.timeAgo || ''}</div>
+                    </div>
+                    ${isUnread ? '<button class="notif-mark-btn" title="Đánh dấu đã đọc"><i class="fas fa-check"></i></button>' : ''}
+                </div>
+            `;
+        });
+        list.innerHTML = html;
+
+        // Click to mark single as read
+        document.querySelectorAll('.notif-item.unread').forEach(item => {
+            const markBtn = item.querySelector('.notif-mark-btn');
+            if (markBtn) {
+                markBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const id = item.dataset.id;
+                    fetch('/api/notifications/' + id + '/read', { method: 'PUT' })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.success) {
+                                item.classList.remove('unread');
+                                item.classList.add('read');
+                                markBtn.remove();
+                                updateCountFromDom();
+                            }
+                        });
+                });
+            }
+        });
+    }
+
+    function updateCount(notifications) {
+        const unread = notifications.filter(n => !n.isRead).length;
+        countSpan.textContent = unread + ' thông báo chưa đọc';
+    }
+
+    function updateCountFromDom() {
+        const unread = document.querySelectorAll('.notif-item.unread').length;
+        countSpan.textContent = unread + ' thông báo chưa đọc';
+    }
+
+    function escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+});
+</script>
+</body>
+</html>
