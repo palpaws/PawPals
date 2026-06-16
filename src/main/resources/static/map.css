@@ -47,6 +47,39 @@ body {
     font-weight: 600;
 }
 
+/* ===== PLACE REVIEWS ===== */
+.place-rating {
+    font-size: 13px;
+    margin: 4px 0 6px;
+    color: #666;
+}
+
+.place-reviews {
+    margin: 4px 0 8px;
+}
+
+.place-review-item {
+    background: #fafafa;
+    border-radius: 8px;
+    padding: 6px 10px;
+    margin-bottom: 4px;
+    font-size: 12px;
+    line-height: 1.5;
+    border-left: 3px solid #f1c40f;
+}
+
+.place-review-item .review-author {
+    font-weight: 600;
+    color: #333;
+    font-size: 12px;
+}
+
+.place-review-item .review-text {
+    color: #777;
+    font-style: italic;
+    font-size: 12px;
+}
+
 /* ===== MY LOCATION BUTTON ===== */
 .my-location-btn {
     width: 100%;
