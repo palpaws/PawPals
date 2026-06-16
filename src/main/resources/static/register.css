@@ -13,99 +13,17 @@ html{
 body{
     font-family:'Fredoka', sans-serif;
 
-    background:#d8aebb;
+    background-image: url("images/register.jpg");
+    background-size: cover;
+    background-position: 20% center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 
     min-height:100vh;
 
     overflow-x:hidden;
 
     position:relative;
-}
-
-/* ================= BACKGROUND EFFECT ================= */
-
-body::before{
-    content:"";
-
-    position:fixed;
-
-    width:420px;
-    height:420px;
-
-    top:-120px;
-    left:-120px;
-
-    border-radius:50%;
-
-    background:
-            radial-gradient(
-                    circle,
-                    rgba(255,255,255,0.25),
-                    transparent 70%
-            );
-
-    filter:blur(22px);
-
-    z-index:-1;
-
-    animation:floatBlob1 8s ease-in-out infinite;
-}
-
-body::after{
-    content:"";
-
-    position:fixed;
-
-    width:380px;
-    height:380px;
-
-    bottom:-100px;
-    right:-100px;
-
-    border-radius:50%;
-
-    background:
-            radial-gradient(
-                    circle,
-                    rgba(141,158,228,0.22),
-                    transparent 70%
-            );
-
-    filter:blur(26px);
-
-    z-index:-1;
-
-    animation:floatBlob2 10s ease-in-out infinite;
-}
-
-@keyframes floatBlob1{
-
-    0%{
-        transform:translateY(0px);
-    }
-
-    50%{
-        transform:translateY(25px);
-    }
-
-    100%{
-        transform:translateY(0px);
-    }
-}
-
-@keyframes floatBlob2{
-
-    0%{
-        transform:translateY(0px);
-    }
-
-    50%{
-        transform:translateY(-25px);
-    }
-
-    100%{
-        transform:translateY(0px);
-    }
 }
 
 /* ================= HEADER ================= */
@@ -228,11 +146,10 @@ body::after{
     width:100%;
 
     display:flex;
-    justify-content:center;
+    justify-content:flex-end;
     align-items:flex-start;
 
-    padding:
-            42px 20px 50px;
+    padding:42px 120px 50px 20px;
 }
 
 /* ================= CARD ================= */
@@ -243,7 +160,7 @@ body::after{
     background:
             rgba(248,248,248,0.92);
 
-    backdrop-filter:blur(12px);
+    backdrop-filter:none;
 
     border-radius:36px;
 
@@ -492,6 +409,67 @@ form{
                 translateY(0)
                 scale(1);
     }
+}
+
+/* ================= RESPONSIVE ================= */
+
+/* ================= PASSWORD REQUIREMENTS ================= */
+
+.password-requirements {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 8px;
+    font-size: 14px;
+    display: none;
+}
+
+.password-requirements.show {
+    display: block;
+}
+
+.requirement {
+    padding: 6px 0;
+    color: #6c757d;
+    transition: color 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.requirement .icon {
+    width: 20px;
+    height: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: #dee2e6;
+    color: #6c757d;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.requirement.met {
+    color: #28a745;
+}
+
+.requirement.met .icon {
+    background-color: #28a745;
+    color: white;
+}
+
+#password-match-message {
+    font-weight: 500;
+}
+
+#password-match-message.match {
+    color: #28a745;
+}
+
+#password-match-message.no-match {
+    color: #d73a49;
 }
 
 /* ================= RESPONSIVE ================= */

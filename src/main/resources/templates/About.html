@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giới thiệu - PawPals</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+    <link rel="stylesheet" th:href="@{/header.css}">
+    <link rel="stylesheet" th:href="@{/about.css}">
+    <link rel="stylesheet" th:href="@{/footer.css}">
+</head>
+<body>
+
+<div class="page">
+
+<!-- HEADER -->
+<div th:replace="fragments/header :: header"></div>
+
+<!-- ================= HERO ================= -->
+<section class="about-hero">
+    <div class="hero-float float1"><i class="fas fa-paw"></i></div>
+    <div class="hero-float float2"><i class="fas fa-heart"></i></div>
+    <div class="hero-float float3"><i class="fas fa-bone"></i></div>
+
+    <div class="hero-content">
+        <h1>About PalPaw</h1>
+        <p>
+            PalPaw là nền tảng kết nối, chăm sóc và tìm bạn đồng hành
+            cho thú cưng của bạn. Chúng tôi tin rằng mỗi chú thú cưng
+            xứng đáng có một cuộc sống hạnh phúc, khỏe mạnh và đầy yêu thương.
+        </p>
+    </div>
+</section>
+
+<!-- ================= OUR STORY ================= -->
+<section class="story-section">
+    <div class="story-top">
+        <div class="story-label">Our Story</div>
+        <div class="story-line"></div>
+        <div class="story-sub">Câu chuyện của chúng tôi</div>
+    </div>
+
+    <div class="story-content">
+        <div class="story-text">
+            <h2>Từ tình yêu thú cưng đến cộng đồng</h2>
+            <p>
+                PalPaw ra đời từ một ý tưởng đơn giản: mỗi người nuôi thú cưng
+                đều mong muốn những điều tốt nhất cho "bé" của mình. Nhưng đôi khi
+                chúng ta thiếu kiến thức, thời gian hoặc kết nối với các dịch vụ
+                chất lượng.
+            </p>
+            <p>
+                Đội ngũ PalPaw - những người yêu thú cưng, các bác sĩ thú y và
+                chuyên gia công nghệ - đã cùng nhau xây dựng nền tảng toàn diện
+                này. Chúng tôi không chỉ cung cấp công cụ quản lý sức khỏe, lịch
+                trình cho thú cưng, mà còn tạo ra một cộng đồng nơi các chủ nuôi
+                có thể chia sẻ, học hỏi và hỗ trợ lẫn nhau.
+            </p>
+            <p>
+                <strong>Nuôi thú có trách nhiệm</strong> — đó là kim chỉ nam của
+                chúng tôi. PalPaw khuyến khích việc chăm sóc sức khỏe định kỳ,
+                tiêm chủng đầy đủ, và đặc biệt là việc nhận nuôi thay vì mua bán
+                thú cưng tràn lan.
+            </p>
+        </div>
+        <div class="story-image">
+            <img th:src="@{/images/img1.jpg}" alt="Our story">
+        </div>
+    </div>
+</section>
+
+<!-- ================= WHAT WE OFFER ================= -->
+<section class="offer-section">
+    <div class="offer-top">
+        <div class="offer-label">What We Offer</div>
+        <div class="offer-line"></div>
+        <div class="offer-sub">Những gì chúng tôi cung cấp</div>
+    </div>
+
+    <div class="offer-grid">
+        <div class="offer-card">
+            <div class="offer-icon"><i class="fas fa-id-card"></i></div>
+            <h3>Hồ sơ thú cưng</h3>
+            <p>Tạo hồ sơ chi tiết cho thú cưng của bạn: ảnh, thông tin sức khỏe, tính cách, sở thích — tất cả trong một nơi.</p>
+        </div>
+        <div class="offer-card">
+            <div class="offer-icon"><i class="fas fa-heart"></i></div>
+            <h3>Ghép đôi thú cưng</h3>
+            <p>Tìm bạn đồng hành phù hợp cho thú cưng của bạn với tính năng ghép đôi thông minh dựa trên giống, tính cách và vị trí.</p>
+        </div>
+        <div class="offer-card">
+            <div class="offer-icon"><i class="fas fa-notes-medical"></i></div>
+            <h3>Theo dõi sức khỏe</h3>
+            <p>Theo dõi lịch tiêm chủng, khám sức khỏe định kỳ, cân nặng và các chỉ số sức khỏe quan trọng khác.</p>
+        </div>
+        <div class="offer-card">
+            <div class="offer-icon"><i class="fas fa-users"></i></div>
+            <h3>Cộng đồng thú cưng</h3>
+            <p>Kết nối với những người yêu thú cưng khác, chia sẻ kinh nghiệm và tham gia các sự kiện thú cưng.</p>
+        </div>
+        <div class="offer-card">
+            <div class="offer-icon"><i class="fas fa-home"></i></div>
+            <h3>Hỗ trợ nhận nuôi</h3>
+            <p>Kết nối với các tổ chức cứu hộ và tìm mái ấm mới cho những chú thú cưng cần được yêu thương.</p>
+        </div>
+        <div class="offer-card">
+            <div class="offer-icon"><i class="fas fa-book-open"></i></div>
+            <h3>Thông tin chăm sóc</h3>
+            <p>Kho tàng kiến thức về dinh dưỡng, sức khỏe, huấn luyện và chăm sóc thú cưng từ các chuyên gia.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ================= WHY CHOOSE US ================= -->
+<section class="why-section">
+    <div class="why-top">
+        <div class="why-label">Why Choose Us</div>
+        <div class="why-line"></div>
+        <div class="why-sub">Tại sao chọn PalPaw?</div>
+    </div>
+
+    <div class="why-grid">
+        <div class="why-card">
+            <div class="why-number">01</div>
+            <div class="why-icon"><i class="fas fa-shield-alt"></i></div>
+            <h3>Nền tảng đáng tin cậy</h3>
+            <p>Được xây dựng bởi đội ngũ chuyên gia thú y và công nghệ, đảm bảo thông tin chính xác và dịch vụ chất lượng.</p>
+        </div>
+        <div class="why-card">
+            <div class="why-number">02</div>
+            <div class="why-icon"><i class="fas fa-users"></i></div>
+            <h3>Cộng đồng yêu thú cưng</h3>
+            <p>Nơi quy tụ những người nuôi thú cưng có trách nhiệm, sẵn sàng chia sẻ và hỗ trợ nhau.</p>
+        </div>
+        <div class="why-card">
+            <div class="why-number">03</div>
+            <div class="why-icon"><i class="fas fa-smile"></i></div>
+            <h3>Giao diện dễ sử dụng</h3>
+            <p>Thiết kế trực quan, thân thiện, giúp bạn dễ dàng quản lý mọi thứ chỉ với vài thao tác đơn giản.</p>
+        </div>
+        <div class="why-card">
+            <div class="why-number">04</div>
+            <div class="why-icon"><i class="fas fa-lock"></i></div>
+            <h3>Bảo mật dữ liệu</h3>
+            <p>Thông tin cá nhân và dữ liệu thú cưng của bạn được bảo vệ với các tiêu chuẩn bảo mật cao nhất.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section class="contact-section">
+    <div class="contact-top">
+        <div class="contact-label">Contact Us</div>
+        <div class="contact-line"></div>
+        <div class="contact-sub">Liên hệ với chúng tôi</div>
+    </div>
+
+    <div class="contact-content">
+        <div class="contact-info">
+            <div class="contact-item">
+                <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                <div>
+                    <h4>Địa chỉ</h4>
+                    <p> Khu Công nghệ cao Hòa Lạc, Km29 Đại lộ Thăng Long, Huyện Thạch Thất</p>
+                </div>
+            </div>
+            <div class="contact-item">
+                <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                <div>
+                    <h4>Email</h4>
+                    <p>pawpals.pet26@gmail.com</p>
+                </div>
+            </div>
+            <div class="contact-socials">
+                <a href="https://www.facebook.com/profile.php?id=61590144071481" target="_blank" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://www.instagram.com/pawpals.pet26/" target="_blank" class="social-link"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-tiktok"></i></a>
+            </div>
+        </div>
+        <div class="contact-map">
+            <img th:src="@{/images/map4.jpg}" alt="Map">
+        </div>
+    </div>
+</section>
+
+<!-- ================= LINK BUTTONS ================= -->
+<div class="about-links">
+    <a th:href="@{/faq}" class="about-link-btn">
+        <i class="fas fa-question-circle"></i>
+        <span>Câu hỏi thường gặp</span>
+    </a>
+    <a th:href="@{/terms}" class="about-link-btn">
+        <i class="fas fa-file-contract"></i>
+        <span>Điều khoản & Bảo mật</span>
+    </a>
+</div>
+
+<!-- FOOTER -->
+<div th:replace="fragments/footer :: footer"></div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xác minh OTP | PawPals</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+    <link rel="stylesheet" th:href="@{/password-reset.css}">
+    <link rel="stylesheet" th:href="@{/header.css}">
+</head>
+<body>
+<div class="reset-page">
+    <div th:replace="fragments/header :: header"></div>
+
+    <section class="reset-section">
+        <div class="reset-card">
+            <h2>Nhập mã OTP</h2>
+            <p class="otp-description">Nhập mã được gửi trong gmail của bạn</p>
+
+            <div th:if="${error}" style="background-color: #ffeef0; color: #d73a49; border: 1px solid rgba(215, 58, 73, 0.4); padding: 12px; border-radius: 12px; margin-bottom: 20px; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 8px; justify-content: center; font-family: sans-serif;">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <span th:text="${error}"></span>
+            </div>
+
+            <form class="otp-form" th:action="@{/verify-otp}" method="post">
+                <div class="otp-inputs">
+                    <input type="text" class="otp-input" maxlength="1" inputmode="numeric" required>
+                    <input type="text" class="otp-input" maxlength="1" inputmode="numeric" required>
+                    <input type="text" class="otp-input" maxlength="1" inputmode="numeric" required>
+                    <input type="text" class="otp-input" maxlength="1" inputmode="numeric" required>
+                </div>
+
+                <input type="hidden" id="otpValue" name="otp">
+
+                <p class="resend-link">
+                    <a href="#" onclick="resendOTP(event)">Gửi lại mã</a>
+                </p>
+
+                <button type="submit" class="reset-btn">Xác minh</button>
+            </form>
+        </div>
+    </section>
+</div>
+
+<script>
+document.querySelectorAll('.otp-input').forEach((input, index) => {
+    input.addEventListener('input', function(e) {
+        if (this.value.length === 1 && index < 3) {
+            document.querySelectorAll('.otp-input')[index + 1].focus();
+        }
+        updateOtpValue();
+    });
+
+    input.addEventListener('keydown', function(e) {
+        if (e.key === 'Backspace' && this.value.length === 0 && index > 0) {
+            document.querySelectorAll('.otp-input')[index - 1].focus();
+        }
+    });
+});
+
+function updateOtpValue() {
+    const otp = Array.from(document.querySelectorAll('.otp-input'))
+        .map(input => input.value)
+        .join('');
+    document.getElementById('otpValue').value = otp;
+}
+
+function resendOTP(e) {
+    e.preventDefault();
+    fetch('/resend-otp', { method: 'POST' })
+        .then(response => {
+            if (response.ok) {
+                alert('Mã OTP đã được gửi lại');
+            }
+        })
+        .catch(err => console.error('Error:', err));
+}
+</script>
+</body>
+</html>

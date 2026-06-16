@@ -1,14 +1,12 @@
 package com.he186674.mvc.petshop.repository;
-
-import com.he186674.mvc.petshop.entities.Pet;
 import com.he186674.mvc.petshop.entities.User;
+import com.he186674.mvc.petshop.entities.Pet;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface PetRepository
-        extends JpaRepository<Pet, Integer> {
-
-    List<Pet> findByUser(User user);
-
-}
+@Repository
+public interface PetRepository extends JpaRepository<Pet, Integer> {
+    List<Pet> findByUser_UserId(Integer userId);
+    List<Pet> findByUser(User user);}

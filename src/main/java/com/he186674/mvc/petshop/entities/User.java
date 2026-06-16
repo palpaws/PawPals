@@ -54,6 +54,18 @@ public class User {
     @Column(name = "is_active")
     private Boolean isActive = true;
 
+    @Column(name = "reset_token")
+    private String resetToken;
+
+    @Column(name = "reset_token_expiry")
+    private LocalDateTime resetTokenExpiry;
+
+    @Column(name = "otp")
+    private String otp;
+
+    @Column(name = "otp_expiry")
+    private LocalDateTime otpExpiry;
+
     // ===== RELATIONSHIPS =====
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -105,6 +117,18 @@ public class User {
 
     public Boolean getIsActive() { return isActive; }
     public void setIsActive(Boolean isActive) { this.isActive = isActive; }
+
+    public String getResetToken() { return resetToken; }
+    public void setResetToken(String resetToken) { this.resetToken = resetToken; }
+
+    public LocalDateTime getResetTokenExpiry() { return resetTokenExpiry; }
+    public void setResetTokenExpiry(LocalDateTime resetTokenExpiry) { this.resetTokenExpiry = resetTokenExpiry; }
+
+    public String getOtp() { return otp; }
+    public void setOtp(String otp) { this.otp = otp; }
+
+    public LocalDateTime getOtpExpiry() { return otpExpiry; }
+    public void setOtpExpiry(LocalDateTime otpExpiry) { this.otpExpiry = otpExpiry; }
 
     public List<Pet> getPets() { return pets; }
     public void setPets(List<Pet> pets) { this.pets = pets; }

@@ -1,0 +1,378 @@
+/* ================= RESET ================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:'Nunito', sans-serif;
+    background:#d8aebb;
+    overflow-x:hidden;
+    color:#173f38;
+    position:relative;
+}
+
+/* ================= BACKGROUND EFFECT ================= */
+
+body::before{
+    content:"";
+    position:fixed;
+    width:420px;
+    height:420px;
+    top:-120px;
+    left:-120px;
+    border-radius:50%;
+    background:
+            radial-gradient(
+                    circle,
+                    rgba(255,255,255,0.28),
+                    transparent 70%
+            );
+    filter:blur(20px);
+    z-index:-1;
+    animation:floatBlob1 8s ease-in-out infinite;
+}
+
+body::after{
+    content:"";
+    position:fixed;
+    width:380px;
+    height:380px;
+    bottom:-120px;
+    right:-100px;
+    border-radius:50%;
+    background:
+            radial-gradient(
+                    circle,
+                    rgba(141,158,228,0.25),
+                    transparent 70%
+            );
+    filter:blur(25px);
+    z-index:-1;
+    animation:floatBlob2 10s ease-in-out infinite;
+}
+
+@keyframes floatBlob1{
+    0%{ transform:translateY(0px); }
+    50%{ transform:translateY(25px); }
+    100%{ transform:translateY(0px); }
+}
+
+@keyframes floatBlob2{
+    0%{ transform:translateY(0px); }
+    50%{ transform:translateY(-25px); }
+    100%{ transform:translateY(0px); }
+}
+
+/* ================= PAGE ================= */
+
+.error-page{
+    width:100%;
+    min-height:100vh;
+    padding:20px 45px;
+}
+
+/* ================= ERROR SECTION ================= */
+
+.error-section{
+    width:100%;
+    min-height:calc(100vh - 110px);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding-top:10px;
+}
+
+/* ================= ERROR CONTAINER ================= */
+
+.error-container{
+    text-align:center;
+    animation:cardShow 0.8s ease;
+}
+
+/* ================= CAT ILLUSTRATION ================= */
+
+.error-illustration{
+    position:relative;
+    margin-bottom:40px;
+    height:320px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.cat-face{
+    position:relative;
+    width:200px;
+    height:200px;
+}
+
+.cat-head{
+    width:100%;
+    height:100%;
+    background:#daa520;
+    border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;
+    position:relative;
+    animation:catBounce 3s ease-in-out infinite;
+}
+
+@keyframes catBounce{
+    0%, 100%{ transform:translateY(0); }
+    50%{ transform:translateY(-20px); }
+}
+
+.cat-ears{
+    position:absolute;
+    top:-30px;
+    left:50%;
+    transform:translateX(-50%);
+    width:100%;
+    display:flex;
+    justify-content:center;
+    gap:60px;
+}
+
+.ear{
+    width:0;
+    height:0;
+    border-left:25px solid transparent;
+    border-right:25px solid transparent;
+    border-bottom:50px solid #daa520;
+    position:relative;
+}
+
+.ear::after{
+    content:"";
+    position:absolute;
+    bottom:5px;
+    left:50%;
+    transform:translateX(-50%);
+    width:20px;
+    height:25px;
+    background:#ffb6c1;
+    border-radius:50%;
+}
+
+.cat-eyes{
+    position:absolute;
+    top:45px;
+    left:50%;
+    transform:translateX(-50%);
+    width:120px;
+    display:flex;
+    justify-content:space-between;
+    gap:40px;
+}
+
+.eye{
+    width:50px;
+    height:50px;
+    background:#000;
+    border-radius:10px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:28px;
+    color:#fff;
+    font-weight:bold;
+}
+
+.pupil{
+    animation:pupilMove 2s ease-in-out infinite;
+}
+
+@keyframes pupilMove{
+    0%, 100%{ transform:translateX(0); }
+    50%{ transform:translateX(5px); }
+}
+
+.cat-nose{
+    position:absolute;
+    top:110px;
+    left:50%;
+    transform:translateX(-50%);
+    width:0;
+    height:0;
+    border-left:8px solid transparent;
+    border-right:8px solid transparent;
+    border-top:12px solid #ff69b4;
+}
+
+.cat-mouth{
+    position:absolute;
+    top:130px;
+    left:50%;
+    transform:translateX(-50%);
+    width:40px;
+    height:20px;
+    border:2px solid #173f38;
+    border-top:none;
+    border-radius:0 0 40px 40px;
+}
+
+.cat-mouth::before,
+.cat-mouth::after{
+    content:"";
+    position:absolute;
+    top:50%;
+    width:15px;
+    height:2px;
+    background:#173f38;
+}
+
+.cat-mouth::before{
+    left:-30px;
+}
+
+.cat-mouth::after{
+    right:-30px;
+}
+
+.error-code{
+    position:absolute;
+    display:flex;
+    justify-content:center;
+    gap:20px;
+    width:100%;
+    top:50%;
+    transform:translateY(-50%);
+    font-size:120px;
+    font-weight:900;
+    color:#daa520;
+    text-shadow: 0 4px 15px rgba(218, 165, 32, 0.3);
+    z-index:-1;
+}
+
+.code-left, .code-center, .code-right{
+    animation:codeFloat 3s ease-in-out infinite;
+}
+
+.code-left{
+    animation-delay:0s;
+}
+
+.code-center{
+    animation-delay:0.2s;
+}
+
+.code-right{
+    animation-delay:0.4s;
+}
+
+@keyframes codeFloat{
+    0%, 100%{ transform:translateY(0); }
+    50%{ transform:translateY(-20px); }
+}
+
+/* ================= TEXT ================= */
+
+.error-title{
+    font-size:48px;
+    color:#daa520;
+    margin-bottom:16px;
+    font-weight:900;
+    letter-spacing:-1px;
+}
+
+.error-description{
+    font-size:16px;
+    color:#173f38;
+    margin-bottom:32px;
+    line-height:1.6;
+    font-weight:600;
+}
+
+/* ================= BUTTON ================= */
+
+.error-btn{
+    display:inline-block;
+    padding:16px 40px;
+    border-radius:999px;
+    background:linear-gradient(135deg, #daa520, #b8860b);
+    color:white;
+    text-decoration:none;
+    font-size:18px;
+    font-weight:900;
+    letter-spacing:0.4px;
+    box-shadow:0 12px 24px rgba(218, 165, 32, 0.25);
+    transition:0.35s ease;
+    position:relative;
+    overflow:hidden;
+}
+
+.error-btn::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:-120%;
+    width:100%;
+    height:100%;
+    background:linear-gradient(120deg, transparent, rgba(255,255,255,0.45), transparent);
+    transition:0.8s;
+}
+
+.error-btn:hover::before{
+    left:120%;
+}
+
+.error-btn:hover{
+    transform:translateY(-4px) scale(1.015);
+    box-shadow:0 18px 34px rgba(218, 165, 32, 0.35);
+}
+
+.error-btn:active{
+    transform:scale(0.98);
+}
+
+/* ================= CARD ANIMATION ================= */
+
+@keyframes cardShow{
+    from{
+        opacity:0;
+        transform:translateY(35px) scale(0.96);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0) scale(1);
+    }
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:768px){
+    .error-page{
+        padding:18px;
+    }
+
+    .error-illustration{
+        height:250px;
+    }
+
+    .cat-head{
+        width:140px;
+        height:140px;
+    }
+
+    .error-code{
+        font-size:80px;
+    }
+
+    .error-title{
+        font-size:36px;
+    }
+
+    .error-description{
+        font-size:14px;
+    }
+
+    .error-btn{
+        padding:14px 32px;
+        font-size:16px;
+    }
+}

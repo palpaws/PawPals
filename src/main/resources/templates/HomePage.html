@@ -9,6 +9,7 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
 
     <link rel="stylesheet" th:href="@{/home.css}">
 </head>
@@ -55,10 +56,10 @@
 
             <!-- center -->
             <div class="center-box">
-                <a th:href="@{/login}" class="login-btn">
+                <a th:if="${session == null or session.currentUser == null}" th:href="@{/login}" class="login-btn">
                     Đăng Nhập
                 </a>
-                <a th:href="@{/register}" class="register-btn">
+                <a th:if="${session == null or session.currentUser == null}" th:href="@{/register}" class="register-btn">
                     Đăng Ký
                 </a>
 
