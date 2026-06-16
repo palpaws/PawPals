@@ -153,4 +153,101 @@ public class Pet {
 
     public LocalDateTime getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+    public String getBloodType() {
+        return bloodType;
+    }
+
+    public void setBloodType(String bloodType) {
+        this.bloodType = bloodType;
+    }
+
+
+    public String getAllergies() {
+        return allergies;
+    }
+
+    public void setAllergies(String allergies) {
+        this.allergies = allergies;
+    }
+
+
+    public String getChronicDiseases() {
+        return chronicDiseases;
+    }
+
+    public void setChronicDiseases(String chronicDiseases) {
+        this.chronicDiseases = chronicDiseases;
+    }
+
+
+    public LocalDate getLastVetVisit() {
+        return lastVetVisit;
+    }
+
+    public void setLastVetVisit(LocalDate lastVetVisit) {
+        this.lastVetVisit = lastVetVisit;
+    }
+
+
+    public String getHealthStatus() {
+        return healthStatus;
+    }
+
+    public void setHealthStatus(String healthStatus) {
+        this.healthStatus = healthStatus;
+    }
+
+
+    public String getTemperament() {
+        return temperament;
+    }
+
+    public void setTemperament(String temperament) {
+        this.temperament = temperament;
+    }
+
+
+    public String getActivityLevel() {
+        return activityLevel;
+    }
+
+    public void setActivityLevel(String activityLevel) {
+        this.activityLevel = activityLevel;
+    }
+
+
+    public Boolean getIsAvailableForMatching() {
+        return isAvailableForMatching;
+    }
+
+    public void setIsAvailableForMatching(Boolean isAvailableForMatching) {
+        this.isAvailableForMatching = isAvailableForMatching;
+    }
+
+
+    public String getMatchingDescription() {
+        return matchingDescription;
+    }
+
+    public void setMatchingDescription(String matchingDescription) {
+        this.matchingDescription = matchingDescription;
+    }
+
+
+    public Integer getProfileViewCount() {
+        return profileViewCount;
+    }
+
+    public void setProfileViewCount(Integer profileViewCount) {
+        this.profileViewCount = profileViewCount;
+    }
+
+
+    public Boolean getIsPublic() {
+        return isPublic;
+    }
+
+    public void setIsPublic(Boolean isPublic) {
+        this.isPublic = isPublic;
+    }
 }

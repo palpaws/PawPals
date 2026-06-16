@@ -1,4 +1,4 @@
-package com.he186674.mvc.petshop.controllers;
+package com.he186674.mvc.petshop.controller;
 
 import com.he186674.mvc.petshop.entities.Pet;
 import com.he186674.mvc.petshop.entities.PetImage;
@@ -7,6 +7,7 @@ import com.he186674.mvc.petshop.repository.PetImageRepository;
 import com.he186674.mvc.petshop.service.PetService;
 
 import jakarta.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -63,6 +64,41 @@ public class PetController {
 
         return "MyPets";
     }
+
+    @GetMapping("/pets/{id}")
+    public String petDetail(
+            @PathVariable("id") Integer id,
+            HttpSession session,
+            Model model
+    ){
+
+        User currentUser =
+                (User) session.getAttribute("currentUser");
+
+
+        if(currentUser == null){
+            return "redirect:/login";
+        }
+
+
+        Pet pet =
+                petService.getPetById(id);
+
+
+        if(pet == null){
+            return "redirect:/pets";
+        }
+
+
+        model.addAttribute(
+                "pet",
+                pet
+        );
+
+
+        return "PetDetail";
+    }
+
 
     @PostMapping("/pets/create")
     public String createPet(

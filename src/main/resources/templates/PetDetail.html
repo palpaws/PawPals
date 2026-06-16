@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="vi"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Chi tiết thú cưng</title>
+
+
+    <link rel="stylesheet"
+          th:href="@{/header.css}">
+
+
+    <link rel="stylesheet"
+          th:href="@{/pet-detail.css}">
+
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+
+
+<body>
+
+
+<div th:replace="~{fragments/header :: header}"></div>
+
+
+
+<div class="pet-detail-container">
+
+
+
+    <!-- PROFILE HEADER -->
+
+    <div class="pet-profile-card">
+
+
+        <div class="pet-avatar">
+
+
+            <img
+                    th:src="${pet.images != null && !pet.images.isEmpty()
+                ? pet.images[0].imageUrl
+                : '/images/default-pet.jpg'}"
+                    alt="pet">
+
+
+        </div>
+
+
+
+        <div class="pet-profile-info">
+
+
+            <h1>
+
+                <i class="fa-solid fa-paw"></i>
+
+                <span th:text="${pet.petName}">
+                    Pet Name
+                </span>
+
+            </h1>
+
+
+
+            <div class="pet-badges">
+
+
+                <span class="badge">
+
+                    <i class="fa-solid fa-dog"></i>
+
+                    <span th:text="${pet.species}">
+                    </span>
+
+                </span>
+
+
+
+                <span class="badge">
+
+                    <i class="fa-solid fa-venus-mars"></i>
+
+                    <span th:text="${pet.gender}">
+                    </span>
+
+                </span>
+
+
+
+                <span class="badge status">
+
+                    <i class="fa-solid fa-circle"></i>
+
+                    <span th:text="${pet.status}">
+                    </span>
+
+                </span>
+
+
+            </div>
+
+
+            <p class="microchip">
+
+                <i class="fa-solid fa-microchip"></i>
+
+                Microchip:
+
+                <b th:text="${pet.microchipCode}">
+                </b>
+
+            </p>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+
+    <!-- BASIC INFO -->
+
+
+    <div class="detail-card">
+
+
+        <h2>
+
+            <i class="fa-solid fa-circle-info"></i>
+
+            Thông tin cơ bản
+
+        </h2>
+
+
+
+        <div class="info-grid">
+
+
+            <div>
+                <label>Giống</label>
+                <p th:text="${pet.breed}"></p>
+            </div>
+
+
+            <div>
+                <label>Màu sắc</label>
+                <p th:text="${pet.color}"></p>
+            </div>
+
+
+            <div>
+                <label>Ngày sinh</label>
+                <p th:text="${pet.dateOfBirth}"></p>
+            </div>
+
+
+            <div>
+                <label>Sinh nhật</label>
+                <p th:text="${pet.birthday}"></p>
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+
+
+    <!-- BODY -->
+
+
+    <div class="detail-card">
+
+
+        <h2>
+
+            <i class="fa-solid fa-ruler"></i>
+
+            Ngoại hình
+
+        </h2>
+
+
+
+        <div class="info-grid">
+
+
+            <div>
+
+                <label>Cân nặng</label>
+
+                <p>
+
+                    <span th:text="${pet.weight}">
+                    </span>
+
+                    kg
+
+                </p>
+
+            </div>
+
+
+
+            <div>
+
+                <label>Chiều cao</label>
+
+                <p>
+
+                    <span th:text="${pet.height}">
+                    </span>
+
+                    cm
+
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+
+
+    <!-- HEALTH -->
+
+
+    <div class="detail-card health">
+
+
+        <h2>
+
+            <i class="fa-solid fa-heart-pulse"></i>
+
+            Sức khỏe
+
+        </h2>
+
+
+
+        <div class="info-grid">
+
+
+            <div>
+
+                <label>Nhóm máu</label>
+
+                <p th:text="${pet.bloodType}">
+                </p>
+
+            </div>
+
+
+
+            <div>
+
+                <label>Tiêm vaccine</label>
+
+                <p th:text="${pet.vaccinated != null && pet.vaccinated ? 'Đã tiêm':'Chưa tiêm'}">
+                </p>
+
+            </div>
+
+
+
+            <div>
+
+                <label>Triệt sản</label>
+
+                <p th:text="${pet.sterilized != null && pet.sterilized ? 'Đã triệt sản':'Chưa'}">
+                </p>
+
+            </div>
+
+
+
+            <div>
+
+                <label>Lần khám cuối</label>
+
+                <p th:text="${pet.lastVetVisit}">
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+
+        <div class="long-info">
+
+            <label>Dị ứng</label>
+
+            <p th:text="${pet.allergies}">
+            </p>
+
+
+            <label>Bệnh mãn tính</label>
+
+            <p th:text="${pet.chronicDiseases}">
+            </p>
+
+
+            <label>Tình trạng</label>
+
+            <p th:text="${pet.healthStatus}">
+            </p>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+
+
+    <!-- BEHAVIOR -->
+
+
+    <div class="detail-card">
+
+
+        <h2>
+
+            <i class="fa-solid fa-dog"></i>
+
+            Hành vi
+
+        </h2>
+
+
+        <p>
+
+            <b>Tính cách:</b>
+
+            <span th:text="${pet.temperament}">
+            </span>
+
+        </p>
+
+
+
+        <p>
+
+            <b>Mức độ hoạt động:</b>
+
+            <span th:text="${pet.activityLevel}">
+            </span>
+
+        </p>
+
+
+    </div>
+
+
+
+
+
+
+
+
+    <!-- MATCH -->
+
+
+    <div class="detail-card">
+
+
+        <h2>
+
+            <i class="fa-solid fa-heart"></i>
+
+            Ghép đôi
+
+        </h2>
+
+
+        <p>
+
+            Trạng thái:
+
+            <b th:text="${pet.isAvailableForMatching != null && pet.isAvailableForMatching ? 'Có thể ghép đôi':'Không'}">
+            </b>
+
+        </p>
+
+
+        <p th:text="${pet.matchingDescription}">
+        </p>
+
+
+    </div>
+
+
+
+
+
+
+
+    <a class="back-btn"
+       th:href="@{/pets}">
+
+
+        <i class="fa-solid fa-arrow-left"></i>
+
+        Quay lại danh sách
+
+
+    </a>
+
+
+
+</div>
+
+
+
+</body>
+
+</html>

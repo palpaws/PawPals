@@ -31,4 +31,10 @@ public class PetService {
     public Pet save(Pet pet){
         return petRepository.save(pet);
     }
+    public Pet getPetById(Integer id){
+
+        return petRepository.findById(id)
+                .orElse(null);
+
+    }
 }
