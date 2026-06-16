@@ -10,5 +10,8 @@ public interface UserService {
     boolean verifyOtp(String email, String otp);
     String generateResetToken(String email);
     void resetPassword(String email, String password, String token);
+    User updateProfile(Integer userId,
+                       String fullName,
+                       String phone,
+                       String address);
 }
-

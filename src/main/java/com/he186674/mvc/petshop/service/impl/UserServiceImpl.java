@@ -2,7 +2,10 @@ package com.he186674.mvc.petshop.service.impl;
 
 import com.he186674.mvc.petshop.entities.User;
 import com.he186674.mvc.petshop.repository.UserRepository;
+<<<<<<< HEAD
 import com.he186674.mvc.petshop.service.EmailService;
+=======
+>>>>>>> origin/main
 import com.he186674.mvc.petshop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -225,5 +228,28 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
     }
-}
 
+
+    @Override
+    public User updateProfile(Integer userId,
+                              String fullName,
+                              String phone,
+                              String address) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Không tìm thấy người dùng."));
+
+        user.setFullName(fullName.trim());
+
+        user.setPhone(
+                phone == null ? null : phone.trim()
+        );
+
+        user.setAddress(
+                address == null ? null : address.trim()
+        );
+
+        return userRepository.save(user);
+    }
+}

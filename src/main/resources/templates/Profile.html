@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hồ Sơ Của Tôi</title>
+
+    <link rel="stylesheet" th:href="@{/profile.css}">
+    <!-- HEADER CSS -->
+    <link rel="stylesheet" th:href="@{/header.css}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<div th:replace="fragments/header :: header"></div>
+
+<div class="profile-container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="user-card">
+            <img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=300"
+                 alt="avatar">
+
+            <h3 th:text="${user.fullName}"></h3>
+
+            <span class="role-badge"
+                  th:text="${user.role}">
+</span>
+        </div>
+
+        <nav class="sidebar-menu">
+
+            <a href="#" class="active">
+                <i class="fa-regular fa-user"></i>
+                Hồ Sơ
+            </a>
+
+            <a href="#">
+                <i class="fa-solid fa-paw"></i>
+                Thú Cưng Của Tôi
+            </a>
+
+
+            <a href="#">
+                <i class="fa-regular fa-bell"></i>
+                Thông Báo
+            </a>
+
+            <a href="#">
+                <i class="fa-regular fa-file-lines"></i>
+                Bài Viết Của Tôi
+            </a>
+
+            <a href="#">
+                <i class="fa-regular fa-heart"></i>
+                Yêu Thích
+            </a>
+
+
+
+            <a href="#">
+                <i class="fa-solid fa-lock"></i>
+                Đổi Mật Khẩu
+            </a>
+
+            <a th:href="@{/logout}">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                Đăng Xuất
+            </a>
+
+        </nav>
+
+        <div class="premium-box">
+
+            <div class="premium-title">
+                <i class="fa-regular fa-gem"></i>
+                Premium
+            </div>
+
+            <p>Tài khoản Premium của bạn sẽ hết hạn vào:</p>
+
+            <h4 th:if="${user.premiumExpiredAt != null}"
+                th:text="${#temporals.format(user.premiumExpiredAt,'dd/MM/yyyy')}">
+            </h4>
+
+            <h4 th:unless="${user.premiumExpiredAt != null}">
+                Chưa có
+            </h4>
+
+            <button>Nâng Cấp Ngay</button>
+
+        </div>
+
+    </aside>
+
+    <!-- CONTENT -->
+    <main class="content">
+
+        <div class="page-header">
+            <h1>Hồ Sơ Của Tôi</h1>
+            <p>Quản lý thông tin hồ sơ để bảo mật tài khoản</p>
+        </div>
+        <div th:if="${success}"
+             class="success-message"
+             th:text="${success}">
+        </div>
+
+        <!-- ACCOUNT -->
+        <section class="account-section">
+
+            <div class="account-info">
+
+                <h2>Thông Tin Tài Khoản</h2>
+
+                <div class="info-row">
+                    <span>Email đăng nhập</span>
+                    <strong th:text="${user.email}"></strong>
+                </div>
+
+                <div class="info-row">
+                    <span>Vai trò</span>
+                    <span class="role-badge"
+                          th:text="${user.role}">
+</span>
+                </div>
+
+                <div class="info-row">
+                    <span>Ngày tham gia</span>
+                    <strong th:text="${#temporals.format(user.createdAt,'dd/MM/yyyy HH:mm')}"></strong>
+                </div>
+
+                <div class="info-row">
+                    <span>Lần đăng nhập cuối</span>
+                    <strong th:text="${#temporals.format(user.lastLoginDate,'dd/MM/yyyy')}"></strong>
+                </div>
+
+                <div class="info-row">
+                    <span>Trạng thái tài khoản</span>
+                    <span class="status-badge"
+                          th:text="${user.isActive ? 'Đang hoạt động' : 'Đã khóa'}">
+    </span>
+                </div>
+
+            </div>
+
+            <div class="account-stats">
+
+                <h2>Thống Kê Tài Khoản</h2>
+
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+                        <i class="fa-solid fa-fire"></i>
+                        <h3 th:text="${user.currentStreak}"></h3>
+                        <p>Streak hiện tại</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <i class="fa-solid fa-trophy"></i>
+                        <h3 th:text="${user.longestStreak}"></h3>
+                        <p>Streak cao nhất</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <i class="fa-solid fa-paw"></i>
+                        <h3>0</h3>
+                        <p>Thú cưng</p>
+                    </div>
+
+                    <div class="stat-card">
+                        <i class="fa-solid fa-crown"></i>
+                        <h3 class="green"
+                            th:text="${user.premiumExpiredAt != null ? 'Còn hạn' : 'Chưa đăng ký'}">
+                        </h3>
+                        <p>Premium</p>
+                    </div>
+
+                </div>
+
+                <div class="premium-expire">
+                    Premium hết hạn vào:
+                    <span th:if="${user.premiumExpiredAt != null}"
+                          th:text="${#temporals.format(user.premiumExpiredAt,'dd/MM/yyyy HH:mm')}">
+</span>
+
+                    <span th:unless="${user.premiumExpiredAt != null}">
+    Không có
+</span>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- FORM -->
+        <section class="profile-form">
+
+            <form th:action="@{/profile/update}"
+                  method="post">
+
+            <h2>Thông Tin Cá Nhân</h2>
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label>Họ và tên</label>
+                    <input type="text"
+                           name="fullName"
+                           th:value="${user.fullName}">
+                </div>
+
+                <div class="form-group">
+                    <label>Vai trò</label>
+                    <input type="text"
+                           th:value="${user.role}"
+                           readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email"
+                           th:value="${user.email}"
+                           readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Ngày tham gia</label>
+                    <input type="text"
+                           th:value="${#temporals.format(user.createdAt,'dd/MM/yyyy HH:mm')}"
+                           readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Số điện thoại</label>
+                    <input type="text"
+                           name="phone"
+                           th:value="${user.phone}">
+                </div>
+
+                <div class="info-row">
+                    <span>Lần đăng nhập cuối</span>
+                    <strong th:text="${user.lastLoginDate != null ?
+        #temporals.format(user.lastLoginDate,'dd/MM/yyyy')
+        : 'Chưa đăng nhập'}">
+                    </strong>
+                </div>
+
+                <div class="form-group">
+                    <label>Địa chỉ</label>
+                    <input type="text"
+                           name="address"
+                           th:value="${user.address}">
+                </div>
+
+                <div class="form-group">
+                    <label>Trạng thái tài khoản</label>
+
+                    <select>
+                        <option>Đang hoạt động</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="btn-area">
+                <button type="submit"
+                        class="update-btn">
+                    Cập Nhật Thông Tin
+                </button>
+            </div>
+
+            <div class="note-box">
+
+                <h4>
+                    <i class="fa-solid fa-circle-info"></i>
+                    Lưu ý:
+                </h4>
+
+                <ul>
+                    <li>Email không thể thay đổi.</li>
+                    <li>
+                        Vui lòng đảm bảo thông tin chính xác để nhận
+                        thông báo và hỗ trợ tốt nhất.
+                    </li>
+                </ul>
+
+            </div>
+            </form>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>
