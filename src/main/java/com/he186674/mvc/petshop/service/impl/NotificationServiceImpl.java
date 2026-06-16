@@ -7,6 +7,7 @@ import com.he186674.mvc.petshop.repository.NotificationRepository;
 import com.he186674.mvc.petshop.repository.PetReminderRepository;
 import com.he186674.mvc.petshop.repository.UserRepository;
 import com.he186674.mvc.petshop.service.NotificationService;
+import com.he186674.mvc.petshop.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,14 +20,17 @@ public class NotificationServiceImpl implements NotificationService {
     private final NotificationRepository notificationRepository;
     private final UserRepository userRepository;
     private final PetReminderRepository petReminderRepository;
+    private final EmailService emailService;
 
     @Autowired
     public NotificationServiceImpl(NotificationRepository notificationRepository,
                                    UserRepository userRepository,
-                                   PetReminderRepository petReminderRepository) {
+                                   PetReminderRepository petReminderRepository,
+                                   EmailService emailService) {
         this.notificationRepository = notificationRepository;
         this.userRepository = userRepository;
         this.petReminderRepository = petReminderRepository;
+        this.emailService = emailService;
     }
 
     @Override
@@ -79,6 +83,20 @@ public class NotificationServiceImpl implements NotificationService {
             notification.setReminder(reminder);
         }
 
-        return notificationRepository.save(notification);
+        Notification saved = notificationRepository.save(notification);
+
+        // Gửi email thông báo cho user (bất đồng bộ, không blocking)
+        try {
+            emailService.sendNotificationEmail(
+                    saved.getUser().getEmail(),
+                    saved.getTitle(),
+                    saved.getContent()
+            );
+        } catch (Exception e) {
+            // Không làm gián đoạn luồng chính nếu email lỗi
+            System.err.println("Email notification failed: " + e.getMessage());
+        }
+
+        return saved;
     }
 }

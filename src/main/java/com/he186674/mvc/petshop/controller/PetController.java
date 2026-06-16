@@ -140,22 +140,26 @@ public class PetController {
                             + "_"
                             + imageFile.getOriginalFilename();
 
-            Path uploadPath =
-                    Paths.get(
-                            "C:/Users/DELL/Desktop/PET_EXE/PawPals/uploads/pets"
-                    );
+            // Get upload directory from application.properties, fallback to project-relative path
+            String uploadDir = "uploads/pets";
+            Path uploadPath = Paths.get(uploadDir);
+
+            // Try absolute path relative to project
+            if (!Files.exists(uploadPath)) {
+                try {
+                    uploadPath = Paths.get(System.getProperty("user.dir"), "uploads", "pets");
+                } catch (Exception e) {
+                    uploadPath = Paths.get("uploads/pets");
+                }
+            }
 
             if(!Files.exists(uploadPath)){
-                Files.createDirectories(
-                        uploadPath
-                );
+                Files.createDirectories(uploadPath);
             }
 
             Files.copy(
                     imageFile.getInputStream(),
-                    uploadPath.resolve(
-                            fileName
-                    )
+                    uploadPath.resolve(fileName)
             );
 
             PetImage petImage =

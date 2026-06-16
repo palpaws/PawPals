@@ -2,10 +2,7 @@ package com.he186674.mvc.petshop.service.impl;
 
 import com.he186674.mvc.petshop.entities.User;
 import com.he186674.mvc.petshop.repository.UserRepository;
-<<<<<<< HEAD
 import com.he186674.mvc.petshop.service.EmailService;
-=======
->>>>>>> origin/main
 import com.he186674.mvc.petshop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
