@@ -166,67 +166,112 @@ CREATE TABLE pet_matching_posts
 
 CREATE TABLE blog_categories
 (
-    category_id   INT IDENTITY(1,1) PRIMARY KEY,
-    category_name NVARCHAR(100) NOT NULL UNIQUE,
-    description   NVARCHAR(255)
+category_id INT IDENTITY(1,1) PRIMARY KEY,
+category_name NVARCHAR(100) NOT NULL UNIQUE,
+description NVARCHAR(255)
 );
-
-
+INSERT INTO blog_categories (category_name, description)
+VALUES
+    (N'General', N'Thảo luận chung'),
+    (N'Questions', N'Hỏi đáp'),
+    (N'Health', N'Sức khỏe thú cưng'),
+    (N'Training', N'Huấn luyện'),
+    (N'Funny', N'Khoảnh khắc vui nhộn'),
+    (N'Adoption', N'Nhận nuôi');
 CREATE TABLE blog_posts
 (
-    post_id       INT IDENTITY(1,1) PRIMARY KEY,
-    author_id     INT NOT NULL,
-    category_id   INT NOT NULL,
-    title         NVARCHAR(200) NOT NULL,
-    slug          NVARCHAR(250) UNIQUE,
-    thumbnail_url NVARCHAR(255),
-    content       NVARCHAR(MAX) NOT NULL,
-    view_count    INT       DEFAULT 0,
-    created_at    DATETIME2 DEFAULT SYSDATETIME(),
-    status        NVARCHAR(20) DEFAULT 'PUBLISHED'
-        CHECK (status IN ('DRAFT','PUBLISHED','HIDDEN')),
+post_id INT IDENTITY(1,1) PRIMARY KEY,
+author_id INT NOT NULL,
 
-    CONSTRAINT fk_blog_author FOREIGN KEY (author_id)
-        REFERENCES users (user_id),
+category_id INT NULL,
 
-    CONSTRAINT fk_blog_category FOREIGN KEY (category_id)
-        REFERENCES blog_categories (category_id)
+title NVARCHAR(200) NOT NULL,
+
+slug NVARCHAR(250) UNIQUE,
+
+thumbnail_url NVARCHAR(255),
+
+content NVARCHAR(MAX) NOT NULL,
+
+view_count INT DEFAULT 0,
+
+created_at DATETIME2 DEFAULT SYSDATETIME(),
+
+updated_at DATETIME2 NULL,
+
+status NVARCHAR(20) DEFAULT 'PUBLISHED'
+    CHECK (status IN ('DRAFT','PUBLISHED','HIDDEN')),
+
+CONSTRAINT fk_blog_author
+    FOREIGN KEY (author_id)
+    REFERENCES users(user_id),
+
+CONSTRAINT fk_blog_category
+    FOREIGN KEY (category_id)
+    REFERENCES blog_categories(category_id)
 );
-
-
 
 CREATE TABLE blog_comments
 (
-    comment_id INT IDENTITY(1,1) PRIMARY KEY,
-    post_id    INT NOT NULL,
-    user_id    INT NOT NULL,
-    content    NVARCHAR(1000) NOT NULL,
-    created_at DATETIME2 DEFAULT SYSDATETIME(),
+comment_id INT IDENTITY(1,1) PRIMARY KEY,
 
-    CONSTRAINT fk_comment_post FOREIGN KEY (post_id)
-        REFERENCES blog_posts (post_id)
-        ON DELETE CASCADE,
+post_id INT NOT NULL,
 
-    CONSTRAINT fk_comment_user FOREIGN KEY (user_id)
-        REFERENCES users (user_id)
+user_id INT NOT NULL,
+
+parent_comment_id INT NULL,
+
+content NVARCHAR(1000) NOT NULL,
+
+created_at DATETIME2 DEFAULT SYSDATETIME(),
+
+CONSTRAINT fk_comment_post
+    FOREIGN KEY (post_id)
+    REFERENCES blog_posts(post_id)
+    ON DELETE CASCADE,
+
+CONSTRAINT fk_comment_user
+    FOREIGN KEY (user_id)
+    REFERENCES users(user_id),
+
+CONSTRAINT fk_comment_parent
+    FOREIGN KEY (parent_comment_id)
+    REFERENCES blog_comments(comment_id)
+
 );
-
 
 CREATE TABLE blog_likes
 (
-    post_id  INT NOT NULL,
-    user_id  INT NOT NULL,
-    liked_at DATETIME2 DEFAULT SYSDATETIME(),
+post_id INT NOT NULL,
 
-    PRIMARY KEY (post_id, user_id),
+user_id INT NOT NULL,
 
-    CONSTRAINT fk_like_post FOREIGN KEY (post_id)
-        REFERENCES blog_posts (post_id)
-        ON DELETE CASCADE,
+liked_at DATETIME2 DEFAULT SYSDATETIME(),
 
-    CONSTRAINT fk_like_user FOREIGN KEY (user_id)
-        REFERENCES users (user_id)
+PRIMARY KEY (post_id, user_id),
+
+CONSTRAINT fk_like_post
+    FOREIGN KEY (post_id)
+    REFERENCES blog_posts(post_id)
+    ON DELETE CASCADE,
+
+CONSTRAINT fk_like_user
+    FOREIGN KEY (user_id)
+    REFERENCES users(user_id)
+
 );
+
+CREATE INDEX ix_blog_posts_author
+ON blog_posts(author_id);
+
+CREATE INDEX ix_blog_posts_created_at
+ON blog_posts(created_at DESC);
+
+CREATE INDEX ix_blog_comments_post
+ON blog_comments(post_id);
+
+CREATE INDEX ix_blog_likes_post
+ON blog_likes(post_id);
 
 
 CREATE TABLE product_categories

@@ -1,9 +1,8 @@
 package com.he186674.mvc.petshop.entities;
 
-
-
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "blog_comments")
@@ -22,6 +21,13 @@ public class BlogComment {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "parent_comment_id")
+    private BlogComment parentComment;
+
+    @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL)
+    private List<BlogComment> replies;
+
     @Column(name = "content", nullable = false)
     private String content;
 
@@ -38,6 +44,12 @@ public class BlogComment {
 
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }
+
+    public BlogComment getParentComment() { return parentComment; }
+    public void setParentComment(BlogComment parentComment) { this.parentComment = parentComment; }
+
+    public List<BlogComment> getReplies() { return replies; }
+    public void setReplies(List<BlogComment> replies) { this.replies = replies; }
 
     public String getContent() { return content; }
     public void setContent(String content) { this.content = content; }

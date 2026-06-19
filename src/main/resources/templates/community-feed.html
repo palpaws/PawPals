@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PawPals Community – Share stories, tips and connect with fellow pet lovers.">
+    <title>Community Feed - PawPals</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/header.css}">
+    <link rel="stylesheet" th:href="@{/footer.css}">
+    <link rel="stylesheet" th:href="@{/community.css}">
+</head>
+<body>
+    <div th:replace="fragments/header :: header"></div>
+
+    <div class="container community-page-wrapper">
+
+        <!-- Hero Banner -->
+        <div class="community-hero d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <h1 class="community-title">
+                    <i class="bi bi-people-fill"></i> Community Feed
+                </h1>
+                <p class="mb-0 mt-1" style="color: rgba(29,61,57,0.65); font-size: 0.95rem; font-weight:500;">
+                    Connect, share, and learn with fellow pet lovers &#x1F43E;
+                </p>
+            </div>
+            <a th:if="${currentUser != null}" href="/community/create" class="btn-create-post">
+                <i class="bi bi-plus-lg"></i> Create Post
+            </a>
+        </div>
+
+        <!-- Search Bar -->
+        <form class="mb-4 d-flex align-items-center gap-2" method="get" action="/community">
+            <div class="input-group search-glass flex-grow-1">
+                <input type="text" class="form-control" name="keyword" id="searchInput"
+                       placeholder="Search posts by title..." th:value="${keyword}">
+                <button class="btn-search" type="submit">
+                    <i class="bi bi-search"></i> Search
+                </button>
+            </div>
+            <a th:if="${keyword != null and !#strings.isEmpty(keyword)}" href="/community" class="btn-clear-search">
+                <i class="bi bi-x-lg"></i> Clear
+            </a>
+        </form>
+
+        <!-- Success/Error Messages -->
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            <span th:text="${success}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <span th:text="${error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <!-- Posts List -->
+        <div th:if="${#lists.isEmpty(posts)}" class="empty-state">
+            <i class="bi bi-journal-text"></i>
+            <p class="mb-1" style="font-weight:600;">No posts found.</p>
+            <p th:if="${keyword != null and !#strings.isEmpty(keyword)}" style="font-size:0.9rem;">
+                Try a different keyword or <a href="/community" style="color:#ea7da3;">clear the search</a>.
+            </p>
+        </div>
+
+        <div th:each="post : ${posts}" class="card post-card mb-3">
+            <div class="card-body">
+                <div class="row g-3">
+                    <div th:if="${post.thumbnailUrl}" class="col-md-3">
+                        <img th:src="${post.thumbnailUrl}" class="img-fluid rounded thumbnail-img" alt="Thumbnail">
+                    </div>
+                    <div th:class="${post.thumbnailUrl} ? 'col-md-9' : 'col-12'">
+                        <div class="d-flex align-items-center mb-2 gap-2">
+                            <div class="avatar-circle">
+                                <span th:text="${#strings.substring(post.authorName, 0, 1)}"></span>
+                            </div>
+                            <div>
+                                <strong class="author-name" th:text="${post.authorName}"></strong>
+                                <small class="text-muted ms-2">
+                                    <i class="bi bi-clock"></i>
+                                    <span th:text="${#temporals.format(post.createdAt, 'MMM dd, yyyy')}"></span>
+                                </small>
+                            </div>
+
+                        </div>
+                        <h5 class="card-title">
+                            <a th:href="@{/community/post/{id}(id=${post.postId})}" class="post-title-link" th:text="${post.title}"></a>
+                        </h5>
+                        <p class="card-text text-muted mb-3" style="font-size:0.95rem;" th:text="${post.excerpt}"></p>
+                        <div class="d-flex align-items-center gap-3">
+                            <span class="badge bg-light">
+                                <i class="bi bi-heart-fill text-danger"></i>
+                                <span th:text="${post.likeCount}"></span> likes
+                            </span>
+                            <span class="badge bg-light">
+                                <i class="bi bi-chat-fill" style="color:#5d6fd6;"></i>
+                                <span th:text="${post.commentCount}"></span> comments
+                            </span>
+                            <a th:href="@{/community/post/{id}(id=${post.postId})}"
+                               class="ms-auto btn btn-sm"
+                               style="background:rgba(234,125,163,0.12); color:#ea7da3; border:1.5px solid rgba(234,125,163,0.30); border-radius:50px; font-weight:600; font-family:'Baloo 2',cursive;">
+                                Read more <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination (all comparison logic done in controller, no < in expressions) -->
+        <div th:if="${totalPages > 1}" class="community-pagination">
+            <nav aria-label="Community pagination">
+                <ul class="pagination justify-content-center">
+
+                    <!-- Previous -->
+                    <li th:if="${isFirstPage}" class="page-item disabled">
+                        <span class="page-link"><i class="bi bi-chevron-left"></i></span>
+                    </li>
+                    <li th:unless="${isFirstPage}" class="page-item">
+                        <a class="page-link" th:href="@{/community(keyword=${keyword}, page=${prevPage}, size=10)}">
+                            <i class="bi bi-chevron-left"></i>
+                        </a>
+                    </li>
+
+                    <!-- First page (when window doesn't start at 0) -->
+                    <li th:if="${showFirstPage}" class="page-item">
+                        <a class="page-link" th:href="@{/community(keyword=${keyword}, page=0, size=10)}">1</a>
+                    </li>
+                    <!-- First ellipsis -->
+                    <li th:if="${showFirstEllipsis}" class="page-item disabled">
+                        <span class="page-link" style="background:transparent; border-color:transparent;">&#8230;</span>
+                    </li>
+
+                    <!-- Sliding window pages -->
+                    <th:block th:each="i : ${#numbers.sequence(pageRangeStart, pageRangeEnd)}">
+                        <li th:if="${i == currentPage}" class="page-item active">
+                            <span class="page-link" th:text="${i + 1}"></span>
+                        </li>
+                        <li th:unless="${i == currentPage}" class="page-item">
+                            <a class="page-link"
+                               th:href="@{/community(keyword=${keyword}, page=${i}, size=10)}"
+                               th:text="${i + 1}">
+                            </a>
+                        </li>
+                    </th:block>
+
+                    <!-- Last ellipsis -->
+                    <li th:if="${showLastEllipsis}" class="page-item disabled">
+                        <span class="page-link" style="background:transparent; border-color:transparent;">&#8230;</span>
+                    </li>
+                    <!-- Last page (when window doesn't reach last page) -->
+                    <li th:if="${showLastPage}" class="page-item">
+                        <a class="page-link"
+                           th:href="@{/community(keyword=${keyword}, page=${lastPageIndex}, size=10)}"
+                           th:text="${totalPages}">
+                        </a>
+                    </li>
+
+                    <!-- Next -->
+                    <li th:if="${isLastPage}" class="page-item disabled">
+                        <span class="page-link"><i class="bi bi-chevron-right"></i></span>
+                    </li>
+                    <li th:unless="${isLastPage}" class="page-item">
+                        <a class="page-link" th:href="@{/community(keyword=${keyword}, page=${nextPage}, size=10)}">
+                            <i class="bi bi-chevron-right"></i>
+                        </a>
+                    </li>
+
+                </ul>
+            </nav>
+            <p class="pagination-info">
+                Page <strong th:text="${currentPage + 1}"></strong> of <strong th:text="${totalPages}"></strong>
+                &nbsp;&middot;&nbsp; <span th:text="${totalItems}"></span> posts total
+            </p>
+        </div>
+
+    </div>
+
+    <div th:replace="fragments/footer :: footer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

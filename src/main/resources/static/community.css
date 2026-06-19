@@ -1,0 +1,552 @@
+/* ===== Community Pages – Theme matching PawPals Home ===== */
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&display=swap');
+
+/* ---- Global reset for community pages ---- */
+* {
+    box-sizing: border-box;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, color 0.3s ease;
+}
+
+body {
+    font-family: 'Baloo 2', cursive;
+    background: #ddb4bf;
+    min-height: 100vh;
+    color: #1d3d39;
+    overflow-x: hidden;
+}
+
+/* ---- Page wrapper ---- */
+.community-page-wrapper {
+    padding: 28px 0 60px;
+}
+
+/* ---- Hero banner strip ---- */
+.community-hero {
+    background: rgba(255,255,255,0.22);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.30);
+    border-radius: 24px;
+    padding: 28px 36px;
+    margin-bottom: 28px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.07);
+}
+
+.community-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #163f36;
+    margin-bottom: 0;
+    letter-spacing: -0.5px;
+}
+
+.community-title i {
+    color: #ea7da3;
+}
+
+/* ---- Search bar ---- */
+.search-glass {
+    background: rgba(255,255,255,0.55);
+    backdrop-filter: blur(10px);
+    border: 1.5px solid rgba(255,255,255,0.60);
+    border-radius: 50px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+}
+
+.search-glass .form-control {
+    background: transparent !important;
+    border: none !important;
+    padding: 0.6rem 1.2rem !important;
+    font-family: 'Baloo 2', cursive;
+    font-size: 1rem;
+    color: #1d3d39;
+    box-shadow: none !important;
+}
+
+.search-glass .form-control::placeholder {
+    color: #8a9e9a;
+}
+
+.search-glass .btn-search {
+    background: linear-gradient(135deg, #ea7da3, #ff9cbc);
+    color: white;
+    border: none;
+    padding: 0.6rem 1.4rem;
+    font-weight: 600;
+    font-family: 'Baloo 2', cursive;
+    border-radius: 0 50px 50px 0;
+}
+
+.search-glass .btn-search:hover {
+    transform: none;
+    box-shadow: none;
+    filter: brightness(1.08);
+}
+
+.btn-clear-search {
+    background: rgba(255,255,255,0.6);
+    border: 1.5px solid rgba(220,100,100,0.35);
+    color: #c0392b;
+    border-radius: 50px;
+    padding: 0.5rem 1.1rem;
+    font-weight: 600;
+    font-family: 'Baloo 2', cursive;
+    margin-left: 8px;
+}
+
+.btn-clear-search:hover {
+    background: rgba(220,100,100,0.12);
+}
+
+/* ---- Create Post button ---- */
+.btn-create-post {
+    background: linear-gradient(135deg, #5d6fd6, #7387d8);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 10px 24px;
+    font-weight: 700;
+    font-family: 'Baloo 2', cursive;
+    font-size: 1rem;
+    box-shadow: 0 6px 18px rgba(93,111,214,0.35);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-create-post:hover {
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 12px 28px rgba(93,111,214,0.42);
+    color: white;
+}
+
+/* ---- Post Card ---- */
+.post-card {
+    background: rgba(255,255,255,0.72);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.55) !important;
+    border-radius: 18px !important;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.07);
+    margin-bottom: 1rem !important;
+    overflow: hidden;
+}
+
+.post-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 36px rgba(0,0,0,0.12);
+    background: rgba(255,255,255,0.88);
+}
+
+.post-card .card-body {
+    padding: 1.4rem !important;
+}
+
+.post-card .card-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    color: #163f36;
+}
+
+.post-title-link {
+    text-decoration: none;
+    color: #163f36;
+}
+
+.post-title-link:hover {
+    color: #ea7da3;
+}
+
+.thumbnail-img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+/* ---- Post Detail Card ---- */
+.post-detail-card {
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.55) !important;
+    border-radius: 22px !important;
+    box-shadow: 0 6px 30px rgba(0,0,0,0.09);
+    margin-bottom: 2rem;
+}
+
+.post-detail-card .card-body {
+    padding: 2.2rem !important;
+}
+
+.detail-thumbnail {
+    width: 100%;
+    max-height: 420px;
+    object-fit: cover;
+    border-radius: 22px 22px 0 0;
+}
+
+.post-content {
+    font-size: 1.05rem;
+    line-height: 1.85;
+    color: #2c3e33;
+    white-space: pre-wrap;
+}
+
+/* ---- Form Cards (create / edit) ---- */
+.form-card {
+    background: rgba(255,255,255,0.82);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.55) !important;
+    border-radius: 22px !important;
+    box-shadow: 0 6px 30px rgba(0,0,0,0.09);
+    overflow: hidden;
+}
+
+.form-card .card-header {
+    background: linear-gradient(135deg, rgba(93,111,214,0.12), rgba(234,125,163,0.10));
+    border-bottom: 1px solid rgba(255,255,255,0.40) !important;
+    padding: 1.2rem 1.8rem !important;
+    font-family: 'Baloo 2', cursive;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #163f36;
+}
+
+.form-card .card-body {
+    padding: 2rem !important;
+}
+
+/* ---- Avatar Circle ---- */
+.avatar-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ea7da3 0%, #97a0c7 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.avatar-circle-sm {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ea7da3 0%, #97a0c7 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+}
+
+.author-name {
+    color: #163f36;
+}
+
+/* ---- Like Button ---- */
+.like-btn {
+    border-radius: 50px;
+    padding: 8px 20px !important;
+    font-weight: 600;
+    font-family: 'Baloo 2', cursive;
+}
+
+.like-btn:hover {
+    transform: scale(1.06);
+}
+
+/* ---- Comments Section ---- */
+.comments-section {
+    margin-top: 1rem;
+}
+
+.comments-section h5 {
+    margin-bottom: 1rem;
+    color: #163f36;
+    font-weight: 700;
+}
+
+.comment-item {
+    padding: 10px 14px !important;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.60);
+    border: 1px solid rgba(255,255,255,0.55);
+    transition: background 0.2s ease;
+    margin-bottom: 0.75rem !important;
+}
+
+.comment-item:hover {
+    background: rgba(255,255,255,0.85);
+}
+
+.comment-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.comment-header strong {
+    font-size: 0.9rem;
+    color: #163f36;
+}
+
+.comment-header small {
+    font-size: 0.8rem;
+}
+
+.comment-item p {
+    margin-bottom: 4px !important;
+    font-size: 0.95rem;
+}
+
+.replies {
+    margin-top: 10px;
+    padding-left: 16px !important;
+}
+
+.reply-form {
+    margin-top: 8px;
+}
+
+.reply-form .input-group {
+    max-width: 400px;
+}
+
+/* ---- Comment Form ---- */
+.comment-form h5 {
+    margin-bottom: 0.75rem;
+    color: #163f36;
+    font-weight: 700;
+}
+
+.comment-form .input-group textarea {
+    padding: 0.5rem 0.75rem !important;
+}
+
+/* ---- Back button ---- */
+.btn-back {
+    background: rgba(255,255,255,0.55);
+    backdrop-filter: blur(8px);
+    border: 1.5px solid rgba(255,255,255,0.55);
+    color: #163f36;
+    border-radius: 50px;
+    padding: 8px 20px;
+    font-weight: 600;
+    font-family: 'Baloo 2', cursive;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 18px;
+}
+
+.btn-back:hover {
+    background: rgba(255,255,255,0.80);
+    color: #163f36;
+    transform: translateX(-3px);
+}
+
+/* ---- Pagination ---- */
+.community-pagination {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.community-pagination .pagination {
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.community-pagination .page-item .page-link {
+    border-radius: 50px !important;
+    border: 1.5px solid rgba(255,255,255,0.55);
+    background: rgba(255,255,255,0.55);
+    color: #163f36;
+    font-weight: 600;
+    font-family: 'Baloo 2', cursive;
+    padding: 8px 18px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    transition: all 0.25s ease;
+}
+
+.community-pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, #ea7da3, #ff9cbc) !important;
+    border-color: transparent !important;
+    color: white !important;
+    box-shadow: 0 6px 18px rgba(234,125,163,0.42);
+}
+
+.community-pagination .page-item .page-link:hover:not(.active) {
+    background: rgba(255,255,255,0.88);
+    border-color: rgba(234,125,163,0.45);
+    color: #ea7da3;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.10);
+}
+
+.community-pagination .page-item.disabled .page-link {
+    background: rgba(255,255,255,0.25);
+    color: #aaa;
+    border-color: rgba(200,200,200,0.3);
+}
+
+.pagination-info {
+    text-align: center;
+    color: rgba(29,61,57,0.70);
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-top: 0.5rem;
+}
+
+/* ---- Badges ---- */
+.badge {
+    font-family: 'Baloo 2', cursive;
+    padding: 0.3em 0.75em !important;
+    font-size: 0.82em !important;
+    border-radius: 50px !important;
+}
+
+.badge.bg-info {
+    background: linear-gradient(135deg, #97a0c7, #7387d8) !important;
+    color: white !important;
+}
+
+.badge.bg-light {
+    background: rgba(255,255,255,0.65) !important;
+    color: #163f36 !important;
+    border: 1px solid rgba(255,255,255,0.5);
+}
+
+/* ---- Alerts ---- */
+.alert {
+    border-radius: 14px !important;
+    border: none !important;
+    backdrop-filter: blur(8px);
+    padding: 0.85rem 1.25rem !important;
+    margin-bottom: 1rem !important;
+}
+
+.alert-success {
+    background: rgba(40,200,100,0.15) !important;
+    color: #1a6638 !important;
+}
+
+.alert-danger {
+    background: rgba(220,53,69,0.12) !important;
+    color: #842029 !important;
+}
+
+.alert-info {
+    background: rgba(93,111,214,0.12) !important;
+    color: #163f36 !important;
+}
+
+/* ---- Form controls ---- */
+.form-control, .form-select {
+    border-radius: 10px !important;
+    border: 1.5px solid rgba(200,200,220,0.50) !important;
+    background: rgba(255,255,255,0.70) !important;
+    font-family: 'Baloo 2', cursive;
+    padding: 0.45rem 0.85rem !important;
+    color: #1d3d39;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #ea7da3 !important;
+    box-shadow: 0 0 0 3px rgba(234,125,163,0.18) !important;
+    background: rgba(255,255,255,0.90) !important;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #163f36;
+    margin-bottom: 0.4rem;
+}
+
+/* ---- Dropdown ---- */
+.dropdown-menu {
+    border-radius: 14px !important;
+    border: 1px solid rgba(255,255,255,0.5) !important;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.12) !important;
+    padding: 0.5rem !important;
+    background: rgba(255,255,255,0.95);
+}
+
+.dropdown-item {
+    border-radius: 8px !important;
+    padding: 0.4rem 0.9rem !important;
+    font-family: 'Baloo 2', cursive;
+    font-weight: 500;
+}
+
+.dropdown-item:hover {
+    background: rgba(234,125,163,0.10);
+    color: #ea7da3;
+}
+
+/* ---- Empty state ---- */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: rgba(29,61,57,0.55);
+}
+
+.empty-state i {
+    font-size: 3.5rem;
+    color: rgba(234,125,163,0.50);
+    display: block;
+    margin-bottom: 14px;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 768px) {
+    .community-title {
+        font-size: 1.5rem;
+    }
+
+    .post-card .card-title {
+        font-size: 1rem;
+    }
+
+    .thumbnail-img {
+        height: 110px;
+    }
+
+    .post-content {
+        font-size: 0.95rem;
+    }
+
+    .detail-thumbnail {
+        max-height: 260px;
+    }
+
+    .avatar-circle {
+        width: 34px;
+        height: 34px;
+        font-size: 0.85rem;
+    }
+
+    .post-detail-card .card-body {
+        padding: 1.2rem !important;
+    }
+
+    .community-hero {
+        padding: 20px 20px;
+        border-radius: 16px;
+    }
+}
+
+@media (max-width: 576px) {
+    .community-pagination .page-link {
+        padding: 6px 12px !important;
+        font-size: 0.88rem;
+    }
+}

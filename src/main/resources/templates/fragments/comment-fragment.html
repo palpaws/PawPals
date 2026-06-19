@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<body>
+<!--
+    NOTE: This fragment is kept for Thymeleaf compatibility but comments are actually
+    rendered by community.js via the GET /community/post/{id}/comments API on page load.
+    This ensures recursive reply nesting (reply of reply) is handled correctly by
+    renderCommentHtml() in JavaScript rather than a non-recursive Thymeleaf template.
+-->
+<div th:fragment="commentNode(comment)" class="comment-item mb-3" th:attr="data-comment-id=${comment.commentId}">
+    <div class="d-flex align-items-start">
+        <div class="avatar-circle-sm me-2">
+            <span th:text="${#strings.substring(comment.authorName, 0, 1)}"></span>
+        </div>
+        <div class="flex-grow-1">
+            <div class="comment-header">
+                <strong th:text="${comment.authorName}"></strong>
+                <small class="text-muted ms-2" th:text="${#temporals.format(comment.createdAt, 'MMM dd, yyyy')}"></small>
+            </div>
+            <p class="mb-1" th:text="${comment.content}"></p>
+        </div>
+    </div>
+</div>
+</body>
+</html>
