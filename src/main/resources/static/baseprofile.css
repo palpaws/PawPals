@@ -315,12 +315,23 @@ body{
 .modal-content{
     width:450px;
     max-width:95%;
+
+    max-height:85vh;
+
     background:white;
-    margin:60px auto;
+
+    margin:50px auto;
+
     border-radius:28px;
+
     padding:35px;
+
     position:relative;
+
+    overflow-y:auto;
+
     animation:showModal .3s ease;
+
     box-shadow:0 25px 60px rgba(0,0,0,.15);
 }
 

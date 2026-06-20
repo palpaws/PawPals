@@ -386,3 +386,49 @@ p{
     }
 
 }
+
+.edit-input{
+    width:100%;
+    padding:12px;
+    border-radius:15px;
+    border:2px solid #f3c6d2;
+    font-family:'Baloo 2',cursive;
+    font-size:16px;
+    color:#1d3d39;
+}
+
+
+.name-input{
+    font-size:35px;
+    font-weight:bold;
+    background:transparent;
+    border:none;
+}
+
+
+.save-btn{
+
+    margin-top:30px;
+
+    padding:15px 35px;
+
+    border:none;
+
+    border-radius:30px;
+
+    background:#1d3d39;
+
+    color:white;
+
+    font-size:16px;
+
+    cursor:pointer;
+
+}
+
+
+.save-btn:hover{
+
+    background:#d98fa5;
+
+}

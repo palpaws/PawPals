@@ -347,3 +347,39 @@ CREATE TABLE pet_reminders
     CONSTRAINT fk_reminder_user FOREIGN KEY (user_id)
         REFERENCES users (user_id)
 );
+CREATE TABLE pet_match_requests
+(
+    request_id INT IDENTITY(1,1) PRIMARY KEY,
+
+
+    sender_pet_id INT NOT NULL,
+
+    receiver_pet_id INT NOT NULL,
+
+
+    message NVARCHAR(500),
+
+
+    status NVARCHAR(20)
+    DEFAULT 'PENDING'
+    CHECK(status IN
+    (
+        'PENDING',
+        'ACCEPTED',
+        'REJECTED'
+    )),
+
+
+    created_at DATETIME2 DEFAULT SYSDATETIME(),
+
+
+    CONSTRAINT fk_sender_pet
+        FOREIGN KEY(sender_pet_id)
+            REFERENCES pets(pet_id)
+            ON DELETE CASCADE,
+
+
+    CONSTRAINT fk_receiver_pet
+        FOREIGN KEY(receiver_pet_id)
+            REFERENCES pets(pet_id)
+);

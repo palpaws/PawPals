@@ -2,6 +2,7 @@ package com.he186674.mvc.petshop.entities;
 
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -14,9 +15,9 @@ public class PetImage {
     private Integer imageId;
 
     @ManyToOne
-    @JoinColumn(name = "pet_id")
+    @JoinColumn(name="pet_id")
+    @JsonBackReference
     private Pet pet;
-
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
 

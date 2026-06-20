@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="vi"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+    <title>Thanh toán thành công</title>
+
+    <link rel="stylesheet" th:href="@{/header.css}">
+    <link rel="stylesheet" th:href="@{/premium.css}">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+          rel="stylesheet">
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div th:replace="fragments/header :: header"></div>
+
+
+<!-- SUCCESS PAGE -->
+<div class="success-page">
+
+
+    <div class="success-card">
+
+
+        <!-- ICON -->
+        <div class="success-icon">
+            <i class="fa-solid fa-circle-check"></i>
+        </div>
+
+
+        <!-- TITLE -->
+        <h1>Thanh toán thành công!</h1>
+
+        <p>
+            🎉 Chúc mừng bạn đã nâng cấp Premium thành công.
+            Giờ bạn có thể sử dụng toàn bộ tính năng.
+        </p>
+
+
+        <!-- INFO BOX -->
+        <div class="info-box">
+
+            <div>
+                <span>Trạng thái</span>
+                <b class="success-text">ACTIVE</b>
+            </div>
+
+            <div>
+                <span>Thời hạn</span>
+                <b>30 ngày</b>
+            </div>
+
+        </div>
+
+
+        <!-- BUTTON -->
+        <a th:href="@{/pet-match}" class="btn-back">
+            👉 Bắt đầu sử dụng ngay
+        </a>
+
+
+    </div>
+
+</div>
+
+</body>
+</html>

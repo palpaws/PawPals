@@ -1,0 +1,585 @@
+*{
+    box-sizing:border-box;
+}
+
+
+
+body{
+
+    background:#f7f8fc;
+
+    font-family:
+            "Segoe UI",
+            sans-serif;
+
+}
+
+
+
+
+.page-container{
+
+
+    width:90%;
+
+    max-width:1200px;
+
+    margin:40px auto;
+
+
+}
+
+
+
+
+
+
+/* HEADER */
+
+
+.page-title{
+
+
+    display:flex;
+
+    align-items:center;
+
+    gap:20px;
+
+    margin-bottom:35px;
+
+
+}
+
+
+
+.title-icon{
+
+
+    width:70px;
+
+    height:70px;
+
+    border-radius:20px;
+
+    background:
+            linear-gradient(
+                    135deg,
+                    #ff758c,
+                    #ff7eb3
+            );
+
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+
+    color:white;
+
+    font-size:32px;
+
+
+}
+
+
+
+.page-title h1{
+
+
+    margin:0;
+
+    font-size:32px;
+
+    color:#222;
+
+
+}
+
+
+
+.page-title p{
+
+
+    margin-top:8px;
+
+    color:#777;
+
+}
+
+
+
+
+
+
+
+
+
+/* CARD */
+
+
+.request-card{
+
+
+    background:white;
+
+    border-radius:25px;
+
+    padding:30px;
+
+
+    margin-bottom:30px;
+
+
+    box-shadow:
+            0 15px 40px
+            rgba(0,0,0,.08);
+
+
+
+    transition:.3s;
+
+
+}
+
+
+
+
+.request-card:hover{
+
+
+    transform:translateY(-5px);
+
+
+}
+
+
+
+
+
+
+
+
+
+/* MATCH */
+
+
+.match-area{
+
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:60px;
+
+
+}
+
+
+
+
+.pet-profile{
+
+
+    text-align:center;
+
+}
+
+
+
+.avatar{
+
+
+    width:130px;
+
+    height:130px;
+
+    border-radius:50%;
+
+    overflow:hidden;
+
+
+    border:5px solid #fff;
+
+
+    box-shadow:
+            0 8px 20px
+            rgba(0,0,0,.15);
+
+
+}
+
+
+
+.avatar img{
+
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:cover;
+
+
+}
+
+
+
+.pet-profile h3{
+
+
+    margin:15px 0 8px;
+
+    font-size:22px;
+
+
+}
+
+
+
+.role{
+
+
+    padding:6px 15px;
+
+    border-radius:20px;
+
+    font-size:13px;
+
+}
+
+
+
+.sender{
+
+
+    background:#ffe5ec;
+
+    color:#ff477e;
+
+
+}
+
+
+
+.receiver{
+
+
+    background:#e5f0ff;
+
+    color:#3478f6;
+
+
+}
+
+
+
+
+
+
+
+
+
+/* HEART */
+
+
+.match-icon{
+
+
+    text-align:center;
+
+}
+
+
+
+.heart-circle{
+
+
+    width:65px;
+
+    height:65px;
+
+    background:#ff477e;
+
+    border-radius:50%;
+
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+
+    color:white;
+
+    font-size:30px;
+
+
+}
+
+
+
+.match-icon span{
+
+
+    display:block;
+
+    margin-top:10px;
+
+    font-weight:bold;
+
+    color:#ff477e;
+
+
+}
+
+
+
+
+
+
+
+
+
+
+/* MESSAGE */
+
+
+.message-card{
+
+
+    margin-top:30px;
+
+    background:#f8f9ff;
+
+    padding:18px 25px;
+
+
+    border-radius:18px;
+
+
+    display:flex;
+
+    gap:15px;
+
+    align-items:center;
+
+
+}
+
+
+
+.message-card i{
+
+
+    color:#ff477e;
+
+    font-size:22px;
+
+
+}
+
+
+
+.message-card p{
+
+
+    margin:0;
+
+    color:#555;
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+/* STATUS */
+
+
+.status-area{
+
+
+    margin-top:20px;
+
+    text-align:center;
+
+
+}
+
+
+
+.status-badge{
+
+
+    padding:8px 25px;
+
+    border-radius:30px;
+
+    background:#fff3cd;
+
+    color:#856404;
+
+
+    font-weight:bold;
+
+
+}
+
+
+
+
+
+
+
+
+
+/* BUTTON */
+
+
+.actions{
+
+
+    margin-top:30px;
+
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:20px;
+
+
+}
+
+
+
+.btn{
+
+
+    border:none;
+
+    padding:14px 35px;
+
+    border-radius:15px;
+
+
+    font-size:16px;
+
+    cursor:pointer;
+
+
+    display:flex;
+
+    gap:10px;
+
+    align-items:center;
+
+
+    transition:.3s;
+
+
+}
+
+
+
+.accept{
+
+
+    background:#ff477e;
+
+    color:white;
+
+
+}
+
+
+
+.accept:hover{
+
+
+    background:#e9366b;
+
+
+}
+
+
+
+
+.reject{
+
+
+    background:#eee;
+
+    color:#555;
+
+
+}
+
+
+
+.reject:hover{
+
+
+    background:#ddd;
+
+
+}
+
+
+
+
+
+
+
+/* MOBILE */
+
+
+@media(max-width:700px){
+
+
+    .match-area{
+
+
+        flex-direction:column;
+
+        gap:25px;
+
+
+    }
+
+
+
+    .actions{
+
+
+        flex-direction:column;
+
+
+    }
+
+
+
+    .btn{
+
+
+        justify-content:center;
+
+
+    }
+
+
+}

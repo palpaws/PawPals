@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="vi"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Lời mời ghép đôi</title>
+
+
+    <link rel="stylesheet"
+          th:href="@{/header.css}">
+
+
+    <link rel="stylesheet"
+          th:href="@{/pet-match-request.css}">
+
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+          rel="stylesheet">
+
+
+</head>
+
+
+<body>
+
+
+<div th:replace="fragments/header :: header"></div>
+
+
+
+<div class="page-container">
+
+
+
+    <!-- HEADER -->
+
+    <div class="page-title">
+
+
+        <div class="title-icon">
+            <i class="fa-solid fa-heart"></i>
+        </div>
+
+
+        <div>
+
+            <h1>
+                Lời mời ghép đôi
+            </h1>
+
+
+            <p>
+                Những thú cưng đang muốn kết bạn với bé nhà bạn
+            </p>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+
+    <!-- LIST -->
+
+
+    <div class="request-list">
+
+
+
+        <div class="request-card"
+             th:each="request : ${requests}">
+
+
+
+
+
+
+            <!-- MATCH AREA -->
+
+
+            <div class="match-area">
+
+
+
+                <!-- SENDER PET -->
+
+
+                <div class="pet-profile">
+
+
+                    <div class="avatar">
+
+
+                        <img th:src="${request.senderPet.images != null
+                        && !request.senderPet.images.isEmpty()
+                        ? request.senderPet.images[0].imageUrl
+                        : '/images/default-pet.jpg'}">
+
+
+                    </div>
+
+
+
+                    <h3 th:text="${request.senderPet.petName}">
+                        Milo
+                    </h3>
+
+
+
+                    <span class="role sender">
+                        Người gửi
+                    </span>
+
+
+
+                </div>
+
+
+
+
+
+
+                <!-- CENTER -->
+
+
+                <div class="match-icon">
+
+
+                    <div class="heart-circle">
+
+                        <i class="fa-solid fa-heart"></i>
+
+                    </div>
+
+
+                    <span>
+                        MATCH
+                    </span>
+
+
+                </div>
+
+
+
+
+
+
+
+                <!-- RECEIVER PET -->
+
+
+                <div class="pet-profile">
+
+
+                    <div class="avatar">
+
+
+                        <img th:src="${request.receiverPet.images != null
+                        && !request.receiverPet.images.isEmpty()
+                        ? request.receiverPet.images[0].imageUrl
+                        : '/images/default-pet.jpg'}">
+
+
+                    </div>
+
+
+
+                    <h3 th:text="${request.receiverPet.petName}">
+                        Lucky
+                    </h3>
+
+
+
+                    <span class="role receiver">
+                        Bạn
+                    </span>
+
+
+
+                </div>
+
+
+
+
+            </div>
+
+
+
+
+
+
+
+
+
+            <!-- MESSAGE -->
+
+
+            <div class="message-card">
+
+
+                <i class="fa-solid fa-message"></i>
+
+
+
+                <p th:text="${request.message}">
+                    Xin chào, mình muốn làm quen!
+                </p>
+
+
+            </div>
+
+
+
+
+
+
+
+
+
+            <!-- STATUS -->
+
+
+            <div class="status-area">
+
+
+                <span class="status-badge"
+                      th:text="${request.status}">
+                    PENDING
+                </span>
+
+
+            </div>
+
+
+
+
+
+
+
+
+
+            <!-- ACTION -->
+
+
+            <div class="actions">
+
+
+
+                <form th:action="@{/pet-match/request/{id}/accept(id=${request.requestId})}"
+                      method="post">
+
+
+                    <button class="btn accept">
+
+
+                        <i class="fa-solid fa-heart"></i>
+
+                        Chấp nhận
+
+
+                    </button>
+
+
+                </form>
+
+
+
+
+
+
+
+
+                <form th:action="@{/pet-match/request/{id}/reject(id=${request.requestId})}"
+                      method="post">
+
+
+                    <button class="btn reject">
+
+
+                        <i class="fa-solid fa-xmark"></i>
+
+                        Từ chối
+
+
+                    </button>
+
+
+                </form>
+
+
+
+            </div>
+
+
+
+
+
+        </div>
+
+
+
+    </div>
+
+
+
+
+
+
+</div>
+
+
+
+</body>
+
+
+</html>

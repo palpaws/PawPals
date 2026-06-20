@@ -35,12 +35,24 @@ public class AuthController {
             @RequestParam("password") String password,
             HttpSession session,
             RedirectAttributes redirectAttributes) {
+
         try {
             User user = userService.login(email, password);
+
             session.setAttribute("currentUser", user);
-            // Tự động sinh notification từ reminders khi đăng nhập
+
+            // tạo notification
             calendarNotificationService.generateReminderNotifications(user.getUserId());
+
+            // =========================
+            // PHÂN QUYỀN Ở ĐÂY
+            // =========================
+            if ("ADMIN".equalsIgnoreCase(user.getRole())) {
+                return "redirect:/admin/payments";
+            }
+
             return "redirect:/";
+
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
             redirectAttributes.addFlashAttribute("emailVal", email);
