@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Payments Dashboard</title>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+
+        body {
+            margin: 0;
+            font-family: Arial;
+            background: #f4f6f9;
+        }
+
+        /* HEADER ADMIN */
+        .topbar {
+            background: linear-gradient(135deg, #ff4d6d, #ff758c);
+            padding: 15px 25px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .topbar h2 {
+            margin: 0;
+        }
+
+        .logout-btn {
+            background: white;
+            color: #ff4d6d;
+            padding: 8px 14px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* TABLE CONTAINER */
+        .container {
+            padding: 25px;
+        }
+
+        table {
+            width: 100%;
+            background: white;
+            border-collapse: collapse;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        th {
+            background: #ff4d6d;
+            color: white;
+            padding: 14px;
+        }
+
+        td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .PENDING { background: #fff3cd; color: #856404; }
+        .SUCCESS { background: #d4edda; color: #155724; }
+        .FAILED  { background: #f8d7da; color: #721c24; }
+
+        /* BUTTONS */
+        .btn {
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .approve {
+            background: #28a745;
+            color: white;
+        }
+
+        .reject {
+            background: #dc3545;
+            color: white;
+        }
+
+        .actions form {
+            display: inline-block;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+    <h2><i class="fa-solid fa-gauge"></i> Admin Payments</h2>
+
+    <a href="/logout" class="logout-btn">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+    </a>
+</div>
+
+<!-- TABLE -->
+<div class="container">
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>User ID</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Order ID</th>
+            <th>Action</th>
+        </tr>
+
+        <tr th:each="p : ${payments}">
+            <td th:text="${p.paymentId}"></td>
+            <td th:text="${p.userId}"></td>
+            <td th:text="${p.amount}"></td>
+
+            <td>
+                <span th:text="${p.status}"
+                      th:classappend="'status ' + ${p.status}">
+                </span>
+            </td>
+
+            <td th:text="${p.orderId}"></td>
+
+            <td class="actions">
+
+                <form th:if="${p.status == 'PENDING'}"
+                      th:action="@{/admin/payments/approve/{id}(id=${p.paymentId})}"
+                      method="post">
+
+                    <button class="btn approve">
+                        ✔ Approve
+                    </button>
+
+                </form>
+
+                <form th:if="${p.status == 'PENDING'}"
+                      th:action="@{/admin/payments/reject/{id}(id=${p.paymentId})}"
+                      method="post">
+
+                    <button class="btn reject">
+                        ✖ Reject
+                    </button>
+
+                </form>
+
+            </td>
+        </tr>
+
+    </table>
+
+</div>
+
+<!-- AUTO REFRESH (REALTIME SIMULATION) -->
+<script>
+    setInterval(() => {
+        location.reload();
+    }, 5000);
+</script>
+
+</body>
+</html>

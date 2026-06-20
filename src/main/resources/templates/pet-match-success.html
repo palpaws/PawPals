@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="vi"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Đang ghép đôi</title>
+
+    <link rel="stylesheet"
+          th:href="@{/header.css}">
+
+    <link rel="stylesheet"
+          th:href="@{/pet-match-success.css}">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+          rel="stylesheet">
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div th:replace="fragments/header :: header"></div>
+
+
+<div class="page-container">
+
+
+    <!-- TITLE -->
+    <div class="page-title">
+
+        <i class="fa-solid fa-heart-pulse"></i>
+
+        <div>
+            <h1>Đang ghép đôi</h1>
+            <p>Những cặp thú cưng đã match thành công</p>
+        </div>
+
+    </div>
+
+
+    <!-- LIST -->
+    <div class="match-list">
+
+
+        <div th:each="m : ${matches}" class="match-card">
+
+
+            <!-- LEFT PET -->
+            <div class="pet-box">
+
+                <div class="avatar">
+                    <img th:src="${m.senderPet.images != null
+                    && !m.senderPet.images.isEmpty()
+                    ? m.senderPet.images[0].imageUrl
+                    : '/images/default-pet.jpg'}">
+                </div>
+
+                <h3 th:text="${m.senderPet.petName}">Pet A</h3>
+
+                <span>Chủ A</span>
+
+            </div>
+
+
+            <!-- CENTER LOVE -->
+            <div class="match-center">
+
+                <div class="heart-circle">
+                    ❤️
+                </div>
+
+                <p>ĐANG GHÉP ĐÔI</p>
+
+            </div>
+
+
+            <!-- RIGHT PET -->
+            <div class="pet-box">
+
+                <div class="avatar">
+                    <img th:src="${m.receiverPet.images != null
+                    && !m.receiverPet.images.isEmpty()
+                    ? m.receiverPet.images[0].imageUrl
+                    : '/images/default-pet.jpg'}">
+                </div>
+
+                <h3 th:text="${m.receiverPet.petName}">Pet B</h3>
+
+                <span>Chủ B</span>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+</div>
+
+</body>
+</html>

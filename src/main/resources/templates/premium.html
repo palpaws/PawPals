@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="vi"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+    <title>Thanh toán Premium</title>
+
+    <link rel="stylesheet" th:href="@{/header.css}">
+    <link rel="stylesheet" th:href="@{/premium.css}">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+          rel="stylesheet">
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div th:replace="fragments/header :: header"></div>
+
+
+<!-- PAGE WRAPPER -->
+<div class="premium-page">
+
+
+    <div class="payment-wrapper">
+
+
+        <!-- LEFT SIDE -->
+        <div class="payment-left">
+
+            <div class="brand">
+                <i class="fa-solid fa-crown"></i>
+                <h2>PetCare Premium</h2>
+            </div>
+
+            <h1>Nâng cấp tài khoản Premium</h1>
+
+            <p class="sub">
+                Mở khóa chat, ghép đôi không giới hạn và ưu tiên hiển thị
+            </p>
+
+            <div class="features">
+                <div><i class="fa-solid fa-check"></i> Chat không giới hạn</div>
+                <div><i class="fa-solid fa-check"></i> Match không giới hạn</div>
+                <div><i class="fa-solid fa-check"></i> Hiển thị ưu tiên</div>
+            </div>
+
+            <div class="price-box">
+                <span>Chỉ với</span>
+                <h2>29.000đ</h2>
+                <small>/ 30 ngày</small>
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT SIDE -->
+        <div class="payment-right">
+
+            <h3>Thanh toán</h3>
+
+            <div class="order-box">
+
+                <div class="row">
+                    <span>Sản phẩm</span>
+                    <b>Premium 30 ngày</b>
+                </div>
+
+                <div class="row">
+                    <span>Giá</span>
+                    <b>29.000đ</b>
+                </div>
+
+                <hr>
+
+                <div class="row total">
+                    <span>Tổng thanh toán</span>
+                    <b>29.000đ</b>
+                </div>
+
+            </div>
+
+
+            <!-- QR SECTION -->
+            <div class="qr-box">
+
+                <p><b>Quét mã để thanh toán</b></p>
+
+                <img src="/images/qr-payment.jpg" alt="QR Code">
+
+                <small>MoMo / VietQR / Ngân hàng</small>
+
+                <p class="note">
+                    Sau khi chuyển khoản, hệ thống sẽ tự cập nhật Premium (không cần bấm xác nhận)
+                </p>
+
+            </div>
+
+
+            <!-- PAY BUTTON -->
+            <form th:action="@{/premium/pay}" method="post">
+
+                <button class="pay-btn" type="submit">
+                    <i class="fa-solid fa-qrcode"></i>
+                    Tạo đơn thanh toán
+                </button>
+
+            </form>
+
+
+            <!-- STATUS -->
+            <div class="status-box">
+                <i class="fa-solid fa-clock"></i>
+                <span>Đang chờ thanh toán...</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

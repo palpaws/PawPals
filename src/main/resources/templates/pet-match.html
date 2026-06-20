@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>
+        Pet Match
+    </title>
+
+
+    <link rel="stylesheet"
+          th:href="@{/pet-match.css}">
+
+
+    <link rel="stylesheet"
+          th:href="@{/header.css}">
+
+</head>
+
+
+
+<body>
+
+
+<!-- HEADER -->
+
+<div th:replace="fragments/header :: header"></div>
+
+
+
+
+<div class="pet-match-container">
+
+
+
+    <!-- ================= BANNER ================= -->
+
+
+    <section class="match-banner">
+
+
+        <div class="banner-content">
+
+
+            <h1>
+                Pet Love Match ❤️
+            </h1>
+
+
+            <p>
+                Tìm người bạn hoàn hảo cho thú cưng của bạn
+            </p>
+
+
+
+            <div class="banner-buttons">
+
+
+                <button type="button"
+                        onclick="location.href='/pet-match/matches'">
+                    ❤️ Kết nối
+                </button>
+
+
+
+                <button>
+                    🐾 Chơi đùa
+                </button>
+
+
+
+                <button onclick="window.location.href='/pet-match/request'">
+
+                    💌 Lời mời ghép đôi
+
+                </button>
+
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <div class="banner-image">
+
+
+            <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png">
+
+
+        </div>
+
+
+
+    </section>
+
+
+
+
+
+
+
+
+    <!-- ================= SEARCH ================= -->
+
+
+    <div class="search-area">
+
+
+        <div class="search-box">
+
+
+            🔍
+
+
+            <input type="text"
+                   placeholder="Tìm kiếm thú cưng theo tên, giống loài...">
+
+
+        </div>
+
+
+
+        <button class="filter-btn">
+
+            ⚙ Lọc theo
+
+        </button>
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+    <!-- ================= TINDER CARD ================= -->
+
+
+    <section class="swipe-container">
+
+
+        <div id="petCard"
+             class="pet-card">
+
+
+
+
+
+            <!-- LEFT INFO -->
+
+
+            <div class="pet-card-info">
+
+
+
+                <!-- NAME -->
+
+                <h1 id="petName"
+                    th:text="${pet.petName != null ? pet.petName : 'Chưa cập nhật'}">
+
+                    Chưa cập nhật
+
+                </h1>
+
+
+
+
+
+                <!-- BREED -->
+
+
+                <div class="tag">
+
+
+                    Giống :
+
+
+                    <span id="petBreed"
+                          th:text="${pet.breed != null ? pet.breed : 'Chưa cập nhật'}">
+
+</span>
+
+
+                </div>
+
+
+
+
+
+
+
+                <!-- LOCATION -->
+
+
+                <div class="tag location">
+
+
+                    📍
+
+
+                    <span th:text="${pet.user != null && pet.user.address != null
+                ? pet.user.address
+                : 'Chưa cập nhật'}">
+
+</span>
+
+
+                </div>
+
+
+
+
+
+
+
+
+                <!-- SMALL INFORMATION -->
+
+
+                <div class="small-info">
+
+
+
+
+
+                    <!-- AGE -->
+
+
+                    <div class="mini-box">
+
+
+                        🕒
+
+
+                        <span id="petAge"
+                              th:text="${pet.dateOfBirth != null ?
+      T(java.time.Period)
+      .between(
+      pet.dateOfBirth,
+      T(java.time.LocalDate).now()
+      ).getYears()
+      : 'Chưa cập nhật'}">
+
+</span>
+
+
+                        Tuổi
+
+
+                    </div>
+
+
+
+
+
+
+
+
+                    <!-- GENDER -->
+
+
+                    <div class="mini-box">
+
+
+                        ♂
+
+
+                        <span id="petGender"
+                              th:text="${pet.gender != null ? pet.gender : 'Chưa cập nhật'}">
+
+</span>
+
+
+                    </div>
+
+
+
+
+
+
+
+
+                    <!-- WEIGHT -->
+
+
+                    <div class="mini-box">
+
+
+                        ⚖
+
+
+
+                        <span>
+
+
+                           <label id="petWeight"
+                                  th:text="${pet.weight != null ? pet.weight : 'Chưa cập nhật'}">
+
+</label>
+
+<span th:if="${pet.weight != null}">
+    kg
+</span>
+
+
+
+
+
+                        </span>
+
+
+                    </div>
+
+
+
+
+
+
+
+
+                    <!-- VACCINE -->
+
+
+                    <div class="mini-box">
+
+
+                        💉
+
+
+
+                        <span th:text="${pet.vaccinated == null
+? 'Chưa cập nhật'
+: (pet.vaccinated ? 'Đã tiêm' : 'Chưa tiêm')}">
+
+</span>
+
+
+
+
+
+                    </div>
+
+
+
+
+
+                </div>
+
+
+
+
+
+
+                <!-- DESCRIPTION -->
+
+
+                <p id="petDescription"
+                   th:text="${pet.matchingDescription != null
+   ? pet.matchingDescription
+   : 'Chưa cập nhật mô tả'}">
+
+                </p>
+
+
+
+            </div>
+
+
+
+
+
+
+
+
+            <!-- PET IMAGE -->
+
+
+            <img id="petImage"
+
+                 class="pet-card-image"
+
+                 th:src="${pet.images != null
+                 && !pet.images.isEmpty()
+                 ?
+                 pet.images[0].imageUrl
+                 :
+                 '/images/default-pet.jpg'}">
+
+
+
+
+
+        </div>
+
+
+
+
+
+
+
+
+
+        <!-- ACTION BUTTON -->
+
+
+        <div class="pet-card-actions">
+
+
+
+
+
+            <button class="no-btn"
+                    onclick="rejectPet()">
+
+
+                💔
+
+
+            </button>
+
+
+
+
+
+            <button id="matchButton"
+                    class="choose-btn"
+
+                    onclick="openMatchModal(this)"
+
+                    th:attr="
+        data-id=${pet.petId},
+        data-name=${pet.petName},
+        data-image=${pet.images != null && !pet.images.isEmpty()
+        ? pet.images[0].imageUrl
+        : '/images/default-pet.jpg'}">
+
+
+                Chọn có
+
+
+            </button>
+
+
+
+
+
+            <button id="likeButton"
+
+                    class="yes-btn"
+
+                    onclick="openMatchModal(this)"
+
+                    th:attr="
+        data-id=${pet.petId},
+        data-name=${pet.petName},
+        data-image=${pet.images != null && !pet.images.isEmpty()
+        ? pet.images[0].imageUrl
+        : '/images/default-pet.jpg'}">
+
+
+                ❤️
+
+
+            </button>
+
+
+
+
+        </div>
+
+
+
+
+
+    </section>
+
+
+
+
+
+
+</div>
+<!-- ================= MODAL MATCH ================= -->
+
+<div id="matchModal"
+     class="modal">
+
+
+    <div class="modal-content">
+
+
+
+        <span class="close"
+              onclick="closeMatchModal()">
+
+            ×
+
+        </span>
+
+
+
+
+        <h2>
+            ❤️ Ghép đôi thú cưng
+        </h2>
+
+
+
+
+        <p class="modal-subtitle">
+
+            Chọn thú cưng phù hợp để gửi yêu cầu
+
+        </p>
+
+
+
+
+
+
+        <form method="post"
+              action="/pet-match/request">
+
+
+
+
+
+            <div class="match-wrapper">
+
+
+
+
+
+                <!-- PET CỦA MÌNH -->
+
+
+                <div class="select-pet-box">
+
+
+                    <h3>
+                        🐾 Thú cưng của bạn
+                    </h3>
+
+
+
+
+
+                    <select id="senderPetSelect"
+                            name="senderPetId"
+                            onchange="changeMyPet()">
+
+
+
+                        <option value="">
+                            -- Chọn thú cưng --
+                        </option>
+
+
+
+
+
+                        <option th:each="myPet:${myPets}"
+
+                                th:value="${myPet.petId}"
+
+
+                                th:data-image="${myPet.images != null && !myPet.images.isEmpty()
+                                ? myPet.images[0].imageUrl
+                                : '/images/default-pet.jpg'}"
+
+
+                                th:data-species="${myPet.species}"
+
+
+                                th:text="${myPet.petName}">
+
+
+                        </option>
+
+
+
+                    </select>
+
+
+
+
+
+
+
+                    <div class="pet-preview">
+
+
+                        <img id="myPetImage"
+                             src="/images/default-pet.jpg">
+
+
+
+                        <h4 id="myPetName">
+
+                            Chưa chọn
+
+                        </h4>
+
+
+
+                        <p id="myPetSpecies">
+
+                        </p>
+
+
+
+                    </div>
+
+
+
+
+                </div>
+
+
+
+
+
+
+
+
+
+                <!-- HEART -->
+
+
+                <div class="heart-middle">
+
+
+                    ❤️
+
+
+                    <span>
+                        MATCH
+                    </span>
+
+
+                </div>
+
+
+
+
+
+
+
+
+
+                <!-- PET ĐỐI PHƯƠNG -->
+
+
+                <div class="receiver-box">
+
+
+                    <h3>
+
+                        💕 Ghép với
+
+                    </h3>
+
+
+
+
+
+                    <div class="pet-preview">
+
+
+
+                        <img id="receiverImage"
+                             src="/images/default-pet.jpg">
+
+
+
+
+
+                        <h4 id="receiverPetName">
+
+                            Chưa chọn
+
+                        </h4>
+
+
+
+
+
+                        <p id="receiverSpecies">
+
+                        </p>
+
+
+
+
+
+                    </div>
+
+
+
+
+
+                    <input type="hidden"
+                           id="receiverPetId"
+                           name="receiverPetId">
+
+
+
+                </div>
+
+
+
+
+
+
+            </div>
+
+
+
+
+
+
+
+            <button class="send-request">
+
+                ❤️ Gửi yêu cầu
+
+
+            </button>
+
+
+
+
+        </form>
+
+
+
+
+
+    </div>
+
+
+</div>
+
+
+
+
+
+
+
+<script>
+    function openMatchModal(button){
+
+
+        document.getElementById("matchModal")
+            .style.display="flex";
+
+
+
+        let petId =
+            button.dataset.id;
+
+
+        let petName =
+            button.dataset.name;
+
+
+        let petImage =
+            button.dataset.image;
+
+
+
+        document.getElementById("receiverPetId")
+            .value =
+            petId;
+
+
+
+        document.getElementById("receiverImage")
+            .src =
+            petImage;
+
+
+
+        document.getElementById("receiverPetName")
+            .innerText =
+            petName;
+
+
+
+    }
+
+
+
+
+
+    function closeMatchModal(){
+
+
+        document.getElementById("matchModal")
+            .style.display="none";
+
+
+    }
+
+
+
+
+
+
+    function changeMyPet(){
+
+
+        let select =
+            document.getElementById("senderPetSelect");
+
+
+        let option =
+            select.options[select.selectedIndex];
+
+
+
+        if(option.value===""){
+
+
+            document.getElementById("myPetImage")
+                .src="/images/default-pet.jpg";
+
+
+            document.getElementById("myPetName")
+                .innerText="Chưa chọn";
+
+
+            document.getElementById("myPetSpecies")
+                .innerText="";
+
+
+            return;
+
+        }
+
+
+
+
+        document.getElementById("myPetImage")
+            .src =
+            option.dataset.image;
+
+
+
+
+        document.getElementById("myPetName")
+            .innerText =
+            option.text;
+
+
+
+
+        document.getElementById("myPetSpecies")
+            .innerText =
+            option.dataset.species;
+
+
+
+    }
+
+
+
+
+
+
+
+
+    function rejectPet(){
+
+
+        let card =
+            document.getElementById("petCard");
+
+
+
+        card.style.transform =
+            "translateX(-500px) rotate(-20deg)";
+
+
+        card.style.opacity="0";
+
+
+
+
+
+        setTimeout(()=>{
+
+
+            fetch('/pet-match/next')
+
+
+                .then(res=>res.json())
+
+
+                .then(pet=>{
+
+
+
+                    if(!pet){
+
+                        return;
+
+                    }
+
+
+
+
+
+                    let image =
+                        pet.images && pet.images.length > 0
+                            ?
+                            pet.images[0].imageUrl
+                            :
+                            "/images/default-pet.jpg";
+
+
+
+
+
+                    // UPDATE CARD
+
+
+                    document.getElementById("petImage")
+                        .src =
+                        image;
+
+
+
+
+                    document.getElementById("petName")
+                        .innerText =
+                        pet.petName ?? "Chưa cập nhật";
+
+
+
+
+                    document.getElementById("petBreed")
+                        .innerText =
+                        pet.breed ?? "Chưa cập nhật";
+
+
+
+
+                    document.getElementById("petGender")
+                        .innerText =
+                        pet.gender ?? "Chưa cập nhật";
+
+
+
+
+                    document.getElementById("petWeight")
+                        .innerText =
+                        pet.weight ?? "Chưa cập nhật";
+
+
+
+
+
+
+
+
+                    // UPDATE BUTTON DATA
+
+                    let chooseBtn =
+                        document.getElementById("matchButton");
+
+
+                    let yesBtn =
+                        document.getElementById("likeButton");
+
+
+
+                    [chooseBtn, yesBtn].forEach(btn=>{
+
+
+                        btn.dataset.id =
+                            pet.petId;
+
+
+                        btn.dataset.name =
+                            pet.petName;
+
+
+                        btn.dataset.image =
+                            image;
+
+
+
+                    });
+
+
+
+
+
+
+
+                    card.style.transform =
+                        "translateX(0) rotate(0)";
+
+
+                    card.style.opacity="1";
+
+
+
+                });
+
+
+
+        },400);
+
+
+
+    }
+
+
+</script>
+
+
+
+</body>
+
+</html>

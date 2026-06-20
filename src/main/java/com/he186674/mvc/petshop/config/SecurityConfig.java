@@ -17,11 +17,14 @@ public class SecurityConfig {
     }
 
     @Bean
+
+
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/admin/**").permitAll() // tạm mở để bạn test
                         .anyRequest().permitAll()
                 )
                 .formLogin(form -> form.disable());
