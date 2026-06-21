@@ -11,7 +11,7 @@ html{
 }
 
 body{
-    font-family:'Fredoka', sans-serif;
+    font-family:'Work Sans', sans-serif;
 
     background-image: url("images/register.jpg");
     background-size: cover;
@@ -117,7 +117,7 @@ body{
     color:#173d37;
 
     font-size:17px;
-    font-family:'Fredoka', sans-serif;
+    font-family:'Work Sans', sans-serif;
     font-weight:600;
 
     cursor:pointer;
@@ -224,6 +224,8 @@ body{
 
 form{
     width:100%;
+    display:flex;
+    flex-direction:column;
 }
 
 /* ================= INPUT ================= */
@@ -247,7 +249,7 @@ form{
     padding:0 22px;
 
     font-size:15px;
-    font-family:'Fredoka', sans-serif;
+    font-family:'Work Sans', sans-serif;
     font-weight:500;
 
     outline:none;
@@ -304,8 +306,8 @@ form{
     color:white;
 
     font-size:20px;
-    font-family:'Fredoka', sans-serif;
-    font-weight:700;
+    font-family:'Work Sans', sans-serif;
+    font-weight:600;
 
     letter-spacing:0.4px;
 

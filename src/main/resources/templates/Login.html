@@ -59,13 +59,21 @@
 
                 </div>
 
-                <div class="input-group">
+                <div class="input-group" style="position: relative;">
 
                     <input type="password"
                            id="passwordInput"
                            name="password"
                            placeholder="Mật khẩu"
-                           required>
+                           required
+                           style="padding-right: 45px;">
+
+                    <span toggle="#passwordInput"
+                          class="password-toggle"
+                          style="position: absolute; right: 16px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #9a9a9a; font-size: 18px; z-index: 2;"
+                          onclick="togglePasswordVisibility('passwordInput', this)">
+                        <i class="fas fa-eye"></i>
+                    </span>
 
                 </div>
 
@@ -111,6 +119,20 @@
 </div>
 
 <script>
+    function togglePasswordVisibility(inputId, toggleEl) {
+        const input = document.getElementById(inputId);
+        const icon = toggleEl.querySelector('i');
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
+
     const emailInput = document.getElementById('emailInput');
     const rememberCheckbox = document.getElementById('rememberCheckbox');
 

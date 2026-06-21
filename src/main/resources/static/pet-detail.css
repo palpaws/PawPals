@@ -13,7 +13,7 @@
 
 body{
 
-    font-family:'Baloo 2', cursive;
+    font-family:'Work Sans', sans-serif;
 
     background:#ddb4bf;
 
@@ -392,7 +392,7 @@ p{
     padding:12px;
     border-radius:15px;
     border:2px solid #f3c6d2;
-    font-family:'Baloo 2',cursive;
+    font-family:'Work Sans', sans-serif;
     font-size:16px;
     color:#1d3d39;
 }

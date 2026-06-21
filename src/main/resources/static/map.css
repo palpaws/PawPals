@@ -6,7 +6,7 @@
 
 body {
     background: #f5f5f5;
-    font-family: 'Fredoka', sans-serif;
+    font-family: 'Work Sans', sans-serif;
     padding-top: 60px;
     overflow: hidden;
 }
@@ -89,7 +89,7 @@ body {
     border-radius: 12px;
     color: white;
     font-size: 14px;
-    font-family: 'Fredoka', sans-serif;
+    font-family: 'Work Sans', sans-serif;
     font-weight: 600;
     cursor: pointer;
     display: flex;
@@ -133,7 +133,7 @@ body {
     border: 2px solid #e0e0e0;
     border-radius: 10px;
     font-size: 14px;
-    font-family: 'Fredoka', sans-serif;
+    font-family: 'Work Sans', sans-serif;
     transition: border-color 0.3s;
 }
 
@@ -202,7 +202,7 @@ body {
     cursor: pointer;
     text-align: center;
     font-size: 11px;
-    font-family: 'Fredoka', sans-serif;
+    font-family: 'Work Sans', sans-serif;
     color: #666;
     transition: all 0.2s;
 }
@@ -237,7 +237,7 @@ body {
     border: 2px solid #e0e0e0;
     background: white;
     font-size: 12px;
-    font-family: 'Fredoka', sans-serif;
+    font-family: 'Work Sans', sans-serif;
     cursor: pointer;
     transition: all 0.2s;
     color: #666;
@@ -302,7 +302,7 @@ body {
     border: none;
     border-radius: 6px;
     font-size: 12px;
-    font-family: 'Fredoka', sans-serif;
+    font-family: 'Work Sans', sans-serif;
     cursor: pointer;
     transition: opacity 0.2s;
 }
@@ -354,7 +354,7 @@ body {
     border-radius: 6px;
     cursor: pointer;
     font-size: 12px;
-    font-family: 'Fredoka', sans-serif;
+    font-family: 'Work Sans', sans-serif;
 }
 
 .direction-info {
@@ -449,7 +449,7 @@ body {
 /* ===== LEAFLET OVERRIDES ===== */
 .leaflet-popup-content-wrapper {
     border-radius: 12px;
-    font-family: 'Fredoka', sans-serif;
+    font-family: 'Work Sans', sans-serif;
 }
 
 .leaflet-popup-content {
@@ -467,7 +467,7 @@ body {
     border: none;
     border-radius: 6px;
     font-size: 12px;
-    font-family: 'Fredoka', sans-serif;
+    font-family: 'Work Sans', sans-serif;
     cursor: pointer;
 }
 

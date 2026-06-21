@@ -12,7 +12,7 @@
 
 body {
     background: #ddb4bf;
-    font-family: 'Fredoka', sans-serif;
+    font-family: 'Work Sans', sans-serif;
     overflow-x: hidden;
     min-height: 100vh;
 }
@@ -366,7 +366,7 @@ body {
     gap: 8px;
     margin-top: 15px;
     transition: background 0.3s ease;
-    font-family: 'Fredoka', sans-serif;
+    font-family: 'Work Sans', sans-serif;
 }
 
 .add-schedule-btn:hover {
@@ -442,7 +442,7 @@ body {
     border: 2px solid #e0e0e0;
     border-radius: 8px;
     font-size: 14px;
-    font-family: 'Fredoka', sans-serif;
+    font-family: 'Work Sans', sans-serif;
     transition: border-color 0.3s;
 }
 
@@ -493,7 +493,7 @@ body {
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    font-family: 'Fredoka', sans-serif;
+    font-family: 'Work Sans', sans-serif;
     transition: opacity 0.3s;
 }
 
@@ -579,7 +579,7 @@ body {
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
-    font-family: 'Fredoka', sans-serif;
+    font-family: 'Work Sans', sans-serif;
 }
 
 .btn-toggle {

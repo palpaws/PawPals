@@ -1,5 +1,5 @@
 /* ===== Community Pages – Theme matching PawPals Home ===== */
-@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600&family=Hannari&display=swap');
 
 /* ---- Global reset for community pages ---- */
 * {
@@ -8,7 +8,7 @@
 }
 
 body {
-    font-family: 'Baloo 2', cursive;
+    font-family: 'Work Sans', sans-serif;
     background: #ddb4bf;
     min-height: 100vh;
     color: #1d3d39;
@@ -57,7 +57,7 @@ body {
     background: transparent !important;
     border: none !important;
     padding: 0.6rem 1.2rem !important;
-    font-family: 'Baloo 2', cursive;
+    font-family: 'Work Sans', sans-serif;
     font-size: 1rem;
     color: #1d3d39;
     box-shadow: none !important;
@@ -73,7 +73,7 @@ body {
     border: none;
     padding: 0.6rem 1.4rem;
     font-weight: 600;
-    font-family: 'Baloo 2', cursive;
+    font-family: 'Work Sans', sans-serif;
     border-radius: 0 50px 50px 0;
 }
 
@@ -90,7 +90,7 @@ body {
     border-radius: 50px;
     padding: 0.5rem 1.1rem;
     font-weight: 600;
-    font-family: 'Baloo 2', cursive;
+    font-family: 'Work Sans', sans-serif;
     margin-left: 8px;
 }
 
@@ -106,7 +106,7 @@ body {
     border-radius: 50px;
     padding: 10px 24px;
     font-weight: 700;
-    font-family: 'Baloo 2', cursive;
+    font-family: 'Work Sans', sans-serif;
     font-size: 1rem;
     box-shadow: 0 6px 18px rgba(93,111,214,0.35);
     text-decoration: none;
@@ -207,8 +207,8 @@ body {
     background: linear-gradient(135deg, rgba(93,111,214,0.12), rgba(234,125,163,0.10));
     border-bottom: 1px solid rgba(255,255,255,0.40) !important;
     padding: 1.2rem 1.8rem !important;
-    font-family: 'Baloo 2', cursive;
-    font-weight: 700;
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 600;
     font-size: 1.2rem;
     color: #163f36;
 }
@@ -255,7 +255,7 @@ body {
     border-radius: 50px;
     padding: 8px 20px !important;
     font-weight: 600;
-    font-family: 'Baloo 2', cursive;
+    font-family: 'Work Sans', sans-serif;
 }
 
 .like-btn:hover {
@@ -340,7 +340,7 @@ body {
     border-radius: 50px;
     padding: 8px 20px;
     font-weight: 600;
-    font-family: 'Baloo 2', cursive;
+    font-family: 'Work Sans', sans-serif;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
@@ -371,7 +371,7 @@ body {
     background: rgba(255,255,255,0.55);
     color: #163f36;
     font-weight: 600;
-    font-family: 'Baloo 2', cursive;
+    font-family: 'Work Sans', sans-serif;
     padding: 8px 18px !important;
     box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     transition: all 0.25s ease;
@@ -408,7 +408,7 @@ body {
 
 /* ---- Badges ---- */
 .badge {
-    font-family: 'Baloo 2', cursive;
+    font-family: 'Work Sans', sans-serif;
     padding: 0.3em 0.75em !important;
     font-size: 0.82em !important;
     border-radius: 50px !important;
@@ -454,7 +454,7 @@ body {
     border-radius: 10px !important;
     border: 1.5px solid rgba(200,200,220,0.50) !important;
     background: rgba(255,255,255,0.70) !important;
-    font-family: 'Baloo 2', cursive;
+    font-family: 'Work Sans', sans-serif;
     padding: 0.45rem 0.85rem !important;
     color: #1d3d39;
 }
@@ -483,7 +483,7 @@ body {
 .dropdown-item {
     border-radius: 8px !important;
     padding: 0.4rem 0.9rem !important;
-    font-family: 'Baloo 2', cursive;
+    font-family: 'Work Sans', sans-serif;
     font-weight: 500;
 }
 
