@@ -1510,6 +1510,7 @@ textarea{
     .review-title {
         font-size: 56px;
         font-weight: 700;
+        margin-left: 60px;
 
         color: #e8ab33;
     }

@@ -14,7 +14,7 @@
         <a th:href="@{/calendar}">Lịch</a>
         <a th:href="@{/map}">Bản đồ</a>
         <a th:href="@{/pet-match}">Ghép đôi</a>
-        <a th:href="@{/base-profile}">Bạn&Thú</a>
+        <a th:href="@{/base-profile}">Bạn&Bé</a>
         <a th:href="@{/community}">Cộng Đồng</a>
     </nav>
 
@@ -40,28 +40,54 @@
                 </div>
             </div>
         </div>
-        <span th:if="${session.currentUser != null
-        && session.currentUser.premiumExpiredAt != null
-        && session.currentUser.premiumExpiredAt.isAfter(T(java.time.LocalDateTime).now())}"
+        <span th:if="${session.currentUser != null}"
 
               style="
         font-size:16px;
         font-weight:700;
-        color:#FFD166;
         display:flex;
         align-items:center;
         gap:6px;
-        text-shadow:0 1px 5px rgba(0,0,0,0.25);
       ">
 
-    <i class="fa-solid fa-crown"
-       style="
-       color:#FFD166;
-       font-size:18px;
-       "></i>
 
-    <span th:text="${'Xin chào, ' + session.currentUser.fullName}">
+    <!-- Crown Premium -->
+    <i th:if="${session.currentUser.premiumExpiredAt != null
+        && session.currentUser.premiumExpiredAt.isAfter(T(java.time.LocalDateTime).now())}"
+
+       class="fa-solid fa-crown"
+
+       style="
+        color:#FFD166;
+        font-size:18px;
+       ">
+    </i>
+
+
+            <!-- Tên Premium -->
+    <span th:if="${session.currentUser.premiumExpiredAt != null
+        && session.currentUser.premiumExpiredAt.isAfter(T(java.time.LocalDateTime).now())}"
+
+          th:text="${'Xin chào, ' + session.currentUser.fullName}"
+
+          style="
+            color:#FFD166;
+            text-shadow:0 1px 5px rgba(0,0,0,0.25);
+          ">
     </span>
+
+
+            <!-- Tên User thường -->
+    <span th:if="${session.currentUser.premiumExpiredAt == null
+        || !session.currentUser.premiumExpiredAt.isAfter(T(java.time.LocalDateTime).now())}"
+
+          th:text="${'Xin chào, ' + session.currentUser.fullName}"
+
+          style="
+            color:#143f38;
+          ">
+    </span>
+
 
 </span>
         <a th:href="@{/logout}">
