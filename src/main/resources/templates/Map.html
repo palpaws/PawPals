@@ -1,417 +1,544 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bản đồ - PawPals</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600&family=Hannari&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600&family=Hannari&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" th:href="@{/header.css}" />
     <link rel="stylesheet" th:href="@{/map.css}" />
 </head>
-<body>
-<div th:replace="fragments/header :: header"></div>
 
-<div class="map-page">
-    <div class="map-sidebar">
-        <h2><i class="fas fa-map-marked-alt"></i> Bản đồ</h2>
-        <div class="sidebar-section">
-            <button class="my-location-btn" onclick="getMyLocation()">
-                <i class="fas fa-location-dot"></i> Vị trí của tôi
-            </button>
-            <div class="location-error" id="locationError"></div>
-        </div>
-        <div class="sidebar-section">
-            <h3><i class="fas fa-search"></i> Tìm kiếm</h3>
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="VD: Phòng khám thú y, Spa, Pet shop..."
-                       onkeypress="if(event.key==='Enter') searchPlaces()">
-                <button onclick="searchPlaces()"><i class="fas fa-search"></i></button>
+<body>
+    <div th:replace="fragments/header :: header"></div>
+
+    <div class="map-page">
+        <div class="map-sidebar">
+            <h2><i class="fas fa-map-marked-alt"></i> Bản đồ</h2>
+            <div class="sidebar-section">
+                <button class="my-location-btn" onclick="getMyLocation()">
+                    <i class="fas fa-location-dot"></i> Vị trí của tôi
+                </button>
+                <button class="nearby-btn" id="nearbyBtn" onclick="searchNearby10km()" style="display:none;">
+                    <i class="fas fa-paw"></i> Dịch vụ trong 10 km
+                </button>
+                <div class="location-error" id="locationError"></div>
             </div>
-            <div class="loading-spinner" id="searchSpinner"><i class="fas fa-spinner"></i> Đang tìm kiếm...</div>
-            <div class="search-results" id="searchResults"></div>
-        </div>
-        <div class="sidebar-section">
-            <h3><i class="fas fa-car"></i> Phương tiện</h3>
-            <div class="transport-buttons" id="transportButtons">
-                <div class="transport-btn active" data-profile="driving" onclick="selectTransport('driving', this)"><i class="fas fa-car"></i> Ô tô</div>
-                <div class="transport-btn" data-profile="motorcycle" onclick="selectTransport('motorcycle', this)"><i class="fas fa-motorcycle"></i> Xe máy</div>
-                <div class="transport-btn" data-profile="walking" onclick="selectTransport('walking', this)"><i class="fas fa-walking"></i> Đi bộ</div>
-                <div class="transport-btn" data-profile="cycling" onclick="selectTransport('cycling', this)"><i class="fas fa-bicycle"></i> Xe đạp</div>
+            <div class="sidebar-section">
+                <h3><i class="fas fa-search"></i> Tìm kiếm</h3>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="VD: Phòng khám thú y, Spa, Pet shop..."
+                        onkeypress="if(event.key==='Enter') searchPlaces()">
+                    <button onclick="searchPlaces()"><i class="fas fa-search"></i></button>
+                </div>
+                <div class="loading-spinner" id="searchSpinner"><i class="fas fa-spinner"></i> Đang tìm kiếm...</div>
+                <div class="search-results" id="searchResults"></div>
             </div>
-        </div>
-        <div class="direction-panel hidden" id="directionPanel">
-            <div class="direction-header">
-                <h4><i class="fas fa-route"></i> Chỉ đường</h4>
-                <button onclick="clearDirection()">✕ Đóng</button>
+            <div class="sidebar-section">
+                <h3><i class="fas fa-car"></i> Phương tiện</h3>
+                <div class="transport-buttons" id="transportButtons">
+                    <div class="transport-btn active" data-profile="driving" onclick="selectTransport('driving', this)">
+                        <i class="fas fa-car"></i> Ô tô</div>
+                    <div class="transport-btn" data-profile="motorcycle" onclick="selectTransport('motorcycle', this)">
+                        <i class="fas fa-motorcycle"></i> Xe máy</div>
+                    <div class="transport-btn" data-profile="walking" onclick="selectTransport('walking', this)"><i
+                            class="fas fa-walking"></i> Đi bộ</div>
+                    <div class="transport-btn" data-profile="cycling" onclick="selectTransport('cycling', this)"><i
+                            class="fas fa-bicycle"></i> Xe đạp</div>
+                </div>
             </div>
-            <div class="direction-summary" id="directionSummary"></div>
-            <div class="direction-info" id="directionInfo">
-                <span><i class="fas fa-circle"></i> <span id="dirFrom">---</span></span>
-                <span><i class="fas fa-flag-checkered"></i> <span id="dirTo">---</span></span>
+            <div class="direction-panel hidden" id="directionPanel">
+                <div class="direction-header">
+                    <h4><i class="fas fa-route"></i> Chỉ đường</h4>
+                    <button onclick="clearDirection()">✕ Đóng</button>
+                </div>
+                <div class="direction-summary" id="directionSummary"></div>
+                <div class="direction-info" id="directionInfo">
+                    <span><i class="fas fa-circle"></i> <span id="dirFrom">---</span></span>
+                    <span><i class="fas fa-flag-checkered"></i> <span id="dirTo">---</span></span>
+                </div>
+                <div class="direction-info" id="directionStats">
+                    <span><i class="fas fa-road"></i> Khoảng cách: <strong id="dirDistance">---</strong></span>
+                    <span><i class="fas fa-clock"></i> Thời gian: <strong id="dirDuration">---</strong></span>
+                </div>
+                <div class="direction-steps" id="directionSteps"></div>
             </div>
-            <div class="direction-info" id="directionStats">
-                <span><i class="fas fa-road"></i> Khoảng cách: <strong id="dirDistance">---</strong></span>
-                <span><i class="fas fa-clock"></i> Thời gian: <strong id="dirDuration">---</strong></span>
-            </div>
-            <div class="direction-steps" id="directionSteps"></div>
-        </div>
-        <div class="sidebar-section">
-            <h3><i class="fas fa-list"></i> Địa điểm</h3>
-            <div class="place-list" id="placeList">
-                <div class="info-box">
-                    <i class="fas fa-map-pin" style="font-size: 24px; display: block; margin-bottom: 6px;"></i>
-                    Bấm "Vị trí của tôi" để tìm địa điểm gần bạn
+            <div class="sidebar-section">
+                <h3><i class="fas fa-list"></i> Địa điểm</h3>
+                <div class="place-list" id="placeList">
+                    <div class="info-box">
+                        <i class="fas fa-map-pin" style="font-size: 24px; display: block; margin-bottom: 6px;"></i>
+                        Bấm "Vị trí của tôi" để tìm địa điểm gần bạn
+                    </div>
                 </div>
             </div>
         </div>
+        <div class="map-container">
+            <div id="map"></div>
+        </div>
     </div>
-    <div class="map-container">
-        <div id="map"></div>
-    </div>
-</div>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>
-    const DEFAULT_LAT = 21.0285;
-    const DEFAULT_LNG = 105.8542;
-    let map, userLocation = null, userMarker = null, routeLine = null;
-    let routeStartMarker = null, routeEndMarker = null, placeMarkers = [], clickMarkers = [];
-    let currentCategory = 'all', currentTransport = 'driving', searchResults = [], currentDestination = null;
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        const DEFAULT_LAT = 21.0285;
+        const DEFAULT_LNG = 105.8542;
+        let map, userLocation = null, userMarker = null, routeLine = null;
+        let routeStartMarker = null, routeEndMarker = null, placeMarkers = [], clickMarkers = [];
+        let currentCategory = 'all', currentTransport = 'driving', searchResults = [], currentDestination = null;
 
-    // ===== BUILT-IN SAMPLE REVIEWS =====
-    const sampleReviews = [
-        { author: 'Minh Anh', text: 'Dịch vụ rất tốt, nhân viên thân thiện. Bé cún nhà mình rất thích!', stars: 5, date: '15/05/2026' },
-        { author: 'Hoàng Nam', text: 'Giá cả hợp lý, chất lượng ổn. Sẽ quay lại', stars: 4, date: '20/05/2026' },
-        { author: 'Phương Linh', text: 'Phòng khám sạch sẽ, bác sĩ tận tâm. Bé mèo được khám kỹ lưỡng', stars: 5, date: '10/06/2026' },
-        { author: 'Đức Anh', text: 'Spa tắm cho chó rất đẹp, thơm cả tuần. Nhân viên nhẹ nhàng với thú cưng', stars: 5, date: '05/06/2026' },
-        { author: 'Thanh Hà', text: 'Cửa hàng đa dạng, đầy đủ đồ cho pet. Giá hơi cao nhưng chất lượng tốt', stars: 4, date: '01/06/2026' },
-        { author: 'Quốc Bảo', text: 'Công viên rộng, thoáng mát, có khu riêng cho chó tha hồ chạy nhảy', stars: 5, date: '25/05/2026' }
-    ];
+        // ===== BUILT-IN SAMPLE REVIEWS =====
+        const sampleReviews = [
+            { author: 'Minh Anh', text: 'Dịch vụ rất tốt, nhân viên thân thiện. Bé cún nhà mình rất thích!', stars: 5, date: '15/05/2026' },
+            { author: 'Hoàng Nam', text: 'Giá cả hợp lý, chất lượng ổn. Sẽ quay lại', stars: 4, date: '20/05/2026' },
+            { author: 'Phương Linh', text: 'Phòng khám sạch sẽ, bác sĩ tận tâm. Bé mèo được khám kỹ lưỡng', stars: 5, date: '10/06/2026' },
+            { author: 'Đức Anh', text: 'Spa tắm cho chó rất đẹp, thơm cả tuần. Nhân viên nhẹ nhàng với thú cưng', stars: 5, date: '05/06/2026' },
+            { author: 'Thanh Hà', text: 'Cửa hàng đa dạng, đầy đủ đồ cho pet. Giá hơi cao nhưng chất lượng tốt', stars: 4, date: '01/06/2026' },
+            { author: 'Quốc Bảo', text: 'Công viên rộng, thoáng mát, có khu riêng cho chó tha hồ chạy nhảy', stars: 5, date: '25/05/2026' }
+        ];
 
-    // Assign sample reviews to places based on category
-    function getReviewsForPlace(place) {
-        const name = place.name || '';
-        const cat = place.category || 'pet_store';
-        let pool = [];
-        if (cat === 'veterinary') pool = [sampleReviews[0], sampleReviews[2]];
-        else if (cat === 'pet_store') pool = [sampleReviews[4]];
-        else if (cat === 'pet_groomer') pool = [sampleReviews[1], sampleReviews[3]];
-        else if (cat === 'park') pool = [sampleReviews[5]];
-        else pool = [sampleReviews[0], sampleReviews[1]];
-        // Return up to 2 random reviews
-        const count = Math.min(pool.length, 2);
-        const shuffled = [...pool].sort(() => Math.random() - 0.5);
-        return shuffled.slice(0, count);
-    }
+        // Assign sample reviews to places based on category
+        function getReviewsForPlace(place) {
+            const name = place.name || '';
+            const cat = place.category || 'pet_store';
+            let pool = [];
+            if (cat === 'veterinary') pool = [sampleReviews[0], sampleReviews[2]];
+            else if (cat === 'pet_store') pool = [sampleReviews[4]];
+            else if (cat === 'pet_groomer') pool = [sampleReviews[1], sampleReviews[3]];
+            else if (cat === 'park') pool = [sampleReviews[5]];
+            else pool = [sampleReviews[0], sampleReviews[1]];
+            // Return up to 2 random reviews
+            const count = Math.min(pool.length, 2);
+            const shuffled = [...pool].sort(() => Math.random() - 0.5);
+            return shuffled.slice(0, count);
+        }
 
-    function initMap() {
-        map = L.map('map', { center: [DEFAULT_LAT, DEFAULT_LNG], zoom: 14, zoomControl: true });
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>', maxZoom: 19
-        }).addTo(map);
-        map.on('click', e => reverseGeocode(e.latlng.lat, e.latlng.lng));
-    }
+        function initMap() {
+            map = L.map('map', { center: [DEFAULT_LAT, DEFAULT_LNG], zoom: 14, zoomControl: true });
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>', maxZoom: 19
+            }).addTo(map);
+            map.on('click', e => reverseGeocode(e.latlng.lat, e.latlng.lng));
+        }
 
-    function getMyLocation() {
-        const errorDiv = document.getElementById('locationError');
-        errorDiv.classList.remove('active');
-        if (!navigator.geolocation) { showLocationError('Trình duyệt không hỗ trợ định vị.'); return; }
-        navigator.geolocation.getCurrentPosition(
-            function(position) {
-                const lat = position.coords.latitude, lng = position.coords.longitude;
-                userLocation = { lat, lng };
-                if (userMarker) map.removeLayer(userMarker);
-                const icon = L.divIcon({ className: 'custom-marker user', html: '<i class="fas fa-user"></i>', iconSize: [36, 36], iconAnchor: [18, 18] });
-                userMarker = L.marker([lat, lng], { icon }).addTo(map).bindPopup('<strong>📍 Vị trí của bạn</strong>').openPopup();
-                map.setView([lat, lng], 15);
-                searchNearbyPlaces(lat, lng);
-                if (currentDestination) calculateRoute(currentDestination.lat, currentDestination.lng, currentDestination.name);
-            },
-            function(error) {
-                let msg = '⚠️ Không thể lấy vị trí. ';
-                switch(error.code) {
-                    case error.PERMISSION_DENIED: msg += 'Vui lòng cấp quyền truy cập vị trí.'; break;
-                    case error.POSITION_UNAVAILABLE: msg += 'Thông tin vị trí không khả dụng.'; break;
-                    case error.TIMEOUT: msg += 'Yêu cầu vị trí đã hết thời gian.'; break;
-                    default: msg += 'Lỗi không xác định.';
+        function getMyLocation() {
+            const errorDiv = document.getElementById('locationError');
+            errorDiv.classList.remove('active');
+            if (!navigator.geolocation) { showLocationError('Trình duyệt không hỗ trợ định vị.'); return; }
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    const lat = position.coords.latitude, lng = position.coords.longitude;
+                    userLocation = { lat, lng };
+                    if (userMarker) map.removeLayer(userMarker);
+                    const icon = L.divIcon({ className: 'custom-marker user', html: '<i class="fas fa-user"></i>', iconSize: [36, 36], iconAnchor: [18, 18] });
+                    userMarker = L.marker([lat, lng], { icon }).addTo(map).bindPopup('<strong>📍 Vị trí của bạn</strong>').openPopup();
+                    map.setView([lat, lng], 15);
+                    document.getElementById('nearbyBtn').style.display = 'flex';
+                    searchNearbyPlaces(lat, lng);
+                    if (currentDestination) calculateRoute(currentDestination.lat, currentDestination.lng, currentDestination.name);
+                },
+                function (error) {
+                    let msg = '⚠️ Không thể lấy vị trí. ';
+                    switch (error.code) {
+                        case error.PERMISSION_DENIED: msg += 'Vui lòng cấp quyền truy cập vị trí.'; break;
+                        case error.POSITION_UNAVAILABLE: msg += 'Thông tin vị trí không khả dụng.'; break;
+                        case error.TIMEOUT: msg += 'Yêu cầu vị trí đã hết thời gian.'; break;
+                        default: msg += 'Lỗi không xác định.';
+                    }
+                    showLocationError(msg);
+                },
+                { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+            );
+        }
+
+        function showLocationError(msg) {
+            const el = document.getElementById('locationError');
+            el.textContent = msg; el.classList.add('active');
+            setTimeout(() => el.classList.remove('active'), 6000);
+        }
+
+        function selectTransport(profile, element) {
+            currentTransport = profile;
+            document.querySelectorAll('.transport-btn').forEach(b => b.classList.remove('active'));
+            element.classList.add('active');
+            if (currentDestination && userLocation) calculateRoute(currentDestination.lat, currentDestination.lng, currentDestination.name);
+        }
+
+        async function searchPlaces(query) {
+            const input = document.getElementById('searchInput');
+            const q = (query || input.value).trim();
+            if (!q) return;
+            document.getElementById('searchSpinner').classList.add('active');
+            try {
+                const url = 'https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(q) + '&limit=15&addressdetails=1&accept-language=vi&dedup=1';
+                const res = await fetch(url, { headers: { 'User-Agent': 'PawPals/1.0' } });
+                const data = await res.json();
+                const resultsDiv = document.getElementById('searchResults');
+                resultsDiv.innerHTML = '';
+                searchResults = data;
+                if (data.length === 0) { resultsDiv.innerHTML = '<div class="no-results">Không tìm thấy địa điểm nào</div>'; return; }
+                data.forEach((item, idx) => {
+                    const lat = parseFloat(item.lat), lng = parseFloat(item.lon);
+                    const name = item.display_name.split(',')[0] || item.display_name;
+                    const div = document.createElement('div');
+                    div.className = 'search-result-item';
+                    div.innerHTML = '<div class="result-name">📍 ' + name + '</div><div class="result-address">' + item.display_name.substring(0, 80) + '...</div>';
+                    div.onclick = () => {
+                        flyToPlace(lat, lng, name, 'search-' + idx);
+                        addToPlaceList([{ lat, lng, name, address: item.display_name, category: 'search' }]);
+                        clearClickMarkers();
+                        const icon = L.divIcon({ className: 'custom-marker end', html: '<i class="fas fa-map-pin"></i>', iconSize: [36, 36], iconAnchor: [18, 36] });
+                        const marker = L.marker([lat, lng], { icon }).addTo(map).bindPopup(
+                            '<strong>📍 ' + name + '</strong><br>' + item.display_name.substring(0, 80) + '...<br><br>' +
+                            '<button onclick="showDirectionByLatLng(' + lat + ', ' + lng + ', \'' + name.replace(/'/g, "\\'") + '\')" style="padding:6px 14px;border:none;border-radius:8px;background:#a89ce4;color:white;cursor:pointer;font-family:Fredoka,sans-serif;"><i class="fas fa-route"></i> Chỉ đường đến đây</button>'
+                        ).openPopup();
+                        clickMarkers.push(marker);
+                    };
+                    resultsDiv.appendChild(div);
+                });
+            } catch (err) {
+                console.error(err);
+                document.getElementById('searchResults').innerHTML = '<div class="no-results">Lỗi tìm kiếm.</div>';
+            } finally { document.getElementById('searchSpinner').classList.remove('active'); }
+        }
+
+        async function searchNearbyPlaces(lat, lng) {
+            document.getElementById('searchSpinner').classList.add('active');
+            try {
+                const query = `[out:json];(node["amenity"="veterinary"](around:5000,${lat},${lng});node["shop"="pet"](around:5000,${lat},${lng});node["amenity"="animal_grooming"](around:5000,${lat},${lng});way["amenity"="veterinary"](around:5000,${lat},${lng});way["shop"="pet"](around:5000,${lat},${lng});way["amenity"="animal_grooming"](around:5000,${lat},${lng}););out center;`;
+                const res = await fetch('https://overpass-api.de/api/interpreter', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: 'data=' + encodeURIComponent(query) });
+                const data = await res.json();
+                const elements = data.elements || [];
+                const places = elements.map(el => {
+                    const ptLat = el.lat || (el.center && el.center.lat), ptLng = el.lon || (el.center && el.center.lon);
+                    if (!ptLat || !ptLng) return null;
+                    let cat = 'pet_store';
+                    if (el.tags) {
+                        if (el.tags.amenity === 'veterinary') cat = 'veterinary';
+                        else if (el.tags.shop === 'pet') cat = 'pet_store';
+                        else if (el.tags.amenity === 'animal_grooming') cat = 'pet_groomer';
+
+                    }
+                    return { lat: ptLat, lng: ptLng, name: el.tags?.name || el.tags?.amenity || el.tags?.shop || el.tags?.leisure || 'Địa điểm', address: el.tags?.['addr:full'] || el.tags?.['addr:street'] || '', category: cat };
+                }).filter(p => p !== null);
+                const unique = [], seen = new Set();
+                places.forEach(p => { const k = p.name + p.lat + p.lng; if (!seen.has(k)) { seen.add(k); unique.push(p); } });
+                const deduped = [];
+                for (const p of unique) {
+                    let tooClose = false;
+                    for (const q of deduped) { if (Math.sqrt(Math.pow(p.lat - q.lat, 2) + Math.pow(p.lng - q.lng, 2)) < 0.003) { tooClose = true; break; } }
+                    if (!tooClose) deduped.push(p);
                 }
-                showLocationError(msg);
-            },
-            { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
-        );
-    }
+                searchResults = deduped;
+                renderPlaces(deduped);
+            } catch (err) { console.error(err); } finally { document.getElementById('searchSpinner').classList.remove('active'); }
+        }
 
-    function showLocationError(msg) {
-        const el = document.getElementById('locationError');
-        el.textContent = msg; el.classList.add('active');
-        setTimeout(() => el.classList.remove('active'), 6000);
-    }
+        function renderPlaces(places) {
+            const list = document.getElementById('placeList');
+            list.innerHTML = '';
+            clearPlaceMarkers();
+            let filtered = places;
+            if (currentCategory !== 'all') filtered = places.filter(p => p.category === currentCategory);
+            if (filtered.length === 0) { list.innerHTML = '<div class="no-results">Không có địa điểm nào</div>'; return; }
 
-    function selectTransport(profile, element) {
-        currentTransport = profile;
-        document.querySelectorAll('.transport-btn').forEach(b => b.classList.remove('active'));
-        element.classList.add('active');
-        if (currentDestination && userLocation) calculateRoute(currentDestination.lat, currentDestination.lng, currentDestination.name);
-    }
+            filtered.forEach((place, idx) => {
+                const card = document.createElement('div');
+                card.className = 'place-card';
+                card.id = 'place-' + idx;
+                const icons = { 'veterinary': '🏥', 'pet_store': '🛒', 'pet_groomer': '💆', 'park': '🌳', 'search': '📍' };
+                const icon = icons[place.category] || '📍';
 
-    async function searchPlaces(query) {
-        const input = document.getElementById('searchInput');
-        const q = (query || input.value).trim();
-        if (!q) return;
-        document.getElementById('searchSpinner').classList.add('active');
-        try {
-            const url = 'https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(q) + '&limit=15&addressdetails=1&accept-language=vi&dedup=1';
-            const res = await fetch(url, { headers: { 'User-Agent': 'PawPals/1.0' } });
-            const data = await res.json();
-            const resultsDiv = document.getElementById('searchResults');
-            resultsDiv.innerHTML = '';
-            searchResults = data;
-            if (data.length === 0) { resultsDiv.innerHTML = '<div class="no-results">Không tìm thấy địa điểm nào</div>'; return; }
-            data.forEach((item, idx) => {
-                const lat = parseFloat(item.lat), lng = parseFloat(item.lon);
-                const name = item.display_name.split(',')[0] || item.display_name;
-                const div = document.createElement('div');
-                div.className = 'search-result-item';
-                div.innerHTML = '<div class="result-name">📍 ' + name + '</div><div class="result-address">' + item.display_name.substring(0, 80) + '...</div>';
-                div.onclick = () => {
-                    flyToPlace(lat, lng, name, 'search-' + idx);
-                    addToPlaceList([{ lat, lng, name, address: item.display_name, category: 'search' }]);
-                    clearClickMarkers();
-                    const icon = L.divIcon({ className: 'custom-marker end', html: '<i class="fas fa-map-pin"></i>', iconSize: [36, 36], iconAnchor: [18, 36] });
-                    const marker = L.marker([lat, lng], { icon }).addTo(map).bindPopup(
-                        '<strong>📍 ' + name + '</strong><br>' + item.display_name.substring(0, 80) + '...<br><br>' +
-                        '<button onclick="showDirectionByLatLng(' + lat + ', ' + lng + ', \'' + name.replace(/'/g, "\\'") + '\')" style="padding:6px 14px;border:none;border-radius:8px;background:#a89ce4;color:white;cursor:pointer;font-family:Fredoka,sans-serif;"><i class="fas fa-route"></i> Chỉ đường đến đây</button>'
-                    ).openPopup();
-                    clickMarkers.push(marker);
-                };
-                resultsDiv.appendChild(div);
+                // Built-in reviews
+                const reviews = getReviewsForPlace(place);
+                let reviewsHtml = '';
+                if (reviews.length > 0) {
+                    const total = reviews.reduce((s, r) => s + r.stars, 0);
+                    const avg = (total / reviews.length).toFixed(1);
+                    let starsFull = '';
+                    for (let i = 1; i <= 5; i++) starsFull += i <= Math.round(parseFloat(avg)) ? '<i class="fas fa-star" style="color:#f1c40f;font-size:12px;"></i>' : '<i class="far fa-star" style="color:#ddd;font-size:12px;"></i>';
+                    reviewsHtml += '<div class="place-rating">' + starsFull + ' <span style="font-weight:600;">' + avg + '</span> (' + reviews.length + ' đánh giá)</div>';
+                    reviews.forEach(r => {
+                        let s = '';
+                        for (let i = 1; i <= 5; i++) s += i <= r.stars ? '<i class="fas fa-star" style="color:#f1c40f;font-size:11px;"></i>' : '<i class="far fa-star" style="color:#ddd;font-size:11px;"></i>';
+                        reviewsHtml += '<div class="place-review-item"><span class="review-author">👤 ' + r.author + '</span> ' + s + '<br><span class="review-text">"' + r.text + '"</span></div>';
+                    });
+                } else {
+                    reviewsHtml = '<div class="place-rating" style="color:#ccc;">Chưa có đánh giá</div>';
+                }
+
+                card.innerHTML =
+                    '<div class="place-name">' + icon + ' ' + place.name + '</div>' +
+                    '<div class="place-address">' + (place.address || '') + '</div>' +
+                    '<div class="place-reviews">' + reviewsHtml + '</div>' +
+                    '<div class="place-actions">' +
+                    '<button class="btn-direction" onclick="event.stopPropagation(); showDirection(' + idx + ')"><i class="fas fa-route"></i> Chỉ đường</button>' +
+                    '<button class="btn-view" onclick="event.stopPropagation(); flyToPlace(' + place.lat + ', ' + place.lng + ', \'' + place.name.replace(/'/g, "\\'") + '\', ' + idx + ')"><i class="fas fa-eye"></i> Xem</button>' +
+                    '</div>';
+                card.onclick = () => flyToPlace(place.lat, place.lng, place.name, idx);
+                list.appendChild(card);
+                addPlaceMarker(place.lat, place.lng, place.name, idx, place.category);
             });
-        } catch (err) { console.error(err);
-            document.getElementById('searchResults').innerHTML = '<div class="no-results">Lỗi tìm kiếm.</div>';
-        } finally { document.getElementById('searchSpinner').classList.remove('active'); }
-    }
+        }
 
-    async function searchNearbyPlaces(lat, lng) {
-        document.getElementById('searchSpinner').classList.add('active');
-        try {
-            const query = `[out:json];(node["amenity"="veterinary"](around:5000,${lat},${lng});node["shop"="pet"](around:5000,${lat},${lng});node["amenity"="animal_grooming"](around:5000,${lat},${lng});way["amenity"="veterinary"](around:5000,${lat},${lng});way["shop"="pet"](around:5000,${lat},${lng});way["amenity"="animal_grooming"](around:5000,${lat},${lng}););out center;`;
-            const res = await fetch('https://overpass-api.de/api/interpreter', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: 'data=' + encodeURIComponent(query) });
-            const data = await res.json();
-            const elements = data.elements || [];
-            const places = elements.map(el => {
-                const ptLat = el.lat || (el.center && el.center.lat), ptLng = el.lon || (el.center && el.center.lon);
-                if (!ptLat || !ptLng) return null;
-                let cat = 'pet_store';
-                if (el.tags) {
-                    if (el.tags.amenity === 'veterinary') cat = 'veterinary';
-                    else if (el.tags.shop === 'pet') cat = 'pet_store';
-                    else if (el.tags.amenity === 'animal_grooming') cat = 'pet_groomer';
+        function addToPlaceList(p) {
+            const existing = Array.isArray(searchResults) ? searchResults : [];
+            const merged = [...existing];
+            p.forEach(pl => { const dup = merged.find(m => Math.abs(m.lat - pl.lat) < 0.001 && Math.abs(m.lng - pl.lng) < 0.001); if (!dup) merged.push(pl); });
+            searchResults = merged;
+            renderPlaces(searchResults);
+        }
 
-                }
-                return { lat: ptLat, lng: ptLng, name: el.tags?.name || el.tags?.amenity || el.tags?.shop || el.tags?.leisure || 'Địa điểm', address: el.tags?.['addr:full'] || el.tags?.['addr:street'] || '', category: cat };
-            }).filter(p => p !== null);
-            const unique = [], seen = new Set();
-            places.forEach(p => { const k = p.name + p.lat + p.lng; if (!seen.has(k)) { seen.add(k); unique.push(p); } });
-            const deduped = [];
-            for (const p of unique) {
-                let tooClose = false;
-                for (const q of deduped) { if (Math.sqrt(Math.pow(p.lat - q.lat, 2) + Math.pow(p.lng - q.lng, 2)) < 0.003) { tooClose = true; break; } }
-                if (!tooClose) deduped.push(p);
-            }
-            searchResults = deduped;
-            renderPlaces(deduped);
-        } catch (err) { console.error(err); } finally { document.getElementById('searchSpinner').classList.remove('active'); }
-    }
+        function clearPlaceMarkers() { placeMarkers.forEach(m => map.removeLayer(m)); placeMarkers = []; }
+        function clearClickMarkers() { clickMarkers.forEach(m => map.removeLayer(m)); clickMarkers = []; }
 
-    function renderPlaces(places) {
-        const list = document.getElementById('placeList');
-        list.innerHTML = '';
-        clearPlaceMarkers();
-        let filtered = places;
-        if (currentCategory !== 'all') filtered = places.filter(p => p.category === currentCategory);
-        if (filtered.length === 0) { list.innerHTML = '<div class="no-results">Không có địa điểm nào</div>'; return; }
-
-        filtered.forEach((place, idx) => {
-            const card = document.createElement('div');
-            card.className = 'place-card';
-            card.id = 'place-' + idx;
-            const icons = { 'veterinary': '🏥', 'pet_store': '🛒', 'pet_groomer': '💆', 'park': '🌳', 'search': '📍' };
-            const icon = icons[place.category] || '📍';
-
-            // Built-in reviews
-            const reviews = getReviewsForPlace(place);
-            let reviewsHtml = '';
+        function addPlaceMarker(lat, lng, name, index, category) {
+            const icon = L.divIcon({ className: 'custom-marker', html: '<i class="fas fa-map-pin" style="font-size:16px;"></i>', iconSize: [36, 36], iconAnchor: [18, 36], popupAnchor: [0, -36] });
+            const marker = L.marker([lat, lng], { icon }).addTo(map);
+            const reviews = getReviewsForPlace({ name, category });
+            let ratingText = 'Chưa có đánh giá';
             if (reviews.length > 0) {
                 const total = reviews.reduce((s, r) => s + r.stars, 0);
                 const avg = (total / reviews.length).toFixed(1);
-                let starsFull = '';
-                for (let i = 1; i <= 5; i++) starsFull += i <= Math.round(parseFloat(avg)) ? '<i class="fas fa-star" style="color:#f1c40f;font-size:12px;"></i>' : '<i class="far fa-star" style="color:#ddd;font-size:12px;"></i>';
-                reviewsHtml += '<div class="place-rating">' + starsFull + ' <span style="font-weight:600;">' + avg + '</span> (' + reviews.length + ' đánh giá)</div>';
-                reviews.forEach(r => {
-                    let s = '';
-                    for (let i = 1; i <= 5; i++) s += i <= r.stars ? '<i class="fas fa-star" style="color:#f1c40f;font-size:11px;"></i>' : '<i class="far fa-star" style="color:#ddd;font-size:11px;"></i>';
-                    reviewsHtml += '<div class="place-review-item"><span class="review-author">👤 ' + r.author + '</span> ' + s + '<br><span class="review-text">"' + r.text + '"</span></div>';
-                });
-            } else {
-                reviewsHtml = '<div class="place-rating" style="color:#ccc;">Chưa có đánh giá</div>';
+                ratingText = '⭐ ' + avg + ' (' + reviews.length + ' đánh giá)';
             }
-
-            card.innerHTML =
-                '<div class="place-name">' + icon + ' ' + place.name + '</div>' +
-                '<div class="place-address">' + (place.address || '') + '</div>' +
-                '<div class="place-reviews">' + reviewsHtml + '</div>' +
-                '<div class="place-actions">' +
-                    '<button class="btn-direction" onclick="event.stopPropagation(); showDirection(' + idx + ')"><i class="fas fa-route"></i> Chỉ đường</button>' +
-                    '<button class="btn-view" onclick="event.stopPropagation(); flyToPlace(' + place.lat + ', ' + place.lng + ', \'' + place.name.replace(/'/g, "\\'") + '\', ' + idx + ')"><i class="fas fa-eye"></i> Xem</button>' +
-                '</div>';
-            card.onclick = () => flyToPlace(place.lat, place.lng, place.name, idx);
-            list.appendChild(card);
-            addPlaceMarker(place.lat, place.lng, place.name, idx, place.category);
-        });
-    }
-
-    function addToPlaceList(p) {
-        const existing = Array.isArray(searchResults) ? searchResults : [];
-        const merged = [...existing];
-        p.forEach(pl => { const dup = merged.find(m => Math.abs(m.lat - pl.lat) < 0.001 && Math.abs(m.lng - pl.lng) < 0.001); if (!dup) merged.push(pl); });
-        searchResults = merged;
-        renderPlaces(searchResults);
-    }
-
-    function clearPlaceMarkers() { placeMarkers.forEach(m => map.removeLayer(m)); placeMarkers = []; }
-    function clearClickMarkers() { clickMarkers.forEach(m => map.removeLayer(m)); clickMarkers = []; }
-
-    function addPlaceMarker(lat, lng, name, index, category) {
-        const icon = L.divIcon({ className: 'custom-marker', html: '<i class="fas fa-map-pin" style="font-size:16px;"></i>', iconSize: [36, 36], iconAnchor: [18, 36], popupAnchor: [0, -36] });
-        const marker = L.marker([lat, lng], { icon }).addTo(map);
-        const reviews = getReviewsForPlace({ name, category });
-        let ratingText = 'Chưa có đánh giá';
-        if (reviews.length > 0) {
-            const total = reviews.reduce((s, r) => s + r.stars, 0);
-            const avg = (total / reviews.length).toFixed(1);
-            ratingText = '⭐ ' + avg + ' (' + reviews.length + ' đánh giá)';
+            marker.bindPopup(
+                '<strong>📍 ' + name + '</strong><br>' + ratingText + '<br><br>' +
+                '<button onclick="showDirectionByLatLng(' + lat + ', ' + lng + ', \'' + name.replace(/'/g, "\\'") + '\')" style="padding:6px 14px;border:none;border-radius:8px;background:#a89ce4;color:white;cursor:pointer;font-family:Fredoka,sans-serif;"><i class="fas fa-route"></i> Chỉ đường đến đây</button>'
+            );
+            placeMarkers.push(marker);
         }
-        marker.bindPopup(
-            '<strong>📍 ' + name + '</strong><br>' + ratingText + '<br><br>' +
-            '<button onclick="showDirectionByLatLng(' + lat + ', ' + lng + ', \'' + name.replace(/'/g, "\\'") + '\')" style="padding:6px 14px;border:none;border-radius:8px;background:#a89ce4;color:white;cursor:pointer;font-family:Fredoka,sans-serif;"><i class="fas fa-route"></i> Chỉ đường đến đây</button>'
-        );
-        placeMarkers.push(marker);
-    }
 
-    function flyToPlace(lat, lng, name, index) {
-        map.setView([lat, lng], 16);
-        document.querySelectorAll('.place-card').forEach(c => c.classList.remove('active'));
-        const el = document.getElementById('place-' + index);
-        if (el) { el.classList.add('active'); el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
-    }
+        function flyToPlace(lat, lng, name, index) {
+            map.setView([lat, lng], 16);
+            document.querySelectorAll('.place-card').forEach(c => c.classList.remove('active'));
+            const el = document.getElementById('place-' + index);
+            if (el) { el.classList.add('active'); el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+        }
 
-    async function reverseGeocode(lat, lng) {
-        try {
-            const url = 'https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lng + '&accept-language=vi';
-            const res = await fetch(url, { headers: { 'User-Agent': 'PawPals/1.0' } });
-            const data = await res.json();
-            const name = data.display_name || 'Vị trí đã chọn';
-            clearClickMarkers();
-            const icon = L.divIcon({ className: 'custom-marker end', html: '<i class="fas fa-map-pin"></i>', iconSize: [36, 36], iconAnchor: [18, 36] });
-            const marker = L.marker([lat, lng], { icon }).addTo(map).bindPopup(
-                '<strong>📍 Vị trí đã chọn</strong><br>' + name.substring(0, 80) + '...<br><br>' +
-                '<button onclick="showDirectionByLatLng(' + lat + ', ' + lng + ', \'Vị trí đã chọn\')" style="padding:6px 14px;border:none;border-radius:8px;background:#a89ce4;color:white;cursor:pointer;font-family:Fredoka,sans-serif;"><i class="fas fa-route"></i> Chỉ đường đến đây</button>'
-            ).openPopup();
-            clickMarkers.push(marker);
-        } catch (err) { console.error(err); }
-    }
+        async function reverseGeocode(lat, lng) {
+            try {
+                const url = 'https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lng + '&accept-language=vi';
+                const res = await fetch(url, { headers: { 'User-Agent': 'PawPals/1.0' } });
+                const data = await res.json();
+                const name = data.display_name || 'Vị trí đã chọn';
+                clearClickMarkers();
+                const icon = L.divIcon({ className: 'custom-marker end', html: '<i class="fas fa-map-pin"></i>', iconSize: [36, 36], iconAnchor: [18, 36] });
+                const marker = L.marker([lat, lng], { icon }).addTo(map).bindPopup(
+                    '<strong>📍 Vị trí đã chọn</strong><br>' + name.substring(0, 80) + '...<br><br>' +
+                    '<button onclick="showDirectionByLatLng(' + lat + ', ' + lng + ', \'Vị trí đã chọn\')" style="padding:6px 14px;border:none;border-radius:8px;background:#a89ce4;color:white;cursor:pointer;font-family:Fredoka,sans-serif;"><i class="fas fa-route"></i> Chỉ đường đến đây</button>'
+                ).openPopup();
+                clickMarkers.push(marker);
+            } catch (err) { console.error(err); }
+        }
 
-    function filterCategory(category, element) {
-        currentCategory = category;
-        document.querySelectorAll('.category-tag').forEach(t => t.classList.remove('active'));
-        element.classList.add('active');
-        renderPlaces(searchResults);
-    }
+        function filterCategory(category, element) {
+            currentCategory = category;
+            document.querySelectorAll('.category-tag').forEach(t => t.classList.remove('active'));
+            element.classList.add('active');
+            renderPlaces(searchResults);
+        }
 
-    function showDirection(index) {
-        const place = searchResults[index];
-        if (!place) return;
-        if (!userLocation) { alert('⚠️ Vui lòng bấm "Vị trí của tôi" trước.'); return; }
-        calculateRoute(place.lat, place.lng, place.name);
-    }
+        function showDirection(index) {
+            const place = searchResults[index];
+            if (!place) return;
+            if (!userLocation) { alert('⚠️ Vui lòng bấm "Vị trí của tôi" trước.'); return; }
+            calculateRoute(place.lat, place.lng, place.name);
+        }
 
-    function showDirectionByLatLng(lat, lng, name) {
-        if (!userLocation) { alert('⚠️ Vui lòng bấm "Vị trí của tôi" trước.'); return; }
-        calculateRoute(lat, lng, name);
-    }
+        function showDirectionByLatLng(lat, lng, name) {
+            if (!userLocation) { alert('⚠️ Vui lòng bấm "Vị trí của tôi" trước.'); return; }
+            calculateRoute(lat, lng, name);
+        }
 
-    async function calculateRoute(toLat, toLng, toName) {
-        if (!userLocation) { alert('⚠️ Vui lòng bấm "Vị trí của tôi" trước.'); return; }
-        currentDestination = { lat: toLat, lng: toLng, name: toName };
-        const panel = document.getElementById('directionPanel');
-        panel.classList.remove('hidden');
-        document.getElementById('directionSummary').textContent = '📍 Điểm đến: ' + toName;
-        document.getElementById('dirFrom').textContent = 'Vị trí của bạn';
-        document.getElementById('dirTo').textContent = toName;
-        document.getElementById('dirDistance').textContent = 'Đang tính...';
-        document.getElementById('dirDuration').textContent = 'Đang tính...';
-        document.getElementById('directionSteps').innerHTML = '<div class="loading-spinner active"><i class="fas fa-spinner"></i> Đang tìm đường...</div>';
-        try {
-            let profile = currentTransport;
-            if (currentTransport === 'walking') profile = 'foot';
-            else if (currentTransport === 'cycling') profile = 'bicycle';
-            else if (currentTransport === 'motorcycle') profile = 'driving';
-            const url = 'https://router.project-osrm.org/route/v1/' + profile + '/' + userLocation.lng + ',' + userLocation.lat + ';' + toLng + ',' + toLat + '?overview=full&geometries=geojson&steps=true&alternatives=false';
-            const response = await fetch(url);
-            const data = await response.json();
-            if (!data.routes || data.routes.length === 0) {
-                document.getElementById('directionSteps').innerHTML = '<div class="no-results">⚠️ Không tìm thấy đường đi</div>';
-                document.getElementById('dirDistance').textContent = '---';
-                document.getElementById('dirDuration').textContent = '---';
+        async function calculateRoute(toLat, toLng, toName) {
+            if (!userLocation) { alert('⚠️ Vui lòng bấm "Vị trí của tôi" trước.'); return; }
+            currentDestination = { lat: toLat, lng: toLng, name: toName };
+            const panel = document.getElementById('directionPanel');
+            panel.classList.remove('hidden');
+            document.getElementById('directionSummary').textContent = '📍 Điểm đến: ' + toName;
+            document.getElementById('dirFrom').textContent = 'Vị trí của bạn';
+            document.getElementById('dirTo').textContent = toName;
+            document.getElementById('dirDistance').textContent = 'Đang tính...';
+            document.getElementById('dirDuration').textContent = 'Đang tính...';
+            document.getElementById('directionSteps').innerHTML = '<div class="loading-spinner active"><i class="fas fa-spinner"></i> Đang tìm đường...</div>';
+            try {
+                let profile = currentTransport;
+                if (currentTransport === 'walking') profile = 'foot';
+                else if (currentTransport === 'cycling') profile = 'bicycle';
+                else if (currentTransport === 'motorcycle') profile = 'driving';
+                const url = 'https://router.project-osrm.org/route/v1/' + profile + '/' + userLocation.lng + ',' + userLocation.lat + ';' + toLng + ',' + toLat + '?overview=full&geometries=geojson&steps=true&alternatives=false';
+                const response = await fetch(url);
+                const data = await response.json();
+                if (!data.routes || data.routes.length === 0) {
+                    document.getElementById('directionSteps').innerHTML = '<div class="no-results">⚠️ Không tìm thấy đường đi</div>';
+                    document.getElementById('dirDistance').textContent = '---';
+                    document.getElementById('dirDuration').textContent = '---';
+                    return;
+                }
+                const route = data.routes[0];
+                const distanceKm = (route.distance / 1000).toFixed(1);
+                let durationMin = Math.round(route.duration / 60);
+                if (currentTransport === 'motorcycle') durationMin = Math.round(durationMin * 1.3);
+                let durationText = '';
+                if (durationMin < 60) durationText = durationMin + ' phút';
+                else { const h = Math.floor(durationMin / 60), m = durationMin % 60; durationText = h + ' giờ ' + m + ' phút'; }
+                document.getElementById('dirDistance').textContent = distanceKm + ' km';
+                document.getElementById('dirDuration').textContent = durationText;
+                const stepsContainer = document.getElementById('directionSteps');
+                stepsContainer.innerHTML = '';
+                route.legs[0].steps.forEach(step => {
+                    const instruction = step.maneuver?.instruction || step.name || 'Đi tiếp';
+                    const dist = step.distance > 1000 ? (step.distance / 1000).toFixed(1) + ' km' : Math.round(step.distance) + ' m';
+                    const div = document.createElement('div');
+                    div.className = 'direction-step';
+                    div.innerHTML = '<span class="step-icon"><i class="fas fa-arrow-right"></i></span><span>' + instruction + ' <em>(' + dist + ')</em></span>';
+                    stepsContainer.appendChild(div);
+                });
+                if (routeLine) map.removeLayer(routeLine);
+                routeLine = L.geoJSON(route.geometry, { style: { color: '#a89ce4', weight: 5, opacity: 0.85 } }).addTo(map);
+                map.fitBounds(routeLine.getBounds(), { padding: [60, 60] });
+                if (routeStartMarker) map.removeLayer(routeStartMarker);
+                if (routeEndMarker) map.removeLayer(routeEndMarker);
+                const startIcon = L.divIcon({ className: 'custom-marker start', html: '<i class="fas fa-play"></i>', iconSize: [36, 36], iconAnchor: [18, 18] });
+                const endIcon = L.divIcon({ className: 'custom-marker end', html: '<i class="fas fa-flag-checkered"></i>', iconSize: [36, 36], iconAnchor: [18, 18] });
+                routeStartMarker = L.marker([userLocation.lat, userLocation.lng], { icon: startIcon }).addTo(map);
+                routeEndMarker = L.marker([toLat, toLng], { icon: endIcon }).addTo(map);
+            } catch (err) {
+                console.error(err);
+                document.getElementById('directionSteps').innerHTML = '<div class="no-results">⚠️ Lỗi tính toán đường đi.</div>';
+            }
+        }
+
+        function clearDirection() {
+            document.getElementById('directionPanel').classList.add('hidden');
+            if (routeLine) { map.removeLayer(routeLine); routeLine = null; }
+            if (routeStartMarker) { map.removeLayer(routeStartMarker); routeStartMarker = null; }
+            if (routeEndMarker) { map.removeLayer(routeEndMarker); routeEndMarker = null; }
+            currentDestination = null;
+        }
+
+        async function searchNearby10km() {
+            if (!userLocation) { alert('⚠️ Vui lòng bấm "Vị trí của tôi" trước.'); return; }
+            const { lat, lng } = userLocation;
+            document.getElementById('searchSpinner').classList.add('active');
+            try {
+                const radius = 10000;
+                const query = `[out:json][timeout:30];(
+                    node["amenity"="veterinary"](around:${radius},${lat},${lng});
+                    node["shop"="pet"](around:${radius},${lat},${lng});
+                    node["amenity"="animal_grooming"](around:${radius},${lat},${lng});
+                    node["shop"="pet_grooming"](around:${radius},${lat},${lng});
+                    node["amenity"="animal_boarding"](around:${radius},${lat},${lng});
+                    node["leisure"="dog_park"](around:${radius},${lat},${lng});
+                    way["amenity"="veterinary"](around:${radius},${lat},${lng});
+                    way["shop"="pet"](around:${radius},${lat},${lng});
+                    way["amenity"="animal_grooming"](around:${radius},${lat},${lng});
+                    way["shop"="pet_grooming"](around:${radius},${lat},${lng});
+                    way["amenity"="animal_boarding"](around:${radius},${lat},${lng});
+                    way["leisure"="dog_park"](around:${radius},${lat},${lng});
+                );out center;`;
+                const res = await fetch('https://overpass-api.de/api/interpreter', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: 'data=' + encodeURIComponent(query)
+                });
+                const data = await res.json();
+                const elements = data.elements || [];
+                const places = elements.map(el => {
+                    const ptLat = el.lat || (el.center && el.center.lat);
+                    const ptLng = el.lon || (el.center && el.center.lon);
+                    if (!ptLat || !ptLng) return null;
+                    let cat = 'pet_store';
+                    if (el.tags) {
+                        if (el.tags.amenity === 'veterinary') cat = 'veterinary';
+                        else if (el.tags.amenity === 'animal_grooming' || el.tags.shop === 'pet_grooming') cat = 'pet_groomer';
+                        else if (el.tags.amenity === 'animal_boarding') cat = 'pet_hotel';
+                        else if (el.tags.leisure === 'dog_park') cat = 'park';
+                        else if (el.tags.shop === 'pet') cat = 'pet_store';
+                    }
+                    const dist = Math.round(Math.sqrt(Math.pow((ptLat - lat) * 111000, 2) + Math.pow((ptLng - lng) * 111000 * Math.cos(lat * Math.PI / 180), 2)));
+                    return {
+                        lat: ptLat, lng: ptLng,
+                        name: el.tags?.name || el.tags?.amenity || el.tags?.shop || el.tags?.leisure || 'Địa điểm',
+                        address: el.tags?.['addr:full'] || el.tags?.['addr:street'] || '',
+                        category: cat,
+                        dist
+                    };
+                }).filter(p => p !== null);
+
+                const unique = [], seen = new Set();
+                places.forEach(p => { const k = p.name + p.lat + p.lng; if (!seen.has(k)) { seen.add(k); unique.push(p); } });
+                const deduped = [];
+                for (const p of unique) {
+                    let tooClose = false;
+                    for (const q of deduped) { if (Math.sqrt(Math.pow(p.lat - q.lat, 2) + Math.pow(p.lng - q.lng, 2)) < 0.003) { tooClose = true; break; } }
+                    if (!tooClose) deduped.push(p);
+                }
+                deduped.sort((a, b) => a.dist - b.dist);
+                searchResults = deduped;
+                renderPlaces10km(deduped);
+                if (deduped.length > 0) map.setView([lat, lng], 13);
+            } catch (err) {
+                console.error(err);
+                document.getElementById('placeList').innerHTML = '<div class="no-results">⚠️ Lỗi tìm kiếm.</div>';
+            } finally {
+                document.getElementById('searchSpinner').classList.remove('active');
+            }
+        }
+
+        function renderPlaces10km(places) {
+            const list = document.getElementById('placeList');
+            list.innerHTML = '';
+            clearPlaceMarkers();
+            if (places.length === 0) {
+                list.innerHTML = '<div class="no-results">Không tìm thấy địa điểm nào trong 10 km</div>';
                 return;
             }
-            const route = data.routes[0];
-            const distanceKm = (route.distance / 1000).toFixed(1);
-            let durationMin = Math.round(route.duration / 60);
-            if (currentTransport === 'motorcycle') durationMin = Math.round(durationMin * 1.3);
-            let durationText = '';
-            if (durationMin < 60) durationText = durationMin + ' phút';
-            else { const h = Math.floor(durationMin / 60), m = durationMin % 60; durationText = h + ' giờ ' + m + ' phút'; }
-            document.getElementById('dirDistance').textContent = distanceKm + ' km';
-            document.getElementById('dirDuration').textContent = durationText;
-            const stepsContainer = document.getElementById('directionSteps');
-            stepsContainer.innerHTML = '';
-            route.legs[0].steps.forEach(step => {
-                const instruction = step.maneuver?.instruction || step.name || 'Đi tiếp';
-                const dist = step.distance > 1000 ? (step.distance / 1000).toFixed(1) + ' km' : Math.round(step.distance) + ' m';
-                const div = document.createElement('div');
-                div.className = 'direction-step';
-                div.innerHTML = '<span class="step-icon"><i class="fas fa-arrow-right"></i></span><span>' + instruction + ' <em>(' + dist + ')</em></span>';
-                stepsContainer.appendChild(div);
+            const header = document.createElement('div');
+            header.className = 'nearby-header';
+            header.innerHTML = '<i class="fas fa-paw"></i> ' + places.length + ' địa điểm trong 10 km';
+            list.appendChild(header);
+
+            places.forEach((place, idx) => {
+                const card = document.createElement('div');
+                card.className = 'place-card';
+                card.id = 'place-' + idx;
+                const icons = { 'veterinary': '🏥', 'pet_store': '🛒', 'pet_groomer': '💆', 'park': '🌳', 'pet_hotel': '🏨', 'search': '📍' };
+                const icon = icons[place.category] || '📍';
+                const distText = place.dist >= 1000 ? (place.dist / 1000).toFixed(1) + ' km' : place.dist + ' m';
+                const reviews = getReviewsForPlace(place);
+                let reviewsHtml = '';
+                if (reviews.length > 0) {
+                    const total = reviews.reduce((s, r) => s + r.stars, 0);
+                    const avg = (total / reviews.length).toFixed(1);
+                    let starsFull = '';
+                    for (let i = 1; i <= 5; i++) starsFull += i <= Math.round(parseFloat(avg)) ? '<i class="fas fa-star" style="color:#f1c40f;font-size:12px;"></i>' : '<i class="far fa-star" style="color:#ddd;font-size:12px;"></i>';
+                    reviewsHtml = '<div class="place-rating">' + starsFull + ' <span style="font-weight:600;">' + avg + '</span></div>';
+                } else {
+                    reviewsHtml = '<div class="place-rating" style="color:#ccc;">Chưa có đánh giá</div>';
+                }
+                card.innerHTML =
+                    '<div class="place-name">' + icon + ' ' + place.name + ' <span class="place-dist">📏 ' + distText + '</span></div>' +
+                    '<div class="place-address">' + (place.address || '') + '</div>' +
+                    reviewsHtml +
+                    '<div class="place-actions">' +
+                    '<button class="btn-direction" onclick="event.stopPropagation(); showDirection(' + idx + ')"><i class="fas fa-route"></i> Chỉ đường</button>' +
+                    '<button class="btn-view" onclick="event.stopPropagation(); flyToPlace(' + place.lat + ', ' + place.lng + ', \'' + place.name.replace(/'/g, "\\'") + '\', ' + idx + ')"><i class="fas fa-eye"></i> Xem</button>' +
+                    '</div>';
+                card.onclick = () => flyToPlace(place.lat, place.lng, place.name, idx);
+                list.appendChild(card);
+                addPlaceMarker(place.lat, place.lng, place.name, idx, place.category);
             });
-            if (routeLine) map.removeLayer(routeLine);
-            routeLine = L.geoJSON(route.geometry, { style: { color: '#a89ce4', weight: 5, opacity: 0.85 } }).addTo(map);
-            map.fitBounds(routeLine.getBounds(), { padding: [60, 60] });
-            if (routeStartMarker) map.removeLayer(routeStartMarker);
-            if (routeEndMarker) map.removeLayer(routeEndMarker);
-            const startIcon = L.divIcon({ className: 'custom-marker start', html: '<i class="fas fa-play"></i>', iconSize: [36, 36], iconAnchor: [18, 18] });
-            const endIcon = L.divIcon({ className: 'custom-marker end', html: '<i class="fas fa-flag-checkered"></i>', iconSize: [36, 36], iconAnchor: [18, 18] });
-            routeStartMarker = L.marker([userLocation.lat, userLocation.lng], { icon: startIcon }).addTo(map);
-            routeEndMarker = L.marker([toLat, toLng], { icon: endIcon }).addTo(map);
-        } catch (err) {
-            console.error(err);
-            document.getElementById('directionSteps').innerHTML = '<div class="no-results">⚠️ Lỗi tính toán đường đi.</div>';
         }
-    }
 
-    function clearDirection() {
-        document.getElementById('directionPanel').classList.add('hidden');
-        if (routeLine) { map.removeLayer(routeLine); routeLine = null; }
-        if (routeStartMarker) { map.removeLayer(routeStartMarker); routeStartMarker = null; }
-        if (routeEndMarker) { map.removeLayer(routeEndMarker); routeEndMarker = null; }
-        currentDestination = null;
-    }
-
-    document.addEventListener('DOMContentLoaded', function() { initMap(); getMyLocation(); });
-</script>
+        document.addEventListener('DOMContentLoaded', function () { initMap(); getMyLocation(); });
+    </script>
 </body>
+
 </html>

@@ -81,6 +81,46 @@ body {
 }
 
 /* ===== MY LOCATION BUTTON ===== */
+.nearby-btn {
+    width: 100%;
+    padding: 10px;
+    background: linear-gradient(135deg, #f093fb, #f5576c);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-size: 14px;
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 8px;
+    transition: opacity 0.3s;
+}
+
+.nearby-btn:hover {
+    opacity: 0.9;
+}
+
+.nearby-header {
+    background: linear-gradient(135deg, #f093fb22, #f5576c22);
+    border: 1px solid #f5576c44;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #c0392b;
+    margin-bottom: 8px;
+}
+
+.place-dist {
+    font-size: 11px;
+    color: #999;
+    font-weight: 400;
+    margin-left: 4px;
+}
+
 .my-location-btn {
     width: 100%;
     padding: 12px;
