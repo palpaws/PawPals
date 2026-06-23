@@ -11,8 +11,7 @@
     <nav class="navbar">
         <a th:href="@{/}">Trang Chủ</a>
 
-        <a th:href="@{/calendar}">Lịch</a>
-        <a th:href="@{/map}">Bản đồ</a>
+        <a th:if="${session != null and session.currentUser != null}" th:href="@{/calendar}">Lịch</a>
         <a th:href="@{/pet-match}">Ghép đôi</a>
         <a th:href="@{/base-profile}">Bạn&Bé</a>
         <a th:href="@{/community}">Cộng Đồng</a>
