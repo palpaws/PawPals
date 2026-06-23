@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="PawPals Community – Share stories, tips and connect with fellow pet lovers.">
-    <title>Community Feed - PawPals</title>
+    <meta name="description" content="Cộng đồng PawPals – Chia sẻ câu chuyện, mẹo hay và kết nối với những người yêu thú cưng.">
+    <title>Bảng tin cộng đồng - PawPals</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link rel="stylesheet" th:href="@{/header.css}">
@@ -20,14 +20,14 @@
         <div class="community-hero d-flex justify-content-between align-items-center flex-wrap gap-3">
             <div>
                 <h1 class="community-title">
-                    <i class="bi bi-people-fill"></i> Community Feed
+                    <i class="bi bi-people-fill"></i> Bảng tin cộng đồng
                 </h1>
                 <p class="mb-0 mt-1" style="color: rgba(29,61,57,0.65); font-size: 0.95rem; font-weight:500;">
-                    Connect, share, and learn with fellow pet lovers &#x1F43E;
+                    Kết nối, chia sẻ và học hỏi cùng những người yêu thú cưng &#x1F43E;
                 </p>
             </div>
             <a th:if="${currentUser != null}" href="/community/create" class="btn-create-post">
-                <i class="bi bi-plus-lg"></i> Create Post
+                <i class="bi bi-plus-lg"></i> Tạo bài viết
             </a>
         </div>
 
@@ -35,13 +35,13 @@
         <form class="mb-4 d-flex align-items-center gap-2" method="get" action="/community">
             <div class="input-group search-glass flex-grow-1">
                 <input type="text" class="form-control" name="keyword" id="searchInput"
-                       placeholder="Search posts by title..." th:value="${keyword}">
+                       placeholder="Tìm kiếm bài viết theo tiêu đề..." th:value="${keyword}">
                 <button class="btn-search" type="submit">
-                    <i class="bi bi-search"></i> Search
+                    <i class="bi bi-search"></i> Tìm kiếm
                 </button>
             </div>
             <a th:if="${keyword != null and !#strings.isEmpty(keyword)}" href="/community" class="btn-clear-search">
-                <i class="bi bi-x-lg"></i> Clear
+                <i class="bi bi-x-lg"></i> Xóa
             </a>
         </form>
 
@@ -60,9 +60,9 @@
         <!-- Posts List -->
         <div th:if="${#lists.isEmpty(posts)}" class="empty-state">
             <i class="bi bi-journal-text"></i>
-            <p class="mb-1" style="font-weight:600;">No posts found.</p>
+            <p class="mb-1" style="font-weight:600;">Không tìm thấy bài viết nào.</p>
             <p th:if="${keyword != null and !#strings.isEmpty(keyword)}" style="font-size:0.9rem;">
-                Try a different keyword or <a href="/community" style="color:#ea7da3;">clear the search</a>.
+                Thử từ khóa khác hoặc <a href="/community" style="color:#ea7da3;">xóa tìm kiếm</a>.
             </p>
         </div>
 
@@ -93,16 +93,16 @@
                         <div class="d-flex align-items-center gap-3">
                             <span class="badge bg-light">
                                 <i class="bi bi-heart-fill text-danger"></i>
-                                <span th:text="${post.likeCount}"></span> likes
+                                <span th:text="${post.likeCount}"></span> lượt thích
                             </span>
                             <span class="badge bg-light">
                                 <i class="bi bi-chat-fill" style="color:#5d6fd6;"></i>
-                                <span th:text="${post.commentCount}"></span> comments
+                                <span th:text="${post.commentCount}"></span> bình luận
                             </span>
                             <a th:href="@{/community/post/{id}(id=${post.postId})}"
                                class="ms-auto btn btn-sm"
                                style="background:rgba(234,125,163,0.12); color:#ea7da3; border:1.5px solid rgba(234,125,163,0.30); border-radius:50px; font-weight:600; font-family:'Baloo 2',cursive;">
-                                Read more <i class="bi bi-arrow-right"></i>
+                                Đọc thêm <i class="bi bi-arrow-right"></i>
                             </a>
                         </div>
                     </div>
@@ -172,8 +172,8 @@
                 </ul>
             </nav>
             <p class="pagination-info">
-                Page <strong th:text="${currentPage + 1}"></strong> of <strong th:text="${totalPages}"></strong>
-                &nbsp;&middot;&nbsp; <span th:text="${totalItems}"></span> posts total
+                Trang <strong th:text="${currentPage + 1}"></strong> / <strong th:text="${totalPages}"></strong>
+                &nbsp;&middot;&nbsp; <span th:text="${totalItems}"></span> bài viết
             </p>
         </div>
 

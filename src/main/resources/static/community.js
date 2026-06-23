@@ -69,7 +69,7 @@ function toggleLike(postId) {
 
 function submitComment(postId) {
     var content = document.getElementById('commentContent').value.trim();
-    if (!content) { alert('Please enter a comment'); return; }
+    if (!content) { alert('Vui lòng nhập bình luận'); return; }
 
     fetch('/community/post/' + postId + '/comment', {
         method: 'POST',
@@ -112,7 +112,7 @@ function submitReply(commentId) {
     var replyInput = document.querySelector('.reply-input[data-comment-id="' + commentId + '"]');
     if (!replyInput) return;
     var content = replyInput.value.trim();
-    if (!content) { alert('Please enter a reply'); return; }
+    if (!content) { alert('Vui lòng nhập câu trả lời'); return; }
 
     fetch('/community/comment/' + commentId + '/reply', {
         method: 'POST',
@@ -138,10 +138,10 @@ function renderAllComments(comments) {
     var container = document.getElementById('commentsSection');
     var commentCountSpan = document.getElementById('commentCount');
 
-    var html = '<h5><i class="bi bi-chat-square-text"></i> Comments</h5>';
+    var html = '<h5><i class="bi bi-chat-square-text"></i> Bình luận</h5>';
 
     if (comments.length === 0) {
-        html += '<div class="text-muted text-center py-3">No comments yet. Be the first to comment!</div>';
+        html += '<div class="text-muted text-center py-3">Chưa có bình luận nào. Hãy là người đầu tiên bình luận!</div>';
     } else {
         // Root comments pass isRoot=true
         comments.forEach(function(c) {
@@ -166,11 +166,11 @@ function renderCommentHtml(comment, isRoot) {
     html += '</div>';
     html += '<p class="mb-1">' + escapeHtml(comment.content) + '</p>';
     html += '<button class="btn btn-sm btn-link p-0 reply-toggle-btn" data-comment-id="' + comment.commentId + '" style="font-size: 0.85rem; color: #65676b; text-decoration: none;">';
-    html += '<i class="bi bi-reply"></i> Reply</button>';
+    html += '<i class="bi bi-reply"></i> Trả lời</button>';
     html += '<div class="reply-form mt-2" style="display:none;" id="replyForm-' + comment.commentId + '">';
     html += '<div class="input-group input-group-sm">';
-    html += '<input type="text" class="form-control reply-input" placeholder="Write a reply..." data-comment-id="' + comment.commentId + '">';
-    html += '<button class="btn btn-primary btn-sm reply-submit-btn" data-comment-id="' + comment.commentId + '">Reply</button>';
+    html += '<input type="text" class="form-control reply-input" placeholder="Viết câu trả lời..." data-comment-id="' + comment.commentId + '">';
+    html += '<button class="btn btn-primary btn-sm reply-submit-btn" data-comment-id="' + comment.commentId + '">Trả lời</button>';
     html += '</div></div></div></div>';
 
     // Only root comments get the show/hide toggle for replies
