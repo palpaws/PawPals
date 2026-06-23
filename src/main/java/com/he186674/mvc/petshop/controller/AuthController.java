@@ -3,14 +3,24 @@ package com.he186674.mvc.petshop.controller;
 import com.he186674.mvc.petshop.entities.User;
 import com.he186674.mvc.petshop.service.UserService;
 import com.he186674.mvc.petshop.service.impl.CalendarNotificationService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Random;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Map;
 
 @Controller
 public class AuthController {
@@ -213,6 +223,74 @@ public class AuthController {
     @GetMapping("/reset-success")
     public String resetSuccessPage() {
         return "ResetSuccess";
+    }
+
+    @PostMapping("/login/google")
+    @ResponseBody
+    public ResponseEntity<?> handleGoogleLogin(
+            @RequestParam("credential") String credential,
+            HttpSession session) {
+
+        try {
+            // Xác thực Google ID token bằng cách gọi Google API
+            URL url = new URL("https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=" + credential);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+
+            int responseCode = conn.getResponseCode();
+            if (responseCode != 200) {
+                return ResponseEntity.badRequest().body(Map.of("error", "Token Google không hợp lệ."));
+            }
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            StringBuilder responseBody = new StringBuilder();
+            String line;
+            while ((line = in.readLine()) != null) {
+                responseBody.append(line);
+            }
+            in.close();
+
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, Object> tokenInfo = mapper.readValue(responseBody.toString(), Map.class);
+
+            String email = (String) tokenInfo.get("email");
+            String name = (String) tokenInfo.get("name");
+
+            if (email == null || email.isEmpty()) {
+                return ResponseEntity.badRequest().body(Map.of("error", "Không thể lấy email từ tài khoản Google."));
+            }
+
+            // Kiểm tra email đã có tài khoản chưa
+            User user = userService.findByEmail(email);
+
+            if (user == null) {
+                // Email chưa đăng ký → tự động tạo tài khoản mới
+                try {
+                    user = userService.registerWithGoogle(name != null ? name : email.split("@")[0], email);
+                } catch (Exception e) {
+                    return ResponseEntity.badRequest().body(Map.of("error", "Không thể tạo tài khoản từ Google: " + e.getMessage()));
+                }
+            }
+
+            // Kiểm tra tài khoản active
+            if (user.getIsActive() == null || !user.getIsActive()) {
+                return ResponseEntity.badRequest().body(Map.of("error", "Tài khoản đã bị khóa."));
+            }
+
+            session.setAttribute("currentUser", user);
+            calendarNotificationService.generateReminderNotifications(user.getUserId());
+
+            // Phân quyền - trả về redirect URL để frontend xử lý
+            String redirectUrl = "/";
+            if ("ADMIN".equalsIgnoreCase(user.getRole())) {
+                redirectUrl = "/admin/payments";
+            }
+
+            return ResponseEntity.ok(Map.of("success", true, "redirect", redirectUrl));
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Lỗi đăng nhập Google: " + e.getMessage()));
+        }
     }
 
     @GetMapping("/error-404")

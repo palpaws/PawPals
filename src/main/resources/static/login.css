@@ -300,6 +300,42 @@ body{
     transform:scale(0.98);
 }
 
+/* ===== Divider ===== */
+.divider {
+    display: flex;
+    align-items: center;
+    margin: 22px 0;
+    gap: 12px;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: rgba(200, 200, 220, 0.5);
+}
+
+.divider span {
+    font-size: 13px;
+    font-weight: 700;
+    color: #9a9a9a;
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ===== Google Sign-In wrapper ===== */
+.g_id_signin {
+    display: flex;
+    justify-content: center;
+    margin-top: 4px;
+}
+
+.g_id_signin > div {
+    margin: 0 auto;
+}
+
 .register-text{
     margin-top:22px;
 

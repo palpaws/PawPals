@@ -90,11 +90,7 @@
 
 
 </span>
-        <a th:href="@{/logout}">
-            <button class="top-btn" style="background: linear-gradient(135deg,#ff7e5f,#feb47b); box-shadow: 0 8px 18px rgba(255,126,95,0.35);">
-                Đăng xuất
-            </button>
-        </a>
+
     </div>
     
     <div th:if="${session == null or session.currentUser == null}" style="display: flex; align-items: center; gap: 20px;">

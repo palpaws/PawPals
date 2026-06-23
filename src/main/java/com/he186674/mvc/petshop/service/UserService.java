@@ -14,4 +14,7 @@ public interface UserService {
                        String fullName,
                        String phone,
                        String address);
+
+    // Đăng ký nhanh từ Google - không cần password, tự tạo fullName từ email
+    User registerWithGoogle(String fullName, String email);
 }

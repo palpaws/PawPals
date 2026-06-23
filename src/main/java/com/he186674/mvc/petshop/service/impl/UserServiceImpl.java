@@ -225,7 +225,31 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
     }
+    @Override
+    public User registerWithGoogle(String fullName, String email) {
+        if (fullName == null || fullName.trim().isEmpty()) {
+            fullName = email.split("@")[0]; // fallback: lấy phần trước @
+        }
+        if (email == null || email.trim().isEmpty()) {
+            throw new IllegalArgumentException("Email không được để trống.");
+        }
+        if (userRepository.existsByEmail(email.trim())) {
+            throw new IllegalArgumentException("Email đã được sử dụng.");
+        }
 
+        User user = new User();
+        user.setFullName(fullName.trim());
+        user.setEmail(email.trim());
+        // Tạo password ngẫu nhiên vì user đăng nhập bằng Google, không cần password
+        user.setPasswordHash(passwordEncoder.encode(UUID.randomUUID().toString()));
+        user.setRole("USER");
+        user.setIsActive(true);
+        user.setCurrentStreak(0);
+        user.setLongestStreak(0);
+        user.setCreatedAt(LocalDateTime.now());
+
+        return userRepository.save(user);
+    }
 
     @Override
     public User updateProfile(Integer userId,

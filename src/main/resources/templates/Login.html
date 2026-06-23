@@ -16,6 +16,7 @@
     <!-- HEADER CSS -->
     <link rel="stylesheet" th:href="@{/header.css}">
     <div th:replace="fragments/google-analytics :: googleAnalytics"></div>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 
 <body>
@@ -102,6 +103,14 @@
 
             </form>
 
+            <div class="divider">
+                <span>hoặc tiếp tục với</span>
+            </div>
+
+            <div id="googleButton" class="google-btn-wrapper">
+                <!-- Google button will be rendered here by JS -->
+            </div>
+
             <p class="register-text">
 
                 Bạn chưa có tài khoản?
@@ -119,6 +128,61 @@
 </div>
 
 <script>
+    // ===== Google Sign-In callback =====
+    function handleGoogleCredential(response) {
+        if (!response || !response.credential) {
+            alert('Lỗi đăng nhập Google. Vui lòng thử lại.');
+            return;
+        }
+
+        // Show loading state
+        const wrapper = document.getElementById('googleButton');
+        if (wrapper) {
+            wrapper.style.opacity = '0.5';
+            wrapper.style.pointerEvents = 'none';
+        }
+
+        // Send credential to backend
+        fetch('/login/google', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'credential=' + encodeURIComponent(response.credential)
+        })
+        .then(function(res) {
+            if (res.ok) return res.json();
+            return res.json().then(function(data) {
+                throw new Error(data.error || 'Đăng nhập Google thất bại');
+            });
+        })
+        .then(function(data) {
+            if (data && data.success) {
+                window.location.href = data.redirect || '/';
+            }
+        })
+        .catch(function(err) {
+            alert(err.message);
+            if (wrapper) {
+                wrapper.style.opacity = '1';
+                wrapper.style.pointerEvents = 'auto';
+            }
+        });
+    }
+
+    // ===== Initialize Google button when GSI loads =====
+    function initGoogleSignIn() {
+        if (typeof google !== 'undefined' && google.accounts) {
+            google.accounts.id.initialize({
+                client_id: '209721092643-gcdtu1jktv4uhiklff2k6o2l5obrf5e7.apps.googleusercontent.com',
+                callback: handleGoogleCredential
+            });
+            google.accounts.id.renderButton(
+                document.getElementById('googleButton'),
+                { type: 'standard', shape: 'rectangular', theme: 'outline', text: 'signin_with', size: 'large', width: 300 }
+            );
+        }
+    }
+
+    // ===== Password toggle =====
     function togglePasswordVisibility(inputId, toggleEl) {
         const input = document.getElementById(inputId);
         const icon = toggleEl.querySelector('i');
@@ -133,11 +197,11 @@
         }
     }
 
+    // ===== Remember email =====
     const emailInput = document.getElementById('emailInput');
     const rememberCheckbox = document.getElementById('rememberCheckbox');
 
-    // Load remembered email on page load
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', function() {
         const savedEmail = localStorage.getItem('rememberedEmail');
         if (savedEmail) {
             emailInput.value = savedEmail;
@@ -145,8 +209,7 @@
         }
     });
 
-    // Save email when checkbox is checked/unchecked
-    rememberCheckbox.addEventListener('change', () => {
+    rememberCheckbox.addEventListener('change', function() {
         if (rememberCheckbox.checked && emailInput.value) {
             localStorage.setItem('rememberedEmail', emailInput.value);
         } else {
@@ -154,12 +217,21 @@
         }
     });
 
-    // Update saved email when email input changes
-    emailInput.addEventListener('change', () => {
+    emailInput.addEventListener('change', function() {
         if (rememberCheckbox.checked && emailInput.value) {
             localStorage.setItem('rememberedEmail', emailInput.value);
         }
     });
+
+    // Initialize Google Sign-In with polling until GSI is ready
+    function waitForGoogleAndInit() {
+        if (typeof google !== 'undefined' && google.accounts) {
+            initGoogleSignIn();
+        } else {
+            setTimeout(waitForGoogleAndInit, 200);
+        }
+    }
+    waitForGoogleAndInit();
 </script>
 
 </body>
