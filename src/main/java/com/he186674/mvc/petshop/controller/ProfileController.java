@@ -1,6 +1,8 @@
 package com.he186674.mvc.petshop.controller;
 
+import com.he186674.mvc.petshop.entities.BlogPost;
 import com.he186674.mvc.petshop.entities.User;
+import com.he186674.mvc.petshop.service.CommunityService;
 import com.he186674.mvc.petshop.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +13,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 @Controller
 public class ProfileController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CommunityService communityService;
 
     @GetMapping("/profile")
     public String profile(
@@ -29,7 +36,10 @@ public class ProfileController {
             return "redirect:/login";
         }
 
+        List<BlogPost> myPosts = communityService.getPostsByAuthor(currentUser.getUserId());
+
         model.addAttribute("user", currentUser);
+        model.addAttribute("myPosts", myPosts);
 
         return "profile";
     }

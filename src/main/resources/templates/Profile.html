@@ -51,7 +51,7 @@
                 Thông Báo
             </a>
 
-            <a href="#">
+            <a href="#my-posts">
                 <i class="fa-regular fa-file-lines"></i>
                 Bài Viết Của Tôi
             </a>
@@ -292,6 +292,79 @@
             </div>
             </form>
 
+        </section>
+
+        <!-- MY POSTS SECTION -->
+        <section id="my-posts" style="margin-top: 30px;">
+            <h2 style="color:#143f38; font-weight:800; margin-bottom:16px;">
+                <i class="fa-regular fa-file-lines"></i> Bài Viết Của Tôi
+            </h2>
+
+            <div th:if="${#lists.isEmpty(myPosts)}"
+                 style="background:white; border-radius:12px; padding:40px; text-align:center; color:#888; box-shadow:0 4px 15px rgba(0,0,0,0.06);">
+                <i class="fa-regular fa-file-lines" style="font-size:2.5rem; margin-bottom:12px; display:block;"></i>
+                <p>Bạn chưa có bài viết nào.</p>
+                <a th:href="@{/community/create}"
+                   style="display:inline-block; margin-top:10px; padding:10px 20px; background:#143f38; color:white; border-radius:8px; text-decoration:none; font-weight:700;">
+                    Tạo bài viết đầu tiên
+                </a>
+            </div>
+
+            <div th:unless="${#lists.isEmpty(myPosts)}"
+                 style="background:white; border-radius:12px; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.06);">
+                <table style="width:100%; border-collapse:collapse;">
+                    <thead>
+                        <tr style="background:#143f38; color:white;">
+                            <th style="padding:12px 16px; text-align:left;">Tiêu đề</th>
+                            <th style="padding:12px 16px; text-align:center;">Trạng thái</th>
+                            <th style="padding:12px 16px; text-align:center;">Ngày đăng</th>
+                            <th style="padding:12px 16px; text-align:center;">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="post : ${myPosts}"
+                            style="border-bottom:1px solid #eee;">
+                            <td style="padding:12px 16px; font-weight:600; color:#143f38;"
+                                th:text="${post.title}"></td>
+                            <td style="padding:12px 16px; text-align:center;">
+                                <span th:if="${post.status == 'DRAFT'}"
+                                      style="background:#fff3cd; color:#856404; padding:4px 12px; border-radius:20px; font-size:13px; font-weight:700;">
+                                    ⏳ Chờ duyệt
+                                </span>
+                                <span th:if="${post.status == 'PUBLISHED'}"
+                                      style="background:#d4edda; color:#155724; padding:4px 12px; border-radius:20px; font-size:13px; font-weight:700;">
+                                    ✅ Đã duyệt
+                                </span>
+                                <span th:if="${post.status == 'HIDDEN'}"
+                                      style="background:#f8d7da; color:#721c24; padding:4px 12px; border-radius:20px; font-size:13px; font-weight:700;">
+                                    ❌ Không được duyệt
+                                </span>
+                            </td>
+                            <td style="padding:12px 16px; text-align:center; color:#888; font-size:13px;"
+                                th:text="${#temporals.format(post.createdAt, 'dd/MM/yyyy HH:mm')}"></td>
+                            <td style="padding:12px 16px; text-align:center;">
+                                <a th:if="${post.status == 'PUBLISHED'}"
+                                   th:href="@{/community/post/{id}(id=${post.postId})}"
+                                   style="padding:6px 12px; background:#17a2b8; color:white; border-radius:6px; text-decoration:none; font-size:13px; font-weight:700; margin-right:4px;">
+                                    <i class="fa-solid fa-eye"></i> Xem
+                                </a>
+                                <a th:if="${post.status != 'HIDDEN'}"
+                                   th:href="@{/community/edit/{id}(id=${post.postId})}"
+                                   style="padding:6px 12px; background:#ffc107; color:#333; border-radius:6px; text-decoration:none; font-size:13px; font-weight:700; margin-right:4px;">
+                                    <i class="fa-solid fa-pen"></i> Sửa
+                                </a>
+                                <form th:action="@{/community/delete/{id}(id=${post.postId})}" method="post" style="display:inline;">
+                                    <button type="submit"
+                                            onclick="return confirm('Xóa bài viết này?')"
+                                            style="padding:6px 12px; background:#dc3545; color:white; border:none; border-radius:6px; font-size:13px; font-weight:700; cursor:pointer;">
+                                        <i class="fa-solid fa-trash"></i> Xóa
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </section>
 
     </main>

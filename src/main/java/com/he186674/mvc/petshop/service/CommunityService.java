@@ -10,6 +10,14 @@ public interface CommunityService {
 
     Page<FeedDto> getFeed(String keyword, int page, int size);
 
+    List<BlogPost> getPostsByAuthor(Integer authorId);
+
+    Page<BlogPost> getDraftPosts(int page, int size);
+
+    void approvePost(Integer postId);
+
+    void rejectPost(Integer postId);
+
     PostDetailDto getPostDetail(Integer postId, Integer currentUserId);
 
     List<CommentTreeDto> getCommentTree(Integer postId);

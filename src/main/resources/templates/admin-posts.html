@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duyệt Bài Viết - PawPals</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Work+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+    <link rel="stylesheet" th:href="@{/header.css}">
+    <link rel="stylesheet" th:href="@{/footer.css}">
+    <div th:replace="fragments/google-analytics :: googleAnalytics"></div>
+
+    <style>
+        body {
+            font-family: 'Work Sans', sans-serif;
+            background: #f7f8fc;
+        }
+
+        .admin-hero {
+            background: linear-gradient(135deg, #143f38 0%, #1d6b5e 60%, #eb6f99 100%);
+            padding: 48px 0 36px;
+            text-align: center;
+            color: white;
+        }
+
+        .admin-hero h1 {
+            font-family: 'Baloo 2', cursive;
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .admin-hero p {
+            font-size: 1rem;
+            opacity: 0.85;
+        }
+
+        .admin-nav {
+            background: white;
+            border-bottom: 2px solid #f0f0f0;
+            padding: 0 24px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .admin-nav a {
+            padding: 14px 20px;
+            text-decoration: none;
+            color: #555;
+            font-weight: 600;
+            font-size: 14px;
+            border-bottom: 3px solid transparent;
+            transition: 0.2s;
+        }
+
+        .admin-nav a.active, .admin-nav a:hover {
+            color: #143f38;
+            border-bottom-color: #143f38;
+        }
+
+        .admin-content {
+            max-width: 1200px;
+            margin: 32px auto;
+            padding: 0 20px;
+        }
+
+        .alert-success-custom {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            border-radius: 10px;
+            padding: 14px 18px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .posts-table-wrapper {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+        }
+
+        .posts-table-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .posts-table-header h2 {
+            font-family: 'Baloo 2', cursive;
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #143f38;
+            margin: 0;
+        }
+
+        .total-badge {
+            background: rgba(20,63,56,0.1);
+            color: #143f38;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead th {
+            background: #f8f9fa;
+            color: #555;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 12px 16px;
+            border-bottom: 2px solid #eee;
+            text-align: left;
+        }
+
+        tbody td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #f5f5f5;
+            vertical-align: middle;
+        }
+
+        tbody tr:last-child td { border-bottom: none; }
+
+        tbody tr:hover td { background: #fafafa; }
+
+        .post-title-cell {
+            font-weight: 700;
+            color: #143f38;
+            font-size: 15px;
+            max-width: 280px;
+        }
+
+        .post-excerpt {
+            color: #888;
+            font-size: 12px;
+            margin-top: 3px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 280px;
+        }
+
+        .author-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .author-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #143f38, #eb6f99);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .author-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .date-cell {
+            color: #888;
+            font-size: 13px;
+        }
+
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            display: inline-block;
+        }
+
+        .status-DRAFT { background: #fff3cd; color: #856404; }
+        .status-PUBLISHED { background: #d4edda; color: #155724; }
+        .status-HIDDEN { background: #f8d7da; color: #721c24; }
+
+        .action-btns {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: 0.2s;
+        }
+
+        .btn-view { background: rgba(23,162,184,0.12); color: #17a2b8; }
+        .btn-view:hover { background: #17a2b8; color: white; }
+
+        .btn-approve { background: rgba(40,167,69,0.12); color: #28a745; }
+        .btn-approve:hover { background: #28a745; color: white; }
+
+        .btn-reject { background: rgba(220,53,69,0.12); color: #dc3545; }
+        .btn-reject:hover { background: #dc3545; color: white; }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: #aaa;
+        }
+
+        .empty-state i {
+            font-size: 3.5rem;
+            margin-bottom: 16px;
+            display: block;
+            color: #ddd;
+        }
+
+        .empty-state p {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .pagination-wrapper {
+            padding: 20px 24px;
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .pagination-wrapper a,
+        .pagination-wrapper span {
+            padding: 8px 14px;
+            border-radius: 8px;
+            background: #f8f9fa;
+            border: 1px solid #eee;
+            text-decoration: none;
+            color: #143f38;
+            font-weight: 600;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .pagination-wrapper a:hover { background: #143f38; color: white; border-color: #143f38; }
+
+        .pagination-wrapper span.active {
+            background: #143f38;
+            color: white;
+            border-color: #143f38;
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="fragments/header :: header"></div>
+
+<!-- HERO -->
+<div class="admin-hero">
+    <h1><i class="fa-solid fa-file-circle-check"></i> Duyệt Bài Viết</h1>
+    <p>Quản lý và kiểm duyệt bài viết từ cộng đồng PawPals</p>
+</div>
+
+<!-- ADMIN NAV -->
+<div class="admin-nav">
+    <a th:href="@{/admin/posts}" class="active">
+        <i class="bi bi-file-earmark-check"></i> Duyệt bài viết
+    </a>
+    <a th:href="@{/admin/payments}">
+        <i class="bi bi-credit-card"></i> Quản lý thanh toán
+    </a>
+    <a th:href="@{/community}">
+        <i class="bi bi-people"></i> Xem cộng đồng
+    </a>
+</div>
+
+<!-- CONTENT -->
+<div class="admin-content">
+
+    <div th:if="${success}" class="alert-success-custom">
+        <i class="fa-solid fa-circle-check"></i>
+        <span th:text="${success}"></span>
+    </div>
+
+    <div class="posts-table-wrapper">
+        <div class="posts-table-header">
+            <h2><i class="bi bi-clock-history me-2"></i>Bài viết chờ duyệt</h2>
+            <span class="total-badge" th:text="${totalItems} + ' bài viết'"></span>
+        </div>
+
+        <div th:if="${#lists.isEmpty(posts)}" class="empty-state">
+            <i class="bi bi-check2-circle"></i>
+            <p>Không có bài viết nào đang chờ duyệt.</p>
+        </div>
+
+        <table th:unless="${#lists.isEmpty(posts)}">
+            <thead>
+                <tr>
+                    <th>Bài viết</th>
+                    <th>Tác giả</th>
+                    <th>Ngày đăng</th>
+                    <th>Trạng thái</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="post : ${posts}">
+                    <td>
+                        <div class="post-title-cell" th:text="${post.title}"></div>
+                        <div class="post-excerpt"
+                             th:if="${post.content != null}"
+                             th:text="${#strings.length(post.content) > 100 ? #strings.substring(post.content, 0, 100) + '...' : post.content}">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="author-cell">
+                            <div class="author-avatar"
+                                 th:text="${#strings.substring(post.author.fullName, 0, 1)}"></div>
+                            <span class="author-name" th:text="${post.author.fullName}"></span>
+                        </div>
+                    </td>
+                    <td class="date-cell">
+                        <i class="bi bi-clock me-1"></i>
+                        <span th:text="${#temporals.format(post.createdAt, 'dd/MM/yyyy HH:mm')}"></span>
+                    </td>
+                    <td>
+                        <span class="status-badge"
+                              th:classappend="'status-' + ${post.status}"
+                              th:text="${post.status == 'DRAFT' ? 'Chờ duyệt' : (post.status == 'PUBLISHED' ? 'Đã duyệt' : 'Từ chối')}">
+                        </span>
+                    </td>
+                    <td>
+                        <div class="action-btns">
+                            <a th:href="@{/community/post/{id}(id=${post.postId})}"
+                               class="btn-action btn-view" target="_blank">
+                                <i class="bi bi-eye"></i> Xem
+                            </a>
+                            <form th:action="@{/admin/posts/approve/{id}(id=${post.postId})}" method="post" style="display:inline;">
+                                <button type="submit" class="btn-action btn-approve">
+                                    <i class="bi bi-check-lg"></i> Duyệt
+                                </button>
+                            </form>
+                            <form th:action="@{/admin/posts/reject/{id}(id=${post.postId})}" method="post" style="display:inline;">
+                                <button type="submit" class="btn-action btn-reject"
+                                        onclick="return confirm('Bạn có chắc muốn từ chối bài viết này?')">
+                                    <i class="bi bi-x-lg"></i> Từ chối
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div th:if="${totalPages > 1}" class="pagination-wrapper">
+            <a th:if="${currentPage > 0}" th:href="@{/admin/posts(page=${currentPage - 1})}">
+                <i class="bi bi-chevron-left"></i>
+            </a>
+            <th:block th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                <a th:if="${i != currentPage}" th:href="@{/admin/posts(page=${i})}" th:text="${i + 1}"></a>
+                <span th:if="${i == currentPage}" class="active" th:text="${i + 1}"></span>
+            </th:block>
+            <a th:if="${currentPage < totalPages - 1}" th:href="@{/admin/posts(page=${currentPage + 1})}">
+                <i class="bi bi-chevron-right"></i>
+            </a>
+        </div>
+    </div>
+
+</div>
+
+<div th:replace="fragments/footer :: footer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

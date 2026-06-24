@@ -2,6 +2,7 @@ package com.he186674.mvc.petshop.controller;
 
 import com.he186674.mvc.petshop.dto.*;
 import com.he186674.mvc.petshop.entities.BlogCategory;
+import com.he186674.mvc.petshop.entities.BlogPost;
 import com.he186674.mvc.petshop.entities.User;
 import com.he186674.mvc.petshop.repository.BlogCategoryRepository;
 import com.he186674.mvc.petshop.repository.BlogCommentRepository;
@@ -133,6 +134,13 @@ public class CommunityController {
         PostDetailDto post = communityService.getPostDetail(postId, currentUser.getUserId());
         if (!post.getAuthorId().equals(currentUser.getUserId()) && !"ADMIN".equals(currentUser.getRole())) {
             return "redirect:/community";
+        }
+
+        // Không cho sửa bài đã bị từ chối (HIDDEN)
+        BlogPost rawPost = communityService.getPostsByAuthor(post.getAuthorId())
+                .stream().filter(p -> p.getPostId().equals(postId)).findFirst().orElse(null);
+        if (rawPost != null && "HIDDEN".equals(rawPost.getStatus()) && !"ADMIN".equals(currentUser.getRole())) {
+            return "redirect:/profile";
         }
 
         List<BlogCategory> categories = blogCategoryRepository.findAll();

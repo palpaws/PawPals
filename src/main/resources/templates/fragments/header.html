@@ -17,6 +17,15 @@
         <a th:href="@{/community}">Cộng Đồng</a>
     </nav>
 
+    <!-- Admin link -->
+    <a th:if="${session != null and session.currentUser != null and session.currentUser.role == 'ADMIN'}"
+       th:href="@{/admin/posts}"
+       style="font-size:14px; font-weight:700; color:#eb6f99; text-decoration:none; border:2px solid #eb6f99; padding:5px 12px; border-radius:20px; margin-right:8px;"
+       onmouseover="this.style.background='#eb6f99'; this.style.color='white';"
+       onmouseout="this.style.background='transparent'; this.style.color='#eb6f99';">
+        <i class="fa-solid fa-file-circle-check"></i> Duyệt bài
+    </a>
+
     <!-- Auth Action Buttons -->
     <div th:if="${session != null and session.currentUser != null}" style="display: flex; align-items: center; gap: 15px;">
         <!-- Notification Bell -->

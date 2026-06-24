@@ -38,6 +38,33 @@ public class CommunityServiceImpl implements CommunityService {
     }
 
     @Override
+    public List<BlogPost> getPostsByAuthor(Integer authorId) {
+        return blogPostRepository.findByAuthorId(authorId);
+    }
+
+    @Override
+    public Page<BlogPost> getDraftPosts(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return blogPostRepository.findDraftPosts(pageable);
+    }
+
+    @Override
+    public void approvePost(Integer postId) {
+        BlogPost post = blogPostRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found with id: " + postId));
+        post.setStatus("PUBLISHED");
+        blogPostRepository.save(post);
+    }
+
+    @Override
+    public void rejectPost(Integer postId) {
+        BlogPost post = blogPostRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found with id: " + postId));
+        post.setStatus("HIDDEN");
+        blogPostRepository.save(post);
+    }
+
+    @Override
     public Page<FeedDto> getFeed(String keyword, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<BlogPost> posts = blogPostRepository.findPublishedPosts(keyword, pageable);
@@ -142,7 +169,7 @@ public class CommunityServiceImpl implements CommunityService {
         post.setThumbnailUrl(dto.getThumbnailUrl());
         post.setContent(dto.getContent());
         post.setCreatedAt(LocalDateTime.now());
-        post.setStatus("PUBLISHED");
+        post.setStatus("DRAFT");
         post.setViewCount(0);
 
         // Generate slug from title
