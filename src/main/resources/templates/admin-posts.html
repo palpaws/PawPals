@@ -16,9 +16,17 @@
     <div th:replace="fragments/google-analytics :: googleAnalytics"></div>
 
     <style>
+        * {
+            box-sizing: border-box;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, color 0.3s ease;
+        }
+
         body {
             font-family: 'Work Sans', sans-serif;
-            background: #f7f8fc;
+            background: #ddb4bf;
+            min-height: 100vh;
+            color: #1d3d39;
+            overflow-x: hidden;
         }
 
         .admin-hero {
