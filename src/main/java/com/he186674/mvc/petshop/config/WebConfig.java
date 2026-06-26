@@ -18,5 +18,12 @@ public class WebConfig implements WebMvcConfigurer {
 
         registry.addResourceHandler("/uploads/pets/**")
                 .addResourceLocations("file:" + absolutePath + "/");
+
+        // Serve uploads/community directory as static resources
+        Path communityUploadPath = Paths.get("uploads/community");
+        String communityAbsolutePath = communityUploadPath.toAbsolutePath().normalize().toString();
+
+        registry.addResourceHandler("/uploads/community/**")
+                .addResourceLocations("file:" + communityAbsolutePath + "/");
     }
 }

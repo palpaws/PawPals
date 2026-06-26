@@ -9,15 +9,23 @@ import com.he186674.mvc.petshop.repository.BlogCommentRepository;
 import com.he186674.mvc.petshop.repository.UserRepository;
 import com.he186674.mvc.petshop.service.CommunityService;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/community")
@@ -28,6 +36,9 @@ public class CommunityController {
     private final BlogCommentRepository blogCommentRepository;
     private final UserRepository userRepository;
 
+    @Value("${community.upload-dir:uploads/community}")
+    private String uploadDir;
+
     public CommunityController(CommunityService communityService,
                                BlogCategoryRepository blogCategoryRepository,
                                BlogCommentRepository blogCommentRepository,
@@ -36,6 +47,32 @@ public class CommunityController {
         this.blogCategoryRepository = blogCategoryRepository;
         this.blogCommentRepository = blogCommentRepository;
         this.userRepository = userRepository;
+    }
+
+    private String saveUploadedFile(MultipartFile file) throws IOException {
+        if (file == null || file.isEmpty()) {
+            return null;
+        }
+
+        // Create upload directory if it doesn't exist
+        Path uploadPath = Paths.get(uploadDir);
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+
+        // Generate unique filename
+        String originalFilename = file.getOriginalFilename();
+        String extension = "";
+        if (originalFilename != null && originalFilename.contains(".")) {
+            extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+        }
+        String filename = UUID.randomUUID().toString() + extension;
+
+        // Save file
+        Path filePath = uploadPath.resolve(filename);
+        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+        return "/uploads/community/" + filename;
     }
 
     @GetMapping
@@ -109,6 +146,7 @@ public class CommunityController {
 
     @PostMapping("/create")
     public String createPost(@ModelAttribute CreatePostDto createPostDto,
+                             @RequestParam(value = "thumbnailFile", required = false) MultipartFile thumbnailFile,
                              HttpSession session,
                              RedirectAttributes redirectAttributes) {
         User currentUser = (User) session.getAttribute("currentUser");
@@ -116,8 +154,19 @@ public class CommunityController {
             return "redirect:/login";
         }
 
-        communityService.createPost(createPostDto, currentUser.getUserId());
-        redirectAttributes.addFlashAttribute("success", "Post created successfully!");
+        try {
+            // Handle file upload
+            if (thumbnailFile != null && !thumbnailFile.isEmpty()) {
+                String thumbnailUrl = saveUploadedFile(thumbnailFile);
+                createPostDto.setThumbnailUrl(thumbnailUrl);
+            }
+
+            communityService.createPost(createPostDto, currentUser.getUserId());
+            redirectAttributes.addFlashAttribute("success", "Post created successfully!");
+        } catch (IOException e) {
+            redirectAttributes.addFlashAttribute("error", "Failed to upload image: " + e.getMessage());
+            return "redirect:/community/create";
+        }
 
         return "redirect:/community";
     }
@@ -162,6 +211,7 @@ public class CommunityController {
     @PostMapping("/edit/{id}")
     public String updatePost(@PathVariable("id") Integer postId,
                              @ModelAttribute CreatePostDto createPostDto,
+                             @RequestParam(value = "thumbnailFile", required = false) MultipartFile thumbnailFile,
                              HttpSession session,
                              RedirectAttributes redirectAttributes) {
         User currentUser = (User) session.getAttribute("currentUser");
@@ -169,8 +219,19 @@ public class CommunityController {
             return "redirect:/login";
         }
 
-        communityService.updatePost(postId, createPostDto);
-        redirectAttributes.addFlashAttribute("success", "Post updated successfully!");
+        try {
+            // Handle file upload (only if a new file is provided)
+            if (thumbnailFile != null && !thumbnailFile.isEmpty()) {
+                String thumbnailUrl = saveUploadedFile(thumbnailFile);
+                createPostDto.setThumbnailUrl(thumbnailUrl);
+            }
+
+            communityService.updatePost(postId, createPostDto);
+            redirectAttributes.addFlashAttribute("success", "Post updated successfully!");
+        } catch (IOException e) {
+            redirectAttributes.addFlashAttribute("error", "Failed to upload image: " + e.getMessage());
+            return "redirect:/community/edit/" + postId;
+        }
 
         return "redirect:/community/post/" + postId;
     }
