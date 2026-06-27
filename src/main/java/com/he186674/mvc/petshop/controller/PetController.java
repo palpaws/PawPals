@@ -327,10 +327,9 @@ public class PetController {
 
 
 
-            Path uploadPath =
-                    Paths.get(
-                            "uploads/pets"
-                    );
+            Path uploadPath = Paths.get(
+                    "src/main/resources/static/uploads/pets"
+            );
 
 
 

@@ -42,7 +42,7 @@
             <!-- left card -->
             <div class="card small-card">
 
-                <h3>Theo dõi vị trí thú cưng của bạn</h3>
+                <h3>Tìm kiếm bạn đời cho bé yêu của bạn</h3>
 
                 <img th:src="@{/images/img1.jpg}" alt="">
 
@@ -52,6 +52,10 @@
             <div class="big-image">
 
                 <img th:src="@{/images/img2.jpg}" alt="">
+
+                <div class="image-text">
+                    Tìm kiếm cơ sở , dịch vụ thú cưng
+                </div>
 
             </div>
 
@@ -346,7 +350,7 @@
             <div class="review-line"></div>
 
             <div class="review-small-text">
-                Xem ý kiến của những người khác về các dịch vụ thú cưng trước khi bạn quyết định đăng ký
+                Xem ý kiến của những người khác về các dịch vụ thú cưng trước khi bạn đăng ký
             </div>
 
         </div>
@@ -477,76 +481,97 @@
             <!-- CARD AREA -->
             <div class="pricing-cards">
 
-                <!-- FREE -->
+
+
                 <div class="pricing-card free-card">
 
-                    <h3>Miễn Phí</h3>
+                    <h3>FREE</h3>
 
-                    <div class="price">
-                        0đ
+                    <div class="feature-box">
+
+                        <div>
+                            <span>Hồ sơ thú cưng (2)</span>
+                            <b class="check">✓</b>
+                        </div>
+
+                        <div>
+                            <span>Nhắc lịch</span>
+                            <b class="check">✓</b>
+                        </div>
+
+                        <div>
+                            <span>Theo dõi sức khỏe</span>
+                            <b class="check">✓</b>
+                        </div>
+
+                        <div>
+                            <span>Ghép đôi</span>
+                            <b class="close">×</b>
+                        </div>
+
+                        <div>
+                            <span>Đặt dịch vụ ưu tiên</span>
+                            <b class="close">×</b>
+                        </div>
+
+                        <div>
+
+                            <b class="close">×</b>
+                        </div>
+
                     </div>
 
-                    <span>per month</span>
 
-                    <ul>
-
-                        <li>Quản lý hồ sơ thú cưng</li>
-
-                        <li>Nhắc lịch tiêm chủng</li>
-
-                        <li>Theo dõi hoạt động hằng ngày</li>
-
-                        <li>Kết nối cộng đồng PawPals</li>
-
-                    </ul>
-
-                    <div class="pricing-divider"></div>
-
-                    <p>
-                        <strong>Phù hợp:</strong>
-                        Người dùng mới muốn trải nghiệm các tính năng cơ bản.
-                    </p>
-
-                    <button>
-                        Bắt đầu miễn phí
-                    </button>
+                    <div class="price-tag">
+                        0 VNĐ
+                    </div>
 
                 </div>
 
-                <!-- PREMIUM -->
+
+
                 <div class="pricing-card premium-card">
 
-                    <h3>Premium</h3>
+                    <h3>PREMIUM</h3>
 
-                    <div class="price">
-                        29.000đ
+                    <div class="feature-box">
+
+                        <div>
+                            <span>Hồ sơ thú cưng (3+)</span>
+                            <b class="check">✓</b>
+                        </div>
+
+                        <div>
+                            <span>Nhắc lịch</span>
+                            <b class="check">✓</b>
+                        </div>
+
+                        <div>
+                            <span>Theo dõi sức khỏe</span>
+                            <b class="check">✓</b>
+                        </div>
+
+                        <div>
+                            <span>Ghép đôi</span>
+                            <b class="check">✓</b>
+                        </div>
+
+                        <div>
+                            <span>Đặt dịch vụ ưu tiên</span>
+                            <b class="check">✓</b>
+                        </div>
+
+                        <div>
+
+                            <b class="check">✓</b>
+                        </div>
+
                     </div>
 
-                    <span>per month</span>
-
-                    <ul>
-
-                        <li>Tất cả tính năng miễn phí</li>
-
-                        <li>AI phân tích sức khỏe thú cưng</li>
-
-                        <li>Ưu tiên đặt lịch spa / hotel</li>
-
-                        <li>Thống kê & báo cáo nâng cao</li>
-
-                    </ul>
-
-                    <div class="pricing-divider"></div>
-
-                    <p>
-                        <strong>Phù hợp:</strong>
-                        Chủ nuôi muốn chăm sóc thú cưng chuyên sâu hơn.
-                    </p>
-
-                    <button type="button"
-                            th:onclick="|location.href='@{/premium}'|">
-                        Nâng cấp ngay
-                    </button>
+                    <div class="price-tag premium-price"
+                         th:onclick="|location.href='@{/premium}'|">
+                        29.000 VNĐ
+                    </div>
 
                 </div>
 

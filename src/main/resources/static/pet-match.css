@@ -390,30 +390,19 @@ body{
 
 
 
-
 .pet-card-actions{
 
-
-    position:absolute;
-
-
-    bottom:-55px;
-
-
-    left:0;
-
-
-    width:100%;
-
+    width:780px;
 
     display:flex;
 
-
     justify-content:center;
 
+    align-items:center;
 
     gap:20px;
 
+    margin-top:20px;
 
 }
 
@@ -1027,8 +1016,13 @@ select{
 .swipe-container{
 
     display:flex;
+
     flex-direction:column;
+
     align-items:center;
+
+    justify-content:center;
+
     margin-top:40px;
 
 }
