@@ -9,7 +9,12 @@ import com.he186674.mvc.petshop.repository.BlogCommentRepository;
 import com.he186674.mvc.petshop.repository.UserRepository;
 import com.he186674.mvc.petshop.service.CommunityService;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Value;
+ 
+
+
+
+
+ 
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,8 +41,8 @@ public class CommunityController {
     private final BlogCommentRepository blogCommentRepository;
     private final UserRepository userRepository;
 
-    @Value("${community.upload-dir:uploads/community}")
-    private String uploadDir;
+ 
+    private final String uploadDir = "src/main/resources/static/uploads/community";
 
     public CommunityController(CommunityService communityService,
                                BlogCategoryRepository blogCategoryRepository,
