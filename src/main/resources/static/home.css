@@ -3478,3 +3478,43 @@ textarea{
     transform:translateY(-3px);
 }
 
+.profile-content{
+    overflow:hidden;
+    position:relative;
+}
+
+
+.profile-slide{
+
+    display:none;
+
+    animation: slide .5s ease;
+
+}
+
+
+.profile-slide.active{
+    display:block;
+}
+
+
+@keyframes slide{
+
+    from{
+        opacity:0;
+        transform:translateX(50px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateX(0);
+    }
+
+}
+
+
+.profile-buttons button{
+
+    cursor:pointer;
+
+}

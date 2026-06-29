@@ -209,3 +209,75 @@ themeToggle.onclick = () => {
     }
 
 };
+
+/* ================= PROFILE SLIDER ================= */
+
+const profileSlides = document.querySelectorAll(".profile-slide");
+
+const nextProfileBtn = document.getElementById("nextBtn");
+const prevProfileBtn = document.getElementById("prevBtn");
+
+
+let currentProfileSlide = 0;
+
+
+
+function showProfileSlide(index){
+
+    profileSlides.forEach(slide => {
+
+        slide.classList.remove("active");
+
+    });
+
+
+    profileSlides[index].classList.add("active");
+
+}
+
+
+
+/* NEXT BUTTON */
+
+if(nextProfileBtn){
+
+    nextProfileBtn.onclick = () => {
+
+        currentProfileSlide++;
+
+        if(currentProfileSlide >= profileSlides.length){
+
+            currentProfileSlide = 0;
+
+        }
+
+
+        showProfileSlide(currentProfileSlide);
+
+    };
+
+}
+
+
+
+/* PREVIOUS BUTTON */
+
+if(prevProfileBtn){
+
+    prevProfileBtn.onclick = () => {
+
+        currentProfileSlide--;
+
+        if(currentProfileSlide < 0){
+
+            currentProfileSlide = profileSlides.length - 1;
+
+        }
+
+
+        showProfileSlide(currentProfileSlide);
+
+    };
+
+}
+
