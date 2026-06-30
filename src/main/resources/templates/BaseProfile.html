@@ -7,6 +7,7 @@
 
     <link rel="stylesheet" th:href="@{/baseprofile.css}">
     <link rel="stylesheet" th:href="@{/header.css}">
+    <link rel="stylesheet" th:href="@{/footer.css}">
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -56,7 +57,7 @@
                  class="pet-image"
                  onclick="window.location.href='/pets'">
 
-            <h3>Bé Cốm</h3>
+
 
             <button
                     class="add-pet-btn"
@@ -69,60 +70,7 @@
 
     </div>
 
-    <div class="schedule-section">
 
-        <div class="schedule-menu">
-
-            <h2>Lịch Chăm Sóc</h2>
-
-            <button class="schedule-btn">
-                <i class="fa-regular fa-bell"></i>
-                Tạo nhắc nhở
-            </button>
-
-            <button class="schedule-btn">
-                <i class="fa-solid fa-heart"></i>
-                Lịch phối giống
-            </button>
-
-            <button class="schedule-btn">
-                <i class="fa-solid fa-stethoscope"></i>
-                Lịch khám
-            </button>
-
-        </div>
-
-        <div class="upcoming-box">
-
-            <h2>Lịch Sắp Tới</h2>
-
-            <div class="schedule-item">
-                <span>13/08/2025</span>
-                <p>Lịch khám của Cốm</p>
-            </div>
-
-            <div class="schedule-item">
-                <span>18/08/2025</span>
-                <p>Lịch tiêm của Miu</p>
-            </div>
-
-            <div class="schedule-item">
-                <span>23/08/2025</span>
-                <p>Lịch khám của Ún</p>
-            </div>
-
-            <div class="schedule-item">
-                <span>03/09/2025</span>
-                <p>Lịch tiêm của Cốm</p>
-            </div>
-
-            <a href="#" class="view-more">
-                Xem tất cả →
-            </a>
-
-        </div>
-
-    </div>
 
 </div>
 
@@ -290,6 +238,8 @@
     );
 
 </script>
+
+<div th:replace="fragments/footer :: footer"></div>
 
 </body>
 </html>

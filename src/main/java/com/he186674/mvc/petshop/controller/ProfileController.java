@@ -45,7 +45,19 @@ public class ProfileController {
     }
 
     @GetMapping("/base-profile")
-    public String showBaseProfile() {
+    public String showBaseProfile(HttpSession session) {
+
+        User currentUser =
+                (User) session.getAttribute("currentUser");
+
+
+        if (currentUser == null) {
+
+            return "redirect:/login";
+
+        }
+
+
         return "BaseProfile";
     }
 

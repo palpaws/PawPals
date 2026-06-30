@@ -728,7 +728,6 @@
     </div>
 
 </div>
-
 <div class="chatbot-container light-mode" id="chatbotContainer">
 
     <!-- HEADER -->
@@ -744,22 +743,35 @@
 
                 <h2>PawPals AI</h2>
 
-                <span class="online-status">
-                       Online
+                <span class="online-status"
+                      th:if="${session != null
+                      and session.currentUser != null
+                      and session.currentUser.premiumExpiredAt != null
+                      and session.currentUser.premiumExpiredAt.isAfter(T(java.time.LocalDateTime).now())}">
+                    Premium Online
+                </span>
+
+
+                <span class="online-status"
+                      th:unless="${session != null
+                      and session.currentUser != null
+                      and session.currentUser.premiumExpiredAt != null
+                      and session.currentUser.premiumExpiredAt.isAfter(T(java.time.LocalDateTime).now())}">
+                    Premium Required
                 </span>
 
             </div>
 
         </div>
 
+
         <div class="chatbot-actions">
 
-            <!-- DARK MODE -->
             <button id="themeToggle" class="theme-btn">
                 🌙
             </button>
 
-            <!-- CLOSE -->
+
             <button id="closeChat" class="close-btn">
                 ✕
             </button>
@@ -768,20 +780,94 @@
 
     </div>
 
+
+
     <!-- BODY -->
     <div class="chatbot-body" id="chatDisplay">
 
-        <div class="bot-message">
+
+        <!-- PREMIUM USER -->
+        <div class="bot-message"
+
+             th:if="${session != null
+             and session.currentUser != null
+             and session.currentUser.premiumExpiredAt != null
+             and session.currentUser.premiumExpiredAt.isAfter(T(java.time.LocalDateTime).now())}">
+
             Xin chào 👋 <br>
-            Tôi là trợ lý AI của PawPals.
-            Tôi có thể giúp bạn tìm dịch vụ spa,
-            hotel, chăm sóc thú cưng và nhiều hơn nữa 🐾
+
+            Tôi là trợ lý AI Premium của PawPals 🐾
+
+            <br><br>
+
+            Tôi có thể giúp bạn:
+
+            <br>
+            🐶 Tư vấn chăm sóc thú cưng
+            <br>
+            🏥 Tìm dịch vụ spa, hotel
+            <br>
+            📅 Hỗ trợ lịch chăm sóc
+
+
         </div>
+
+
+
+        <!-- USER THƯỜNG -->
+        <div class="bot-message premium-lock"
+
+             th:unless="${session != null
+             and session.currentUser != null
+             and session.currentUser.premiumExpiredAt != null
+             and session.currentUser.premiumExpiredAt.isAfter(T(java.time.LocalDateTime).now())}">
+
+
+            🔒 <b>PawPals AI Premium</b>
+
+
+            <br><br>
+
+
+            Tính năng chat AI chỉ dành cho tài khoản Premium.
+
+
+            <br><br>
+
+
+            Hãy đăng ký Premium để sử dụng trợ lý AI
+            và nhận nhiều hỗ trợ chăm sóc thú cưng hơn 🐾
+
+
+            <br><br>
+
+
+            <a th:href="@{/premium}"
+               class="upgrade-btn">
+
+                ⭐ Nâng cấp Premium
+
+            </a>
+
+
+        </div>
+
 
     </div>
 
+
+
     <!-- INPUT -->
-    <div class="chatbot-input">
+
+    <!-- Chỉ Premium mới nhập được -->
+
+    <div class="chatbot-input"
+
+         th:if="${session != null
+         and session.currentUser != null
+         and session.currentUser.premiumExpiredAt != null
+         and session.currentUser.premiumExpiredAt.isAfter(T(java.time.LocalDateTime).now())}">
+
 
         <input
                 type="text"
@@ -789,11 +875,40 @@
                 placeholder="Nhập tin nhắn..."
         >
 
+
         <button id="sendButton">
             ➤
         </button>
 
+
     </div>
+
+
+
+    <!-- User thường bị khóa input -->
+
+    <div class="chatbot-input"
+
+         th:unless="${session != null
+         and session.currentUser != null
+         and session.currentUser.premiumExpiredAt != null
+         and session.currentUser.premiumExpiredAt.isAfter(T(java.time.LocalDateTime).now())}">
+
+
+        <input
+                type="text"
+                placeholder="Đăng ký Premium để chat..."
+                disabled
+        >
+
+
+        <button disabled>
+            🔒
+        </button>
+
+
+    </div>
+
 
 </div>
 <script th:src="@{/home.js}"></script>
