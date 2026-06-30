@@ -25,12 +25,63 @@
 <body>
 
 
+
+
 <!-- HEADER -->
 
 <div th:replace="fragments/header :: header"></div>
 
+<!-- Chỉ Premium mới được dùng -->
+<div th:if="${session.currentUser == null
+        || session.currentUser.premiumExpiredAt == null
+        || !session.currentUser.premiumExpiredAt.isAfter(T(java.time.LocalDateTime).now())}">
+
+    <div class="premium-lock">
+
+        <div class="premium-card">
+
+            <div class="crown-wrapper">
+                <i class="fa-solid fa-crown"></i>
+            </div>
+
+            <span class="premium-badge">
+                PREMIUM EXCLUSIVE
+            </span>
+
+            <h1>Pet Match Premium</h1>
+
+            <p>
+                Ghép đôi thú cưng thông minh, tìm kiếm bạn đồng hành phù hợp
+                và mở khóa nhiều tính năng độc quyền chỉ dành cho thành viên Premium.
+            </p>
+
+            <ul class="premium-features">
+                <li>🐾 Ghép đôi không giới hạn</li>
+                <li>❤️ Ưu tiên hiển thị hồ sơ</li>
+                <li>💌 Gửi lời mời ghép đôi không giới hạn</li>
+                <li>⭐ Nhận huy hiệu Premium</li>
+            </ul>
+
+            <a th:href="@{/premium}">
+                <button class="upgrade-btn">
+                    <i class="fa-solid fa-crown"></i>
+                    Nâng cấp Premium
+                </button>
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
 
 
+
+<div th:if="${session.currentUser != null
+        && session.currentUser.premiumExpiredAt != null
+        && session.currentUser.premiumExpiredAt.isAfter(T(java.time.LocalDateTime).now())}">
+
+    <!-- Toàn bộ pet-match-container -->
 
 <div class="pet-match-container">
 
@@ -753,6 +804,9 @@
 
 
 
+
+
+</div>
 
 
 
