@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:color="http://www.w3.org/1999/xhtml">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lịch - PawPals</title>
+    <title>Đặt lịch dịch vụ - PawPals</title>
 
     <!-- FONT -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,39 +28,24 @@
 <div th:replace="fragments/header :: header"></div>
 
 <div class="calendar-container">
-    <!-- LEFT SIDEBAR -->
+    <!-- LEFT SIDEBAR: Bộ lọc & danh sách dịch vụ -->
     <div class="sidebar-left">
-        <h2>Lịch</h2>
-        <div class="pet-list">
-            <!-- Nút xem tất cả -->
-            <div class="pet-item-all active" id="petAll" onclick="selectAllPets()">
-                <i class="fas fa-paw"></i> Tất cả
-            </div>
+        <h2>Đặt lịch</h2>
 
-            <!-- Danh sách pets từ backend -->
-            <div th:if="${pets != null and !pets.isEmpty()}">
-                <div th:each="pet : ${pets}"
-                     class="pet-item"
-                     th:attr="data-pet-id=${pet.petId}, onclick='selectPet(' + ${pet.petId} + ')'"
-                     style="background: #f0f0f8; display: flex; align-items: center; justify-content: center;">
-                    <div style="text-align: center; padding: 8px;">
-                        <!-- Ảnh thú cưng hoặc fallback icon -->
-                        <img th:if="${petImageMap[pet.petId] != null}"
-                             th:src="${petImageMap[pet.petId]}"
-                             alt="pet avatar"
-                             style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover; display: block; margin: 0 auto 4px auto;">
-                        <i th:if="${petImageMap[pet.petId] == null}"
-                           th:classappend="${pet.species != null and pet.species.toLowerCase().contains('chó')} ? 'fas fa-dog' : 'fas fa-cat'"
-                           style="font-size: 28px; color: #a89ce4; display: block; margin-bottom: 4px;"></i>
-                        <div class="pet-name-label" th:text="${pet.petName}">Tên thú cưng</div>
-                    </div>
-                </div>
-            </div>
+        <div class="form-group">
+            <label>Loại dịch vụ</label>
+            <select id="serviceTypeFilter" onchange="loadServices()">
+                <option value="">-- Tất cả dịch vụ --</option>
+                <option value="KHAM">🏥 Khám bệnh</option>
+                <option value="SPA">💆 Spa / Tắm rửa</option>
+                <option value="PHOI_GIONG">🐾 Phối giống</option>
+                <option value="VACCINE">💉 Tiêm chủng</option>
+            </select>
+        </div>
 
-            <div th:if="${pets == null or pets.isEmpty()}" class="no-pets-msg">
-                <i class="fas fa-info-circle"></i> Chưa có thú cưng nào.<br>
-                <a th:href="@{/base-profile}">Thêm thú cưng</a>
-            </div>
+        <h3 style="margin-top:16px;"><i class="fas fa-store"></i> Chọn shop / dịch vụ</h3>
+        <div class="service-list" id="serviceList">
+            <div class="no-events-msg">Đang tải dịch vụ...</div>
         </div>
     </div>
 
@@ -75,6 +60,8 @@
                 <i class="fas fa-chevron-right"></i>
             </button>
         </div>
+
+        <div id="selectedServiceBanner" class="selected-service-banner" style="display:none;"></div>
 
         <table class="calendar-grid" id="calendar">
             <thead>
@@ -91,161 +78,174 @@
             <tbody id="calendarBody">
             </tbody>
         </table>
+
+        <div class="calendar-hint">
+            <i class="fas fa-info-circle"></i>
+            Chọn một dịch vụ, sau đó bấm vào ngày có khung giờ trống để đăng ký. Những ngày trong quá khứ không thể đăng ký.
+        </div>
     </div>
 
-    <!-- RIGHT SIDEBAR -->
+    <!-- RIGHT SIDEBAR: Lịch đã đặt -->
     <div class="sidebar-right">
-        <h3><i class="fas fa-bell"></i> Lịch trình sắp tới</h3>
-        <div class="schedule-list" id="scheduleList">
-            <div class="no-events-msg" id="noEventsMsg">
-                <i class="fas fa-calendar-check"></i><br>
-                Chưa có lịch trình nào
+        <h3><i class="fas fa-calendar-check"></i> Lịch đã đặt</h3>
+        <div class="schedule-list" id="bookingList">
+            <div class="no-events-msg" id="noBookingsMsg">
+                <i class="fas fa-calendar"></i><br>
+                Chưa có lịch đặt nào
             </div>
         </div>
-        <button class="add-schedule-btn" onclick="openCreateModal()">
-            <i class="fas fa-plus"></i> Thêm lịch trình
-        </button>
     </div>
 </div>
 
-<!-- MODAL: Tạo nhắc nhở mới -->
-<div class="modal-overlay" id="createModal">
+<!-- MODAL: Chọn khung giờ trong ngày -->
+<div class="modal-overlay" id="slotModal">
     <div class="modal">
-        <h3><i class="fas fa-calendar-plus"></i> Tạo nhắc nhở mới</h3>
-        <form id="reminderForm" onsubmit="submitReminder(event)">
+        <h3 id="slotModalTitle"><i class="fas fa-clock"></i> Chọn khung giờ</h3>
+        <div id="slotModalContent" class="slot-grid"></div>
+        <div class="modal-actions">
+            <button type="button" class="btn-cancel" onclick="closeSlotModal()">Đóng</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: Xác nhận đăng ký + thanh toán -->
+<div class="modal-overlay" id="bookingModal">
+    <div class="modal">
+        <h3><i class="fas fa-calendar-plus"></i> Xác nhận đăng ký</h3>
+        <div id="bookingSummary" class="booking-summary"></div>
+
+        <form id="bookingForm" onsubmit="submitBooking(event)">
             <div class="form-group">
-                <label>Thú cưng *</label>
-                <select id="formPetId" required>
-                    <option value="">-- Chọn thú cưng --</option>
+                <label>Thú cưng (không bắt buộc)</label>
+                <select id="formPetId">
+                    <option value="">-- Không chọn --</option>
                     <option th:each="pet : ${pets}"
                             th:value="${pet.petId}"
                             th:text="${pet.petName}">
                     </option>
                 </select>
             </div>
-            <div class="form-group">
-                <label>Tiêu đề *</label>
-                <input type="text" id="formTitle" placeholder="VD: Khám sức khỏe Cốm" required>
-            </div>
-            <div class="form-group">
-                <label>Loại sự kiện *</label>
-                <select id="formEventType" required>
-                    <option value="KHAM">🏥 Khám bệnh</option>
-                    <option value="SPA">💆 Spa / Tắm rửa</option>
-                    <option value="PHOI_GIONG">🐾 Phối giống</option>
-                    <option value="VACCINE">💉 Tiêm chủng</option>
-                    <option value="OTHER">📋 Khác</option>
-                </select>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Ngày *</label>
-                    <input type="date" id="formEventDate" required>
-                </div>
-                <div class="form-group">
-                    <label>Giờ</label>
-                    <input type="time" id="formEventTime">
-                </div>
-            </div>
-            <div class="form-group">
-                <label>Địa điểm</label>
-                <input type="text" id="formLocation" placeholder="VD: Phòng khám Thú y ABC">
-            </div>
+
             <div class="form-group">
                 <label>Ghi chú</label>
-                <textarea id="formDescription" placeholder="Ghi chú thêm..."></textarea>
+                <textarea id="formNote" placeholder="Ghi chú thêm cho shop..."></textarea>
             </div>
+
             <div class="form-group">
-                <div class="form-check">
-                    <input type="checkbox" id="formIsRecurring" onchange="toggleRecurring()">
-                    <label for="formIsRecurring" style="margin-bottom:0">Lặp lại định kỳ</label>
+                <label>Thanh toán</label>
+                <div class="payment-options">
+                    <label class="payment-option">
+                        <input type="radio" name="paymentType" value="DEPOSIT" checked>
+                        <span>Cọc <strong id="depositLabel">50%</strong> (<span id="depositAmount">0</span>đ)</span>
+                    </label>
+                    <label class="payment-option">
+                        <input type="radio" name="paymentType" value="FULL">
+                        <span>Trả đủ (<span id="fullAmount">0</span>đ)</span>
+                    </label>
+                    <label class="payment-option">
+                        <input type="radio" name="paymentType" value="NONE">
+                        <span>Chưa thanh toán (trả tại shop)</span>
+                    </label>
                 </div>
             </div>
-            <div class="form-group" id="recurringGroup" style="display:none">
-                <label>Chu kỳ (ngày)</label>
-                <input type="number" id="formRecurringDays" min="1" value="30" placeholder="VD: 30">
-            </div>
+
             <div class="modal-actions">
-                <button type="button" class="btn-cancel" onclick="closeCreateModal()">Hủy</button>
-                <button type="submit" class="btn-save">Lưu nhắc nhở</button>
+                <button type="button" class="btn-cancel" onclick="closeBookingModal()">Hủy</button>
+                <button type="submit" class="btn-save">Đăng ký lịch</button>
             </div>
         </form>
-    </div>
-</div>
-
-<!-- MODAL: Chi tiết nhắc nhở -->
-<div class="modal-overlay" id="detailModal">
-    <div class="modal" style="width: 400px;">
-        <h3 id="detailTitle"></h3>
-        <div id="detailContent"></div>
-        <div class="modal-actions" style="margin-top: 20px;">
-            <button class="btn-cancel" onclick="closeDetailModal()">Đóng</button>
-            <button class="btn-toggle" id="detailToggleBtn" onclick="toggleFromDetail()">
-                <i class="fas fa-check"></i> Hoàn thành
-            </button>
-            <button class="btn-delete" id="detailDeleteBtn" onclick="deleteFromDetail()">
-                <i class="fas fa-trash"></i> Xóa
-            </button>
-        </div>
     </div>
 </div>
 
 <script>
     // ===== STATE =====
     let currentDate = new Date();
-    let selectedPetId = null; // null = tất cả pets
-    let reminders = []; // reminders của tháng hiện tại
-    let currentDetailReminderId = null;
+    let selectedService = null;      // dịch vụ đang chọn
+    let slotsByDate = {};            // { 'YYYY-MM-DD': [slot,...] }
+    let selectedSlot = null;         // slot đang chọn để đăng ký
 
-    // ===== PET SELECTION =====
-    function selectAllPets() {
-        selectedPetId = null;
-        document.querySelectorAll('.pet-item').forEach(p => p.classList.remove('active'));
-        document.getElementById('petAll').classList.add('active');
-        loadReminders();
-        loadUpcomingReminders();
+    const TYPE_ICONS = {
+        'KHAM': '🏥', 'SPA': '💆', 'PHOI_GIONG': '🐾', 'VACCINE': '💉'
+    };
+
+    function formatMoney(v) {
+        if (v == null) return '0';
+        return Math.round(v).toLocaleString('vi-VN');
     }
 
-    function selectPet(petId) {
-        selectedPetId = petId;
-        document.getElementById('petAll').classList.remove('active');
-        document.querySelectorAll('.pet-item').forEach(p => {
-            p.classList.toggle('active', parseInt(p.getAttribute('data-pet-id')) === petId);
+    // ===== LOAD SERVICES =====
+    function loadServices() {
+        const type = document.getElementById('serviceTypeFilter').value;
+        let url = '/api/booking/services';
+        if (type) url += '?serviceType=' + type;
+
+        fetch(url)
+            .then(res => res.json())
+            .then(data => renderServiceList(data))
+            .catch(err => {
+                console.error('Lỗi tải dịch vụ:', err);
+                document.getElementById('serviceList').innerHTML =
+                    '<div class="no-events-msg">Không tải được dịch vụ</div>';
+            });
+    }
+
+    function renderServiceList(services) {
+        const list = document.getElementById('serviceList');
+        if (!services || services.length === 0) {
+            list.innerHTML = '<div class="no-events-msg">Chưa có dịch vụ nào</div>';
+            return;
+        }
+        list.innerHTML = '';
+        services.forEach(s => {
+            const div = document.createElement('div');
+            div.className = 'service-card';
+            div.onclick = () => selectService(s);
+            div.setAttribute('data-service-id', s.serviceId);
+            div.innerHTML =
+                '<div class="service-card-title">' + (TYPE_ICONS[s.serviceType] || '') + ' ' + s.name + '</div>' +
+                '<div class="service-card-shop"><i class="fas fa-store"></i> ' + (s.shopName || '') + '</div>' +
+                '<div class="service-card-meta">' +
+                    '<span><i class="fas fa-tag"></i> ' + formatMoney(s.price) + 'đ</span>' +
+                    '<span><i class="fas fa-star"></i> ' + (s.shopRating != null ? s.shopRating : '-') + '</span>' +
+                '</div>';
+            list.appendChild(div);
         });
-        loadReminders();
-        loadUpcomingReminders();
     }
 
-    // ===== CALENDAR RENDERING =====
+    function selectService(service) {
+        selectedService = service;
+        document.querySelectorAll('.service-card').forEach(c => {
+            c.classList.toggle('active', parseInt(c.getAttribute('data-service-id')) === service.serviceId);
+        });
+
+        const banner = document.getElementById('selectedServiceBanner');
+        banner.style.display = 'block';
+        banner.innerHTML =
+            '<strong>' + (TYPE_ICONS[service.serviceType] || '') + ' ' + service.name + '</strong> — ' +
+            (service.shopName || '') + ' · ' + formatMoney(service.price) + 'đ';
+
+        loadSlots();
+    }
+
+    // ===== CALENDAR =====
     function generateCalendar() {
         const year = currentDate.getFullYear();
         const month = currentDate.getMonth();
-
         const firstDay = new Date(year, month, 1);
         const lastDay = new Date(year, month + 1, 0);
 
-        let calendarBody = document.getElementById('calendarBody');
+        const calendarBody = document.getElementById('calendarBody');
         calendarBody.innerHTML = '';
 
-        const startingDayOfWeek = (firstDay.getDay() + 6) % 7; // Monday = 0
+        const startingDayOfWeek = (firstDay.getDay() + 6) % 7;
 
         const today = new Date();
         const todayStr = today.getFullYear() + '-' +
             String(today.getMonth() + 1).padStart(2, '0') + '-' +
             String(today.getDate()).padStart(2, '0');
 
-        // Build events map: key = "YYYY-MM-DD", value = array of reminders
-        const eventsMap = {};
-        reminders.forEach(r => {
-            if (!eventsMap[r.eventDate]) {
-                eventsMap[r.eventDate] = [];
-            }
-            eventsMap[r.eventDate].push(r);
-        });
-
         let row = document.createElement('tr');
 
-        // Fill previous month days
         const prevMonthLastDay = new Date(year, month, 0).getDate();
         for (let i = startingDayOfWeek - 1; i >= 0; i--) {
             const cell = document.createElement('td');
@@ -254,7 +254,6 @@
             row.appendChild(cell);
         }
 
-        // Fill current month days
         for (let day = 1; day <= lastDay.getDate(); day++) {
             if (row.children.length === 7) {
                 calendarBody.appendChild(row);
@@ -266,32 +265,35 @@
 
             let cellClass = '';
             if (dateStr === todayStr) cellClass = 'today';
-            cell.className = cellClass;
+            const isPast = dateStr < todayStr;
+            if (isPast) cellClass += ' past-day';
+            cell.className = cellClass.trim();
 
             let cellHTML = '<div class="day-number">' + day + '</div>';
 
-            if (eventsMap[dateStr]) {
-                eventsMap[dateStr].forEach(r => {
-                    const completedClass = r.isCompleted ? ' completed' : '';
-                    cellHTML += '<span class="event ' + r.eventType + completedClass + '" ' +
-                        'onclick="showReminderDetail(' + r.reminderId + ')" ' +
-                        'title="' + r.title + ' (' + r.petName + ')">' +
-                        r.title + '</span>';
-                });
+            const daySlots = slotsByDate[dateStr] || [];
+            const availableCount = daySlots.filter(s => s.bookable).length;
+
+            if (selectedService && daySlots.length > 0) {
+                if (isPast) {
+                    cellHTML += '<span class="slot-badge slot-past">Đã qua</span>';
+                } else if (availableCount > 0) {
+                    cellHTML += '<span class="slot-badge slot-available">' + availableCount + ' giờ trống</span>';
+                } else {
+                    cellHTML += '<span class="slot-badge slot-full">Hết chỗ</span>';
+                }
             }
 
-            // Click on empty area to create reminder
             cell.innerHTML = cellHTML;
-            cell.addEventListener('dblclick', function(e) {
-                if (e.target === cell || e.target.classList.contains('day-number')) {
-                    openCreateModalWithDate(dateStr);
-                }
-            });
+
+            if (selectedService && !isPast && availableCount > 0) {
+                cell.classList.add('clickable');
+                cell.addEventListener('click', () => openSlotModal(dateStr));
+            }
 
             row.appendChild(cell);
         }
 
-        // Fill next month days
         let nextDay = 1;
         while (row.children.length < 7) {
             const cell = document.createElement('td');
@@ -300,281 +302,215 @@
             row.appendChild(cell);
             nextDay++;
         }
-        if (row.children.length > 0) {
-            calendarBody.appendChild(row);
-        }
+        if (row.children.length > 0) calendarBody.appendChild(row);
 
-        // Update month/year display
         document.getElementById('monthYear').textContent = (month + 1) + '/' + year;
     }
 
     function previousMonth() {
         currentDate.setMonth(currentDate.getMonth() - 1);
-        loadReminders();
+        loadSlots();
     }
 
     function nextMonth() {
         currentDate.setMonth(currentDate.getMonth() + 1);
-        loadReminders();
+        loadSlots();
     }
 
-    // ===== API CALLS =====
-    function loadReminders() {
+    // ===== LOAD SLOTS FOR SELECTED SERVICE =====
+    function loadSlots() {
+        if (!selectedService) {
+            slotsByDate = {};
+            generateCalendar();
+            return;
+        }
         const year = currentDate.getFullYear();
         const month = currentDate.getMonth() + 1;
-
-        let url = '/api/calendar/reminders?year=' + year + '&month=' + month;
-        if (selectedPetId) {
-            url += '&petId=' + selectedPetId;
-        }
+        const url = '/api/booking/slots?serviceId=' + selectedService.serviceId +
+            '&year=' + year + '&month=' + month;
 
         fetch(url)
             .then(res => res.json())
             .then(data => {
-                reminders = data;
+                slotsByDate = {};
+                data.forEach(slot => {
+                    if (!slotsByDate[slot.slotDate]) slotsByDate[slot.slotDate] = [];
+                    slotsByDate[slot.slotDate].push(slot);
+                });
                 generateCalendar();
             })
             .catch(err => {
-                console.error('Lỗi tải reminders:', err);
-                reminders = [];
+                console.error('Lỗi tải khung giờ:', err);
+                slotsByDate = {};
                 generateCalendar();
             });
     }
 
-    function loadUpcomingReminders() {
-        let url = '/api/calendar/upcoming';
-        if (selectedPetId) {
-            url += '?petId=' + selectedPetId;
+    // ===== SLOT MODAL =====
+    function openSlotModal(dateStr) {
+        const daySlots = slotsByDate[dateStr] || [];
+        const content = document.getElementById('slotModalContent');
+        document.getElementById('slotModalTitle').innerHTML =
+            '<i class="fas fa-clock"></i> Khung giờ ngày ' + formatDate(dateStr);
+        content.innerHTML = '';
+
+        daySlots.forEach(slot => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            const remaining = (slot.capacity || 0) - (slot.bookedCount || 0);
+            if (slot.bookable) {
+                btn.className = 'slot-btn';
+                btn.innerHTML = slot.startTime + ' - ' + slot.endTime +
+                    '<small>còn ' + remaining + ' chỗ</small>';
+                btn.onclick = () => { closeSlotModal(); openBookingModal(slot); };
+            } else {
+                btn.className = 'slot-btn disabled';
+                btn.disabled = true;
+                btn.innerHTML = slot.startTime + ' - ' + slot.endTime +
+                    '<small>' + (slot.isPast ? 'đã qua' : 'hết chỗ') + '</small>';
+            }
+            content.appendChild(btn);
+        });
+
+        document.getElementById('slotModal').classList.add('active');
+    }
+
+    function closeSlotModal() {
+        document.getElementById('slotModal').classList.remove('active');
+    }
+
+    // ===== BOOKING MODAL =====
+    function openBookingModal(slot) {
+        selectedSlot = slot;
+        const price = selectedService.price || 0;
+        const pct = selectedService.depositPercent || 50;
+        const deposit = price * pct / 100;
+
+        document.getElementById('bookingSummary').innerHTML =
+            '<div class="detail-row"><i class="fas fa-concierge-bell"></i> <strong>' + selectedService.name + '</strong></div>' +
+            '<div class="detail-row"><i class="fas fa-store"></i> ' + (selectedService.shopName || '') + '</div>' +
+            '<div class="detail-row"><i class="fas fa-calendar"></i> ' + formatDate(slot.slotDate) + '</div>' +
+            '<div class="detail-row"><i class="fas fa-clock"></i> ' + slot.startTime + ' - ' + slot.endTime + '</div>' +
+            '<div class="detail-row"><i class="fas fa-tag"></i> Giá: <strong>' + formatMoney(price) + 'đ</strong></div>';
+
+        document.getElementById('depositLabel').textContent = pct + '%';
+        document.getElementById('depositAmount').textContent = formatMoney(deposit);
+        document.getElementById('fullAmount').textContent = formatMoney(price);
+
+        document.getElementById('bookingForm').reset();
+        // reset đặt lại radio mặc định
+        const depRadio = document.querySelector('input[name="paymentType"][value="DEPOSIT"]');
+        if (depRadio) depRadio.checked = true;
+
+        document.getElementById('bookingModal').classList.add('active');
+    }
+
+    function closeBookingModal() {
+        document.getElementById('bookingModal').classList.remove('active');
+        selectedSlot = null;
+    }
+
+    function submitBooking(e) {
+        e.preventDefault();
+        if (!selectedSlot) return;
+
+        // Chặn client-side: không đăng ký ngày quá khứ
+        const today = new Date();
+        const todayStr = today.getFullYear() + '-' +
+            String(today.getMonth() + 1).padStart(2, '0') + '-' +
+            String(today.getDate()).padStart(2, '0');
+        if (selectedSlot.slotDate < todayStr) {
+            alert('Không thể đăng ký lịch trong quá khứ');
+            return;
         }
 
-        fetch(url)
-            .then(res => res.json())
-            .then(data => {
-                renderUpcomingList(data);
-            })
-            .catch(err => {
-                console.error('Lỗi tải upcoming:', err);
-            });
+        const paymentType = document.querySelector('input[name="paymentType"]:checked').value;
+
+        const data = {
+            slotId: String(selectedSlot.slotId),
+            petId: document.getElementById('formPetId').value || null,
+            note: document.getElementById('formNote').value || null,
+            paymentType: paymentType
+        };
+
+        fetch('/api/booking/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+        .then(async res => {
+            if (!res.ok) {
+                const msg = await res.text();
+                throw new Error(msg || 'Đăng ký thất bại');
+            }
+            return res.json();
+        })
+        .then(() => {
+            closeBookingModal();
+            alert('Đăng ký lịch thành công!');
+            loadSlots();
+            loadMyBookings();
+        })
+        .catch(err => alert(err.message));
     }
 
-    function renderUpcomingList(items) {
-        const list = document.getElementById('scheduleList');
-        const noMsg = document.getElementById('noEventsMsg');
+    // ===== MY BOOKINGS =====
+    function loadMyBookings() {
+        fetch('/api/booking/my')
+            .then(res => res.json())
+            .then(data => renderBookingList(data))
+            .catch(err => console.error('Lỗi tải lịch đã đặt:', err));
+    }
 
-        if (!items || items.length === 0) {
+    function renderBookingList(items) {
+        const list = document.getElementById('bookingList');
+        const noMsg = document.getElementById('noBookingsMsg');
+
+        const active = (items || []).filter(b => b.status !== 'CANCELLED');
+        if (active.length === 0) {
             list.innerHTML = '';
             list.appendChild(noMsg);
             noMsg.style.display = 'block';
             return;
         }
-
         noMsg.style.display = 'none';
         list.innerHTML = '';
 
-        items.forEach(r => {
-            const typeLabels = {
-                'KHAM': '🏥',
-                'SPA': '💆',
-                'PHOI_GIONG': '🐾',
-                'VACCINE': '💉',
-                'OTHER': '📋'
-            };
+        const statusLabels = {
+            'PENDING': 'Chờ xác nhận', 'CONFIRMED': 'Đã xác nhận',
+            'COMPLETED': 'Hoàn thành', 'CANCELLED': 'Đã hủy'
+        };
+        const payLabels = { 'NONE': 'Trả tại shop', 'DEPOSIT': 'Đã cọc', 'FULL': 'Đã trả đủ' };
 
-            const dateParts = r.eventDate.split('-');
-            const dateDisplay = parseInt(dateParts[2]) + '/' + parseInt(dateParts[1]);
-
+        active.forEach(b => {
             const div = document.createElement('div');
             div.className = 'schedule-item';
-            // Avatar pet
-            const petAvatar = r.petImageUrl
-                ? '<img src="' + r.petImageUrl + '" alt="pet" class="schedule-pet-avatar">'
-                : '<div class="schedule-pet-avatar-placeholder"><i class="fas fa-paw"></i></div>';
             div.innerHTML =
-                petAvatar +
-                '<span class="event-type-icon ' + r.eventType + '"></span>' +
                 '<div class="event-info">' +
-                    '<div class="event-name">' + (typeLabels[r.eventType] || '') + ' ' + r.title + '</div>' +
-                    '<div class="event-pet">' + r.petName + '</div>' +
+                    '<div class="event-name">' + (TYPE_ICONS[b.serviceType] || '') + ' ' + b.serviceName + '</div>' +
+                    '<div class="event-pet"><i class="fas fa-store"></i> ' + (b.shopName || '') + '</div>' +
+                    '<div class="event-pet"><i class="fas fa-calendar"></i> ' + formatDate(b.slotDate) +
+                        ' · ' + b.startTime + '-' + b.endTime + '</div>' +
+                    '<div class="event-pet"><span class="status-tag status-' + b.status + '">' +
+                        (statusLabels[b.status] || b.status) + '</span> · ' +
+                        (payLabels[b.paymentType] || b.paymentType) + '</div>' +
                 '</div>' +
-                '<span class="event-date">' + dateDisplay + '</span>' +
-                '<button class="delete-btn" onclick="deleteReminder(' + r.reminderId + ')" title="Xóa">' +
+                '<button class="delete-btn" onclick="cancelBooking(' + b.bookingId + ')" title="Hủy lịch">' +
                     '<i class="fas fa-times"></i>' +
                 '</button>';
-
-            div.querySelector('.event-name').addEventListener('click', function() {
-                showReminderDetail(r.reminderId);
-            });
-
             list.appendChild(div);
         });
     }
 
-    // ===== CREATE REMINDER =====
-    function openCreateModal() {
-        document.getElementById('createModal').classList.add('active');
-        document.getElementById('reminderForm').reset();
-
-        // Nếu đang chọn pet cụ thể, pre-select
-        if (selectedPetId) {
-            document.getElementById('formPetId').value = selectedPetId;
-        }
-
-        // Set default date to today
-        const today = new Date();
-        document.getElementById('formEventDate').value =
-            today.getFullYear() + '-' +
-            String(today.getMonth() + 1).padStart(2, '0') + '-' +
-            String(today.getDate()).padStart(2, '0');
-    }
-
-    function openCreateModalWithDate(dateStr) {
-        openCreateModal();
-        document.getElementById('formEventDate').value = dateStr;
-    }
-
-    function closeCreateModal() {
-        document.getElementById('createModal').classList.remove('active');
-    }
-
-    function toggleRecurring() {
-        const checked = document.getElementById('formIsRecurring').checked;
-        document.getElementById('recurringGroup').style.display = checked ? 'block' : 'none';
-    }
-
-    function submitReminder(e) {
-        e.preventDefault();
-
-        const data = {
-            petId: document.getElementById('formPetId').value,
-            title: document.getElementById('formTitle').value,
-            eventType: document.getElementById('formEventType').value,
-            eventDate: document.getElementById('formEventDate').value,
-            eventTime: document.getElementById('formEventTime').value || null,
-            location: document.getElementById('formLocation').value || null,
-            description: document.getElementById('formDescription').value || null,
-            isRecurring: document.getElementById('formIsRecurring').checked ? 'true' : 'false',
-            recurringIntervalDays: document.getElementById('formRecurringDays').value || null
-        };
-
-        if (!data.petId) {
-            alert('Vui lòng chọn thú cưng');
-            return;
-        }
-
-        fetch('/api/calendar/reminders', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        })
-        .then(res => {
-            if (!res.ok) throw new Error('Lỗi tạo nhắc nhở');
-            return res.json();
-        })
-        .then(saved => {
-            closeCreateModal();
-            loadReminders();
-            loadUpcomingReminders();
-        })
-        .catch(err => {
-            alert(err.message);
-        });
-    }
-
-    // ===== DETAIL / TOGGLE / DELETE =====
-    function showReminderDetail(reminderId) {
-        const r = reminders.find(x => x.reminderId === reminderId);
-        if (!r) return;
-
-        currentDetailReminderId = reminderId;
-
-        const typeLabels = {
-            'KHAM': '🏥 Khám bệnh',
-            'SPA': '💆 Spa / Tắm rửa',
-            'PHOI_GIONG': '🐾 Phối giống',
-            'VACCINE': '💉 Tiêm chủng',
-            'OTHER': '📋 Khác'
-        };
-
-        document.getElementById('detailTitle').textContent = r.title;
-
-        let html = '';
-        const avatarHtml = r.petImageUrl
-            ? '<img src="' + r.petImageUrl + '" style="width:32px;height:32px;border-radius:50%;object-fit:cover;vertical-align:middle;margin-right:8px;">'
-            : '';
-        html += '<div class="detail-row"><i class="fas fa-paw"></i> ' + avatarHtml + '<strong>' + r.petName + '</strong></div>';
-        html += '<div class="detail-row"><i class="fas fa-tag"></i> ' + (typeLabels[r.eventType] || r.eventType) + '</div>';
-        html += '<div class="detail-row"><i class="fas fa-calendar"></i> ' + formatDate(r.eventDate) + '</div>';
-        if (r.eventTime) {
-            html += '<div class="detail-row"><i class="fas fa-clock"></i> ' + r.eventTime + '</div>';
-        }
-        if (r.location) {
-            html += '<div class="detail-row"><i class="fas fa-map-marker-alt"></i> ' + r.location + '</div>';
-        }
-        if (r.description) {
-            html += '<div class="detail-row"><i class="fas fa-sticky-note"></i> ' + r.description + '</div>';
-        }
-        html += '<div class="detail-row"><i class="fas fa-check-circle"></i> Trạng thái: ' +
-            (r.isCompleted ? '<span style="color:#4a7c4e">Hoàn thành</span>' : '<span style="color:#e67e22">Chưa hoàn thành</span>') +
-            '</div>';
-
-        document.getElementById('detailContent').innerHTML = html;
-
-        const toggleBtn = document.getElementById('detailToggleBtn');
-        toggleBtn.innerHTML = r.isCompleted
-            ? '<i class="fas fa-undo"></i> Chưa hoàn thành'
-            : '<i class="fas fa-check"></i> Hoàn thành';
-
-        document.getElementById('detailModal').classList.add('active');
-    }
-
-    function closeDetailModal() {
-        document.getElementById('detailModal').classList.remove('active');
-        currentDetailReminderId = null;
-    }
-
-    function toggleFromDetail() {
-        if (!currentDetailReminderId) return;
-
-        fetch('/api/calendar/reminders/' + currentDetailReminderId + '/toggle', {
-            method: 'PUT'
-        })
-        .then(res => {
-            if (!res.ok) throw new Error('Lỗi');
-            closeDetailModal();
-            loadReminders();
-            loadUpcomingReminders();
-        })
-        .catch(err => alert(err.message));
-    }
-
-    function deleteFromDetail() {
-        if (!currentDetailReminderId) return;
-        if (!confirm('Bạn có chắc muốn xóa nhắc nhở này?')) return;
-
-        fetch('/api/calendar/reminders/' + currentDetailReminderId, {
-            method: 'DELETE'
-        })
-        .then(res => {
-            if (!res.ok) throw new Error('Lỗi');
-            closeDetailModal();
-            loadReminders();
-            loadUpcomingReminders();
-        })
-        .catch(err => alert(err.message));
-    }
-
-    function deleteReminder(reminderId) {
-        if (!confirm('Bạn có chắc muốn xóa nhắc nhở này?')) return;
-
-        fetch('/api/calendar/reminders/' + reminderId, {
-            method: 'DELETE'
-        })
-        .then(res => {
-            if (!res.ok) throw new Error('Lỗi');
-            loadReminders();
-            loadUpcomingReminders();
-        })
-        .catch(err => alert(err.message));
+    function cancelBooking(bookingId) {
+        if (!confirm('Bạn có chắc muốn hủy lịch này?')) return;
+        fetch('/api/booking/' + bookingId, { method: 'DELETE' })
+            .then(res => {
+                if (!res.ok) throw new Error('Hủy thất bại');
+                loadMyBookings();
+                loadSlots();
+            })
+            .catch(err => alert(err.message));
     }
 
     // ===== HELPERS =====
@@ -585,16 +521,16 @@
 
     // ===== INIT =====
     document.addEventListener('DOMContentLoaded', function() {
-        loadReminders();
-        loadUpcomingReminders();
+        loadServices();
+        loadMyBookings();
+        generateCalendar();
     });
 
-    // Close modals on overlay click
-    document.getElementById('createModal').addEventListener('click', function(e) {
-        if (e.target === this) closeCreateModal();
+    document.getElementById('slotModal').addEventListener('click', function(e) {
+        if (e.target === this) closeSlotModal();
     });
-    document.getElementById('detailModal').addEventListener('click', function(e) {
-        if (e.target === this) closeDetailModal();
+    document.getElementById('bookingModal').addEventListener('click', function(e) {
+        if (e.target === this) closeBookingModal();
     });
 </script>
 

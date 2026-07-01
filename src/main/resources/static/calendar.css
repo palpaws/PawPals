@@ -596,3 +596,238 @@ body {
     background: #e0e0e0;
     color: #555;
 }
+
+/* ===== BOOKING: SERVICE LIST ===== */
+.service-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 520px;
+    overflow-y: auto;
+}
+
+.service-card {
+    background: #f7f5ff;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    padding: 12px;
+    cursor: pointer;
+}
+
+.service-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(168, 156, 228, 0.25);
+}
+
+.service-card.active {
+    border-color: #a89ce4;
+    background: #ece7fb;
+}
+
+.service-card-title {
+    font-weight: 600;
+    color: #5a4e9e;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.service-card-shop {
+    font-size: 12px;
+    color: #777;
+    margin-bottom: 6px;
+}
+
+.service-card-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #555;
+}
+
+/* ===== SELECTED SERVICE BANNER ===== */
+.selected-service-banner {
+    background: #ece7fb;
+    color: #5a4e9e;
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.calendar-hint {
+    margin-top: 10px;
+    font-size: 12px;
+    color: #888;
+    text-align: center;
+}
+
+.calendar-hint i {
+    color: #a89ce4;
+}
+
+/* ===== CALENDAR CELL STATES FOR BOOKING ===== */
+.calendar-grid td.past-day {
+    background: #f3f3f3;
+    color: #bbb;
+    cursor: not-allowed;
+}
+
+.calendar-grid td.past-day:hover {
+    background: #f3f3f3;
+}
+
+.calendar-grid td.clickable {
+    cursor: pointer;
+}
+
+.calendar-grid td.clickable:hover {
+    background: #efeaff;
+}
+
+.slot-badge {
+    display: inline-block;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 6px;
+    margin-top: 4px;
+    white-space: nowrap;
+}
+
+.slot-badge.slot-available {
+    background: #d4e8d4;
+    color: #4a7c4e;
+}
+
+.slot-badge.slot-full {
+    background: #f5d0d0;
+    color: #c0392b;
+}
+
+.slot-badge.slot-past {
+    background: #e0e0e0;
+    color: #999;
+}
+
+/* ===== SLOT MODAL ===== */
+.slot-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.slot-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 12px;
+    border: 2px solid #a89ce4;
+    border-radius: 10px;
+    background: white;
+    color: #5a4e9e;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    font-family: 'Work Sans', sans-serif;
+}
+
+.slot-btn small {
+    font-weight: 400;
+    font-size: 11px;
+    color: #888;
+}
+
+.slot-btn:hover {
+    background: #ece7fb;
+}
+
+.slot-btn.disabled {
+    border-color: #e0e0e0;
+    color: #bbb;
+    background: #f5f5f5;
+    cursor: not-allowed;
+}
+
+.slot-btn.disabled small {
+    color: #bbb;
+}
+
+/* ===== BOOKING SUMMARY & PAYMENT ===== */
+.booking-summary {
+    background: #f7f5ff;
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 16px;
+}
+
+.booking-summary .detail-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+    font-size: 14px;
+    color: #555;
+}
+
+.booking-summary .detail-row i {
+    width: 18px;
+    color: #a89ce4;
+}
+
+.payment-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.payment-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #555;
+}
+
+.payment-option input[type="radio"] {
+    width: auto;
+    accent-color: #a89ce4;
+}
+
+.payment-option:hover {
+    border-color: #a89ce4;
+}
+
+/* ===== BOOKING STATUS TAGS ===== */
+.status-tag {
+    display: inline-block;
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 6px;
+}
+
+.status-tag.status-PENDING {
+    background: #fdebc8;
+    color: #b8860b;
+}
+
+.status-tag.status-CONFIRMED {
+    background: #d4e8d4;
+    color: #4a7c4e;
+}
+
+.status-tag.status-COMPLETED {
+    background: #c8d9f1;
+    color: #3c5a99;
+}
+
+.status-tag.status-CANCELLED {
+    background: #f5d0d0;
+    color: #c0392b;
+}
+
+
