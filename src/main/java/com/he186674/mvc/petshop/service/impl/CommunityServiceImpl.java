@@ -98,7 +98,8 @@ public class CommunityServiceImpl implements CommunityService {
                 .orElseThrow(() -> new RuntimeException("Post not found with id: " + postId));
 
         // Increment view count
-        post.setViewCount(post.getViewCount() + 1);
+        Integer views = post.getViewCount();
+        post.setViewCount(views == null ? 1 : views + 1);
         blogPostRepository.save(post);
 
         PostDetailDto dto = new PostDetailDto();
