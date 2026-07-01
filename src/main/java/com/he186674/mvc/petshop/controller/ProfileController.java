@@ -36,14 +36,22 @@ public class ProfileController {
             return "redirect:/login";
         }
 
-        List<BlogPost> myPosts = communityService.getPostsByAuthor(currentUser.getUserId());
-
         model.addAttribute("user", currentUser);
-        model.addAttribute("myPosts", myPosts);
+
+        try {
+            List<BlogPost> myPosts =
+                    communityService.getPostsByAuthor(currentUser.getUserId());
+
+            model.addAttribute("myPosts", myPosts);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            model.addAttribute("myPosts", List.of());
+        }
 
         return "profile";
     }
-
     @GetMapping("/base-profile")
     public String showBaseProfile(HttpSession session) {
 
