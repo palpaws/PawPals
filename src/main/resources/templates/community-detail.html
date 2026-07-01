@@ -24,7 +24,7 @@
 
                 <article class="card post-detail-card">
                     <div th:if="${post.thumbnailUrl}" class="card-img-top-wrapper">
-                        <img th:src="${post.thumbnailUrl}" class="detail-thumbnail" alt="Thumbnail">
+                        <img th:src="${post.thumbnailUrl}" class="detail-thumbnail" alt="Thumbnail" onerror="this.src='/images/img5.png'">
                     </div>
                     <div class="card-body">
                         <!-- Title & Edit/Delete -->

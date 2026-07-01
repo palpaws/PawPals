@@ -71,7 +71,7 @@
             <div class="card-body">
                 <div class="row g-3">
                     <div th:if="${post.thumbnailUrl}" class="col-md-3">
-                        <img th:src="${post.thumbnailUrl}" class="img-fluid rounded thumbnail-img" alt="Thumbnail">
+                        <img th:src="${post.thumbnailUrl}" class="img-fluid rounded thumbnail-img" alt="Thumbnail" onerror="this.src='/images/img5.png'">
                     </div>
                     <div th:class="${post.thumbnailUrl} ? 'col-md-9' : 'col-12'">
                         <div class="d-flex align-items-center mb-2 gap-2">
@@ -111,7 +111,7 @@
             </div>
         </div>
 
-        <!-- Pagination (all comparison logic done in controller, no < in expressions) -->
+        <!-- Pagination -->
         <div th:if="${totalPages > 1}" class="community-pagination">
             <nav aria-label="Community pagination">
                 <ul class="pagination justify-content-center">
@@ -126,16 +126,14 @@
                         </a>
                     </li>
 
-                    <!-- First page (when window doesn't start at 0) -->
+                    <!-- First page -->
                     <li th:if="${showFirstPage}" class="page-item">
                         <a class="page-link" th:href="@{/community(keyword=${keyword}, page=0, size=10)}">1</a>
                     </li>
-                    <!-- First ellipsis -->
                     <li th:if="${showFirstEllipsis}" class="page-item disabled">
                         <span class="page-link" style="background:transparent; border-color:transparent;">&#8230;</span>
                     </li>
 
-                    <!-- Sliding window pages -->
                     <th:block th:each="i : ${#numbers.sequence(pageRangeStart, pageRangeEnd)}">
                         <li th:if="${i == currentPage}" class="page-item active">
                             <span class="page-link" th:text="${i + 1}"></span>
@@ -148,11 +146,9 @@
                         </li>
                     </th:block>
 
-                    <!-- Last ellipsis -->
                     <li th:if="${showLastEllipsis}" class="page-item disabled">
                         <span class="page-link" style="background:transparent; border-color:transparent;">&#8230;</span>
                     </li>
-                    <!-- Last page (when window doesn't reach last page) -->
                     <li th:if="${showLastPage}" class="page-item">
                         <a class="page-link"
                            th:href="@{/community(keyword=${keyword}, page=${lastPageIndex}, size=10)}"
@@ -162,7 +158,7 @@
 
                     <!-- Next -->
                     <li th:if="${isLastPage}" class="page-item disabled">
-                        <span class="page-link"><i class="bi bi-chevron-right"></i></span>
+                        <span class="page-link"><i class="bi bi-chevron-left"></i></span>
                     </li>
                     <li th:unless="${isLastPage}" class="page-item">
                         <a class="page-link" th:href="@{/community(keyword=${keyword}, page=${nextPage}, size=10)}">
