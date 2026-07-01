@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:color="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -59,7 +59,7 @@
 
             <div th:if="${pets == null or pets.isEmpty()}" class="no-pets-msg">
                 <i class="fas fa-info-circle"></i> Chưa có thú cưng nào.<br>
-                <a href="/" style="color: #a89ce4;">Thêm thú cưng</a>
+                <a th:href="@{/base-profile}">Thêm thú cưng</a>
             </div>
         </div>
     </div>
